@@ -25,4 +25,3 @@ D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HecopUI_Test\obj\Debug\HecopUI_Tes
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HecopUI_Test\obj\Debug\HecopUI_.9411D683.Up2Date
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HecopUI_Test\obj\Debug\HecopUI_Test.exe
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HecopUI_Test\obj\Debug\HecopUI_Test.pdb
-D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HecopUI_Test\obj\Debug\HecopUI_Test.exe.config
