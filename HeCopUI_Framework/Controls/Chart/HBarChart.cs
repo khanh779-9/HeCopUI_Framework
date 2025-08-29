@@ -288,7 +288,7 @@ namespace HeCopUI_Framework.Controls.Chart
             g.SmoothingMode = SmoothingMode.AntiAlias;
             PointF mousePos = PointToClient(MousePosition);
             SizeF textSize = g.MeasureString(tooltipText, toolTipFont);
-            int padding = 12;  // Padding lớn hơn
+            int padding = 10;  // Padding lớn hơn
             int cornerRadius = 12; // Góc bo tròn mượt mà
             int shadowOffset = 6;  // Bóng đổ mạnh hơn
             Color backgroundColor = Color.FromArgb(240, 255, 255, 255); // Nền trắng trong suốt nhẹ

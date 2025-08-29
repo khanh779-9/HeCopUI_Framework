@@ -124,8 +124,7 @@ namespace HecopUI_Test
             #endregion
 
             #region Radar Chart
-            // Thằng hRadar1 này xài Series là mảng ấy
-            // Ví dụ mẫu đi
+           
             List<HeCopUI_Framework.Controls.Chart.Series> series = new List<HeCopUI_Framework.Controls.Chart.Series>();
 
             HeCopUI_Framework.Controls.Chart.Series s1 = new HeCopUI_Framework.Controls.Chart.Series

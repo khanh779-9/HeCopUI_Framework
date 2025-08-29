@@ -289,6 +289,11 @@ namespace HeCopUI_Framework.Controls.Chart
                             foreach (var point in points)
                             {
                                 g.FillEllipse(pointBrush, point.X - 3, point.Y - 3, 6, 6);
+
+                                if(new RectangleF(point.X - 3, point.Y - 3, 6, 6).Contains(PointToClient(MousePosition)))
+                                {
+                                    DrawPopupTip(g, dataset.LegendText + " : " + (int)((_maximumValue - (point.Y - offsetY) * _maximumValue / (chartHeight - offsetY))), point.X + 10, point.Y - 10);
+                                }
                             }
                         }
                     }
@@ -326,6 +331,19 @@ namespace HeCopUI_Framework.Controls.Chart
             base.OnPaint(e);
         }
 
+        void DrawPopupTip(Graphics g, string text, float x, float y)
+        {
+            using (Brush brush = new SolidBrush(Color.FromArgb(50, 50, 50)))
+            {
+                using (Pen pen = new Pen(Color.FromArgb(50, 50, 50)))
+                {
+                    SizeF size = g.MeasureString(text, _numbericChartFont);
+                    g.FillRectangle(brush, x, y, size.Width + 10, size.Height + 5);
+                    g.DrawRectangle(pen, x, y, size.Width + 10, size.Height + 5);
+                    g.DrawString(text, _numbericChartFont, new SolidBrush(Color.White), x + 5, y + 2);
+                }
+            }
+        }
 
         private void DrawOYLabels(Graphics g, Pen penOY, Brush brushOy, Font font, float offX, float offY, float offyh)
         {
