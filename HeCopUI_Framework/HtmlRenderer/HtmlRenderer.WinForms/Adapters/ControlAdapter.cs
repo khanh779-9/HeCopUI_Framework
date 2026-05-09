@@ -55,7 +55,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
 
         public override RPoint MouseLocation
         {
-            get { return Utils.Convert(_control.PointToClient(Control.MousePosition)); }
+            get { return WinFormsUtils.Convert(_control.PointToClient(Control.MousePosition)); }
         }
 
         public override bool LeftMouseButton

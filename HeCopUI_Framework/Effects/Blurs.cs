@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-namespace QuanLy_ThuVienB
+namespace HeCopUI_Framework.Effects
 {
     public static class Blurs
     {

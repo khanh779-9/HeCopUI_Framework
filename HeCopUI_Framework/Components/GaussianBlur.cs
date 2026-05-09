@@ -1111,7 +1111,8 @@ namespace HeCopUI_Framework.Components
 
                     result.SetPixel(x, y, Color.FromArgb(a1, r1, g1, b1));
                 }
-            };
+            }
+            ;
 
 
             return result;
@@ -1154,7 +1155,8 @@ namespace HeCopUI_Framework.Components
                     int a1 = Clamp((int)Math.Round(a), 0, 255);
 
                     result.SetPixel(x, y, Color.FromArgb(a1, r1, g1, b1));
-                };
+                }
+                ;
             });
 
             return result;

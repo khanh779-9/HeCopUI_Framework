@@ -11,62 +11,62 @@ namespace HeCopUI_Framework.Controls
 
         }
 
-
-        private Control TF;
+        private Control _targetControl;
         public Control TargetControl
         {
-            get { return TF; }
+            get { return _targetControl; }
             set
             {
-                TF = value; TF.Invalidate();
+                _targetControl = value;
+                _targetControl.Invalidate();
             }
         }
-        private Control TC;
+
+        private Control _dragControl;
         public Control GetControl
         {
-            get { return TC; }
+            get { return _dragControl; }
             set
             {
-                TC = value;
+                _dragControl = value;
                 try
                 {
-                    TC.MouseDown += TC_MouseDown; TC.MouseUp += TC_MouseUp;
-                    TC.MouseMove += TC_MouseMove;
+                    _dragControl.MouseDown += OnDragControlMouseDown;
+                    _dragControl.MouseUp += OnDragControlMouseUp;
+                    _dragControl.MouseMove += OnDragControlMouseMove;
                 }
                 catch { }
-                TC.Invalidate();
+                _dragControl.Invalidate();
             }
         }
 
-        bool isMouseDown;
+        private bool _isMouseDown;
+        private int _xLast;
+        private int _yLast;
 
-        int xLast;
-        int yLast;
-
-        private void TC_MouseMove(object sender, MouseEventArgs e)
+        private void OnDragControlMouseMove(object sender, MouseEventArgs e)
         {
-            if (isMouseDown == true)
+            if (_isMouseDown)
             {
-                int newY = TF.Top + (e.Y - yLast);
-                int newX = TF.Left + (e.X - xLast);
+                int newY = _targetControl.Top + (e.Y - _yLast);
+                int newX = _targetControl.Left + (e.X - _xLast);
 
-                TF.Location = new Point(newX, newY);
+                _targetControl.Location = new Point(newX, newY);
             }
         }
 
-        private void TC_MouseUp(object sender, MouseEventArgs e)
+        private void OnDragControlMouseUp(object sender, MouseEventArgs e)
         {
-            isMouseDown = false;
+            _isMouseDown = false;
         }
 
-        private void TC_MouseDown(object sender, MouseEventArgs e)
+        private void OnDragControlMouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                isMouseDown = true;
-                xLast = e.X;
-                yLast = e.Y;
-
+                _isMouseDown = true;
+                _xLast = e.X;
+                _yLast = e.Y;
             }
         }
     }

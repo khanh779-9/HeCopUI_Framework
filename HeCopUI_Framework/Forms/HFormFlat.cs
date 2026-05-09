@@ -1,4 +1,5 @@
-﻿using HeCopUI_Framework.Win32.Enums;
+using HeCopUI_Framework.Enums;
+using HeCopUI_Framework.Win32.Enums;
 using HeCopUI_Framework.Win32.Struct;
 using System;
 using System.ComponentModel;
@@ -771,8 +772,6 @@ namespace HeCopUI_Framework.Forms
                 case HeCopUI_Framework.Win32.Enums.WindowMessages.WM_ERASEBKGND:
                     // https://msdn.microsoft.com/en-us/library/windows/desktop/ms648055(v=vs.85).aspx
                     m.Result = IntPtr.Zero;
-                    // BUG HACK thing to correctly redraw th window after maximizing it
-                    // will not be needed once we get rid of the nonclient scroll panel
                     if (_needRedraw)
                     {
                         _needRedraw = false;

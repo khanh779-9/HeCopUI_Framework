@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Windows.Forms;
 
-namespace HeCopUI_Framework.Controls
+namespace HeCopUI_Framework.Controls.TextControl
 {
     [ToolboxBitmap(typeof(Label), "Bitmaps.Label.bmp")]
     public partial class HLabel : Control
@@ -50,32 +50,32 @@ namespace HeCopUI_Framework.Controls
             Helper.GraphicsHelper.SetHightGraphics(g);
             StringFormat SF = new StringFormat
             {
-                Trimming = ST
+                Trimming = _textTrim
             };
-            g.TextRenderingHint = textRen;
-            Helper.TextHelper.SetStringAlign(SF, CA);
-            if ((_symbol != String.Empty || _symbol != null | _symbol != "") && symbolVisible)
+            g.TextRenderingHint = _textRenderingHint;
+            Helper.TextHelper.SetStringAlign(SF, _textAlign);
+            if ((_symbol != String.Empty || _symbol != null | _symbol != "") && _symbolVisible)
                 g.DrawString(_symbol, _symbolFont, new SolidBrush(_symbolColor), new RectangleF(0 + Padding.Left, 0 + Padding.Top, Width - Padding.Right, Height - Padding.Bottom));
             g.DrawString(Text, Font, new SolidBrush(ForeColor), new RectangleF(((_symbol != String.Empty || _symbol != null | _symbol != "") ? g.MeasureString(_symbol, _symbolFont).Width + 2 : 0) + Padding.Left,
                 0 + Padding.Top, Width - Padding.Right - ((_symbol != String.Empty || _symbol != null | _symbol != "") ? g.MeasureString(_symbol, _symbolFont).Width + 2 : 0), Height - Padding.Bottom), SF);
             base.OnPaint(e);
         }
 
-        bool symbolVisible = true;
+        private bool _symbolVisible = true;
 
         /// <summary>
         /// Gets or sets symbol visibility
         /// </summary>
         public bool SymbolVisible
         {
-            get { return symbolVisible; }
+            get { return _symbolVisible; }
             set
             {
-                symbolVisible = value; Invalidate();
+                _symbolVisible = value; Invalidate();
             }
         }
 
-        Color _symbolColor = Color.Gray;
+        private Color _symbolColor = Color.Gray;
 
         /// <summary>
         /// Gets or sets symbol color
@@ -89,17 +89,17 @@ namespace HeCopUI_Framework.Controls
             }
         }
 
-        private System.Drawing.Text.TextRenderingHint textRen = Helper.TextHelper.SetTextRender();
+        private System.Drawing.Text.TextRenderingHint _textRenderingHint = Helper.TextHelper.SetTextRender();
         public System.Drawing.Text.TextRenderingHint TextRenderingHint
         {
-            get { return textRen; }
+            get { return _textRenderingHint; }
             set
             {
-                textRen = value;
+                _textRenderingHint = value;
             }
         }
 
-        Font _symbolFont = new Font("Segoe UI Emoji", 10);
+        private Font _symbolFont = new Font("Segoe UI Emoji", 10);
         public Font SymbolFont
         {
             get { return _symbolFont; }
@@ -109,7 +109,7 @@ namespace HeCopUI_Framework.Controls
             }
         }
 
-        string _symbol = "";
+        private string _symbol = "";
         public string Symbol
         {
             get { return _symbol; }
@@ -125,23 +125,23 @@ namespace HeCopUI_Framework.Controls
             base.OnPaddingChanged(e);
         }
 
-        private StringTrimming ST = StringTrimming.EllipsisCharacter;
+        private StringTrimming _textTrim = StringTrimming.EllipsisCharacter;
         public StringTrimming TextTrim
         {
-            get { return ST; }
+            get { return _textTrim; }
             set
             {
-                ST = value; Invalidate();
+                _textTrim = value; Invalidate();
             }
         }
 
-        private ContentAlignment CA = ContentAlignment.MiddleCenter;
+        private ContentAlignment _textAlign = ContentAlignment.MiddleCenter;
         public ContentAlignment TextAlign
         {
-            get { return CA; }
+            get { return _textAlign; }
             set
             {
-                CA = value; Invalidate();
+                _textAlign = value; Invalidate();
             }
         }
     }

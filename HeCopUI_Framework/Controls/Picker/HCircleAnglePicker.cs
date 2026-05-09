@@ -1030,24 +1030,7 @@ namespace HeCopUI_Framework.Controls
             }
             else
             {
-                double r = Math.Atan(Convert.ToDouble(p.Y - y) / Convert.ToDouble(p.X - x));
-
-                d = r * (180 / Math.PI);
-
-                if ((p.X - x) < 0 || (p.Y - y) < 0)
-                {
-                    d += 180;
-
-                    if ((p.X - x) > 0 && (p.Y - y) < 0)
-                    {
-                        d -= 180;
-                    }
-
-                    if (d > 180)
-                    {
-                        d -= 360;
-                    }
-                }
+                d = Math.Atan2(p.Y - y, p.X - x) * (180 / Math.PI);
             }
 
             Value = -Convert.ToInt32(d);

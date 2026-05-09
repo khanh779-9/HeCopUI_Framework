@@ -1,4 +1,4 @@
-﻿using HeCopUI_Framework.Animations;
+using HeCopUI_Framework.Animations;
 using HeCopUI_Framework.Enums;
 using HeCopUI_Framework.Structs;
 using System;
@@ -56,38 +56,56 @@ namespace HeCopUI_Framework.Controls.Button
 
         #endregion
 
-        private int BT { get; set; } = 0;
-        private Color BC { get; set; } = Color.DarkGray;
-        private Color BTC { get; set; } = Global.PrimaryColors.BackNormalColor1;
+        private int _borderThickness = 0;
+        private Color _borderColor = Color.DarkGray;
+        private Color _normalColor1 = Global.PrimaryColors.BackNormalColor1;
         //Global.PrimaryColors.BackNormalColor1
 
+        private Color _hoverColor1 = Global.PrimaryColors.BackHoverColor1;
         /// <summary>
         /// Gets or sets the color of the button when the mouse is over the button.
         /// </summary>
         [Description("Gets or sets the color of the button when the mouse is over the button.")]
-        public Color BackHoverColor1 { get; set; } = Global.PrimaryColors.BackHoverColor1;
+        public Color HoverColor1
+        {
+            get { return _hoverColor1; }
+            set { _hoverColor1 = value; Invalidate(); }
+        }
 
-        //Global.PrimaryColors.BackHoverColor1
+        private Color _hoverColor2 = Global.PrimaryColors.BackHoverColor2;
+        /// <summary>
+        /// Gets or sets the second color of the button when the mouse is over the button.
+        /// </summary>
+        [Description("Gets or sets the second color of the button when the mouse is over the button.")]
+        public Color HoverColor2
+        {
+            get { return _hoverColor2; }
+            set { _hoverColor2 = value; Invalidate(); }
+        }
+
+        private Color _pressColor1 = Global.PrimaryColors.BackPressColor1;
         /// <summary>
         /// Gets or sets the color of the button when the mouse is pressed on the button.
         /// </summary>
         [Description("Gets or sets the color of the button when the mouse is pressed on the button.")]
-        public Color BackPressColor1 { get; set; } = Global.PrimaryColors.BackPressColor1;
-        //Global.PrimaryColors.BackPressColor1
+        public Color PressColor1
+        {
+            get { return _pressColor1; }
+            set { _pressColor1 = value; Invalidate(); }
+        }
 
+        private Color _pressColor2 = Global.PrimaryColors.BackPressColor2;
         /// <summary>
-        /// Gets or sets the color of the button when the mouse is over the button.
+        /// Gets or sets the second color of the button when the mouse is pressed on the button.
         /// </summary>
-        [Description("Gets or sets the color of the button when the mouse is over the button.")]
-        public Color BackHoverColor2 { get; set; } = Global.PrimaryColors.BackHoverColor2;
-
-        /// <summary>
-        /// Gets or sets the color of the button when the mouse is pressed on the button.
-        /// </summary>
-        [Description("Gets or sets the color of the button when the mouse is pressed on the button.")]
-        public Color BackPressColor2 { get; set; } = Global.PrimaryColors.BackPressColor2;
-        bool ButDo;
-        bool ButHo;
+        [Description("Gets or sets the second color of the button when the mouse is pressed on the button.")]
+        public Color PressColor2
+        {
+            get { return _pressColor2; }
+            set { _pressColor2 = value; Invalidate(); }
+        }
+        private bool _isButtonPressed = false;
+        private bool _isButtonHovered = false;
 
         /// <summary>
         /// Gets or sets the color of the text when the mouse is over the button.
@@ -99,36 +117,36 @@ namespace HeCopUI_Framework.Controls.Button
         /// Gets or sets the color of the text when the mouse is pressed on the button.
         /// </summary>
         [Description("Gets or sets the color of the text when the mouse is pressed on the button.")]
-        public Color TextDownColor { get; set; } = Color.White;
-        private Color textNormalColor = Color.WhiteSmoke;
+        public Color TextPressColor { get; set; } = Color.White;
+        private Color _textNormalColor = Color.WhiteSmoke;
 
         /// <summary>
-        /// Gets or sets the color of the text when the mouse is pressed on the button.
+        /// Gets or sets the color of the text when normal state.
         /// </summary>
-        [Description("Gets or sets the color of the text when the mouse is pressed on the button.")]
+        [Description("Gets or sets the color of the text when normal state.")]
         public Color TextNormalColor
         {
-            get { return textNormalColor; }
+            get { return _textNormalColor; }
             set
             {
-                textNormalColor = value; Invalidate();
+                _textNormalColor = value; Invalidate();
             }
         }
 
-        private Color buttonColor2 = Global.PrimaryColors.BackNormalColor2;
+        private Color _normalColor2 = Global.PrimaryColors.BackNormalColor2;
         /// <summary>
-        /// Gets or sets the color of the button when the mouse is pressed on the button.
+        /// Gets or sets the second color of the button when normal state.
         /// </summary>
-        [Description("Gets or sets the color of the button when the mouse is pressed on the button.")]
-        public Color ButtonColor2
+        [Description("Gets or sets the second color of the button when normal state.")]
+        public Color NormalColor2
         {
             get
             {
-                return buttonColor2;
+                return _normalColor2;
             }
             set
             {
-                buttonColor2 = value;
+                _normalColor2 = value;
                 Invalidate();
             }
         }
@@ -139,14 +157,14 @@ namespace HeCopUI_Framework.Controls.Button
         [Description("Gets or sets the border thickness of the button.")]
         public int BorderThickness
         {
-            get { return BT; }
+            get { return _borderThickness; }
             set
             {
-                BT = value; Invalidate();
+                _borderThickness = value; Invalidate();
             }
         }
 
-        private DialogResult DR = DialogResult.None;
+        private DialogResult _dialogResult = DialogResult.None;
 
         /// <summary>
         /// Gets or sets the dialog result of the button.
@@ -154,28 +172,27 @@ namespace HeCopUI_Framework.Controls.Button
         [Description("Gets or sets the dialog result of the button.")]
         public DialogResult DialogResult
         {
-            get { return DR; }
+            get { return _dialogResult; }
             set
             {
-                DR = value; Invalidate();
+                _dialogResult = value; Invalidate();
             }
         }
 
         /// <summary>
-        /// Gets or sets the color of the button.
+        /// Gets or sets the color of the button when normal state.
         /// </summary>
-        [Description("Gets or sets the color of the button.")]
-        public Color ButtonColor1
+        [Description("Gets or sets the color of the button when normal state.")]
+        public Color NormalColor1
         {
             get
             {
-                return BTC;
+                return _normalColor1;
             }
             set
             {
-                BTC = value;
+                _normalColor1 = value;
                 Invalidate();
-
             }
         }
 
@@ -185,26 +202,27 @@ namespace HeCopUI_Framework.Controls.Button
 
         public Color BorderColor
         {
-            get { return BC; }
+            get { return _borderColor; }
             set
             {
-                BC = value; Invalidate();
+                _borderColor = value; Invalidate();
             }
         }
-        public Color BorderDownColor { get; set; } = Global.PrimaryColors.BackNormalColor1;
+        public Color BorderPressColor { get; set; } = Global.PrimaryColors.BackNormalColor1;
         public Color BorderHoverColor { get; set; } = Global.PrimaryColors.BackNormalColor1;
-        private LinearGradientMode LB = LinearGradientMode.Vertical;
+        private LinearGradientMode _gradientMode = LinearGradientMode.Vertical;
         public LinearGradientMode GradientMode
         {
-            get { return LB; }
+            get { return _gradientMode; }
             set
             {
-                LB = value;
+                _gradientMode = value;
                 Invalidate();
             }
         }
 
-        bool autosize = false;
+
+        private bool _autoSize = false;
         /// <summary>
         /// Sets or gets a value that indicates whether the control resizes based on its contents.
         /// </summary>
@@ -212,10 +230,10 @@ namespace HeCopUI_Framework.Controls.Button
         [EditorBrowsable(EditorBrowsableState.Always)]
         public override bool AutoSize
         {
-            get { return autosize; }
+            get { return _autoSize; }
             set
             {
-                autosize = value;
+                _autoSize = value;
                 SetAutoSize();
                 Invalidate();
             }
@@ -241,47 +259,47 @@ namespace HeCopUI_Framework.Controls.Button
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new Padding Padding { get; set; } = new Padding(0);
 
-        private Padding shadowPadding = new Padding(0, 0, 0, 0);
+        private Padding _shadowPadding = new Padding(0, 0, 0, 0);
         /// <summary>
         /// Gets or sets the padding of the shadow.
         /// </summary>
         [Description("Gets or sets the padding of the shadow.")]
         public Padding ShadowPadding
         {
-            get { return shadowPadding; }
+            get { return _shadowPadding; }
             set
             {
-                shadowPadding = value;
-                if (value.Left < 0) shadowPadding.Left = 0;
-                if (value.Top < 0) shadowPadding.Top = 0;
-                if (value.Right < 0) shadowPadding.Right = 0;
-                if (value.Bottom < 0) shadowPadding.Bottom = 0;
+                _shadowPadding = value;
+                if (value.Left < 0) _shadowPadding.Left = 0;
+                if (value.Top < 0) _shadowPadding.Top = 0;
+                if (value.Right < 0) _shadowPadding.Right = 0;
+                if (value.Bottom < 0) _shadowPadding.Bottom = 0;
                 SetAutoSize();
                 Invalidate();
             }
         }
 
-        private Color shadowColor = Color.FromArgb(60, 0, 0, 0);
+        private Color _shadowColor = Color.FromArgb(60, 0, 0, 0);
         /// <summary>
         /// Gets or sets the color of the shadow.
         /// </summary>
         [Description("Gets or sets the color of the shadow.")]
         public Color ShadowColor
         {
-            get { return shadowColor; }
+            get { return _shadowColor; }
             set
             {
-                shadowColor = value; Invalidate();
+                _shadowColor = value; Invalidate();
             }
         }
 
-        private int shadowRad = 5;
+        private int _shadowRadius = 5;
         public int ShadowRadius
         {
-            get { return shadowRad; }
+            get { return _shadowRadius; }
             set
             {
-                shadowRad = value; Invalidate();
+                _shadowRadius = value; Invalidate();
             }
         }
 
@@ -292,20 +310,18 @@ namespace HeCopUI_Framework.Controls.Button
             return graphicsPath;
         }
 
-        CornerRadius radius = new Structs.CornerRadius(5);
+        private CornerRadius _cornerRadius = new Structs.CornerRadius(5);
 
         /// <summary>
         /// Gets or sets radius of HButton.
         /// </summary>
         [Description("Gets or sets radius of HButton.")]
-
         public CornerRadius Radius
         {
-            get { return radius; }
+            get { return _cornerRadius; }
             set
             {
-
-                radius = value; Invalidate();
+                _cornerRadius = value; Invalidate();
             }
         }
 
@@ -313,29 +329,29 @@ namespace HeCopUI_Framework.Controls.Button
         {
             float b = 0f;
             base.OnPaint(e);
-            RectangleF RF = new RectangleF(shadowPadding.Left + 2 + textPadding.Left, shadowPadding.Top + 2 + textPadding.Top, Width - 2 - textPadding.Right - textPadding.Left - shadowPadding.Left - shadowPadding.Right, Height - 2 - textPadding.Bottom - textPadding.Top - shadowPadding.Top - shadowPadding.Bottom);
+            RectangleF RF = new RectangleF(_shadowPadding.Left + 2 + _textPadding.Left, _shadowPadding.Top + 2 + _textPadding.Top, Width - 2 - _textPadding.Right - _textPadding.Left - _shadowPadding.Left - _shadowPadding.Right, Height - 2 - _textPadding.Bottom - _textPadding.Top - _shadowPadding.Top - _shadowPadding.Bottom);
             Helper.GraphicsHelper.MakeTransparent(this, e.Graphics);
-            using (GraphicsPath SGP = (ST == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(b, b, Width - b, Height - b), new CornerRadius(radius.TopLeft, radius.TopRight, radius.BottomLeft, radius.BottomRight, 0.5f)) : CircularGraphicsPath(new RectangleF(b, b, Width - b, Height - b)))
-            using (GraphicsPath GP = HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(b + (shadowPadding.Left), b + (shadowPadding.Top), (Width - shadowPadding.Left) - (shadowPadding.Right), (Height - shadowPadding.Top) - (shadowPadding.Bottom)), Radius, BorderThickness))
+            using (GraphicsPath SGP = (_shapeType == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(b, b, Width - b, Height - b), new CornerRadius(_cornerRadius.TopLeft, _cornerRadius.TopRight, _cornerRadius.BottomLeft, _cornerRadius.BottomRight, 0.5f)) : CircularGraphicsPath(new RectangleF(b, b, Width - b, Height - b)))
+            using (GraphicsPath GP = HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(b + (_shadowPadding.Left), b + (_shadowPadding.Top), (Width - _shadowPadding.Left) - (_shadowPadding.Right), (Height - _shadowPadding.Top) - (_shadowPadding.Bottom)), Radius, BorderThickness))
 
             using (LinearGradientBrush AHB =
-                (AnimationMode == AnimationMode.ColorTransition) ? new LinearGradientBrush(ClientRectangle, ButDo ? BackPressColor1 : ButHo ? HeCopUI_Framework.Helper.DrawHelper.BlendColor(ButtonColor1, BackHoverColor1, 255 * _animationManager.GetProgress()) : HeCopUI_Framework.Helper.DrawHelper.BlendColor(ButtonColor1, BackHoverColor1, 255 * _animationManager.GetProgress()),
-                 ButDo ? BackPressColor2 : ButHo ? HeCopUI_Framework.Helper.DrawHelper.BlendColor(ButtonColor2, BackHoverColor2, 255 * _animationManager.GetProgress()) : HeCopUI_Framework.Helper.DrawHelper.BlendColor(ButtonColor2, BackHoverColor2, 255 * _animationManager.GetProgress()), LB) :
-                (AnimationMode == AnimationMode.Ripple) ? new LinearGradientBrush(ClientRectangle, ButHo ? BackHoverColor1 : ButtonColor1, ButHo ? BackHoverColor2 : ButtonColor2, LB) :
-                 new LinearGradientBrush(ClientRectangle, ButDo ? BackPressColor1 : ButHo ? BackHoverColor1 : ButtonColor1, ButDo ? BackPressColor2 : ButHo ? BackHoverColor2 : ButtonColor2, LB))
+                (AnimationMode == AnimationMode.ColorTransition) ? new LinearGradientBrush(ClientRectangle, _isButtonPressed ? PressColor1 : _isButtonHovered ? HeCopUI_Framework.Helper.DrawHelper.BlendColor(NormalColor1, HoverColor1, 255 * _animationManager.GetProgress()) : HeCopUI_Framework.Helper.DrawHelper.BlendColor(NormalColor1, HoverColor1, 255 * _animationManager.GetProgress()),
+                 _isButtonPressed ? PressColor2 : _isButtonHovered ? HeCopUI_Framework.Helper.DrawHelper.BlendColor(NormalColor2, HoverColor2, 255 * _animationManager.GetProgress()) : HeCopUI_Framework.Helper.DrawHelper.BlendColor(NormalColor2, HoverColor2, 255 * _animationManager.GetProgress()), _gradientMode) :
+                (AnimationMode == AnimationMode.Ripple) ? new LinearGradientBrush(ClientRectangle, _isButtonHovered ? HoverColor1 : NormalColor1, _isButtonHovered ? HoverColor2 : NormalColor2, _gradientMode) :
+                 new LinearGradientBrush(ClientRectangle, _isButtonPressed ? PressColor1 : _isButtonHovered ? HoverColor1 : NormalColor1, _isButtonPressed ? PressColor2 : _isButtonHovered ? HoverColor2 : NormalColor2, _gradientMode))
 
-            using (SolidBrush sbText = new SolidBrush(ButDo ? TextDownColor : ButHo ? TextHoverColor : TextNormalColor))
+            using (SolidBrush sbText = new SolidBrush(_isButtonPressed ? TextPressColor : _isButtonHovered ? TextHoverColor : TextNormalColor))
             using (StringFormat SF = new StringFormat())
-            using (Bitmap bitmap = HeCopUI_Framework.Ultils.DropShadow.Create(SGP, ShadowColor, shadowRad))
+            using (Bitmap bitmap = HeCopUI_Framework.Utils.DropShadow.Create(SGP, ShadowColor, _shadowRadius))
             {
                 bitmap.MakeTransparent();
                 Graphics g = Graphics.FromImage(bitmap);
-                g.TextRenderingHint = textRenderHint;
-                if (ST == ShapeType.Circular)
+                g.TextRenderingHint = _textRenderHint;
+                if (_shapeType == ShapeType.Circular)
                 {
                     Helper.GraphicsHelper.SetHightGraphics(g); Helper.GraphicsHelper.SetHightGraphics(e.Graphics);
                 }
-                if (ST == ShapeType.RoundedRectangle)
+                if (_shapeType == ShapeType.RoundedRectangle)
                 {
                     if (Radius.All != 0)
                     {
@@ -349,12 +365,12 @@ namespace HeCopUI_Framework.Controls.Button
                     }
                 }
                 if (Radius.All == 0) g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                Helper.TextHelper.SetStringAlign(SF, CA);
-                SF.Trimming = STA;
+                Helper.TextHelper.SetStringAlign(SF, _buttonTextAlignment);
+                SF.Trimming = _stringTrimming;
                 if (ClipRegion == true && DesignMode == false)
                 {
-                    if (ST == ShapeType.RoundedRectangle) Region = new Region(HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(0, 0, Width, Height), new CornerRadius(radius.TopLeft, radius.TopRight, radius.BottomLeft, radius.BottomRight, 2.5f)));
-                    if (ST == ShapeType.Circular)
+                    if (_shapeType == ShapeType.RoundedRectangle) Region = new Region(HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(0, 0, Width, Height), new CornerRadius(_cornerRadius.TopLeft, _cornerRadius.TopRight, _cornerRadius.BottomLeft, _cornerRadius.BottomRight, 2.5f)));
+                    if (_shapeType == ShapeType.Circular)
                     {
                         GraphicsPath a = new GraphicsPath(); a.AddEllipse(0, 0, Width, Height);
                         Region = new Region(a);
@@ -363,9 +379,9 @@ namespace HeCopUI_Framework.Controls.Button
 
                 g.FillPath(AHB, GP);
 
-                if (image != null)
+                if (_image != null)
                 {
-                    if (supportImageGif == true)
+                    if (_supportImageGif == true)
                     {
                         try
                         {
@@ -378,34 +394,34 @@ namespace HeCopUI_Framework.Controls.Button
 
                     RectangleF drawRectangle = RectangleF.Empty;
 
-                    switch (textImageRelation)
+                    switch (_imageAlignment)
                     {
                         case ContentAlignment.MiddleLeft:
-                            drawRectangle = new RectangleF(imagePadding.Left + radius.TopLeft + 8, Height / 2 - imgSize.Height / 2, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(_imagePadding.Left + _cornerRadius.TopLeft + 8, Height / 2 - _imageSize.Height / 2, _imageSize.Width, _imageSize.Height);
                             break;
                         case ContentAlignment.MiddleRight:
-                            drawRectangle = new RectangleF(Width - 8 - imagePadding.Right - imgSize.Width - radius.TopRight, Height / 2 - imgSize.Height / 2, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(Width - 8 - _imagePadding.Right - _imageSize.Width - _cornerRadius.TopRight, Height / 2 - _imageSize.Height / 2, _imageSize.Width, _imageSize.Height);
                             break;
                         case ContentAlignment.MiddleCenter:
-                            drawRectangle = new RectangleF(Width / 2 - imgSize.Width / 2, Height / 2 - imgSize.Height / 2, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(Width / 2 - _imageSize.Width / 2, Height / 2 - _imageSize.Height / 2, _imageSize.Width, _imageSize.Height);
                             break;
                         case ContentAlignment.TopLeft:
-                            drawRectangle = new RectangleF(imagePadding.Left + radius.TopLeft + 8, imagePadding.Top + 8, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(_imagePadding.Left + _cornerRadius.TopLeft + 8, _imagePadding.Top + 8, _imageSize.Width, _imageSize.Height);
                             break;
                         case ContentAlignment.TopCenter:
-                            drawRectangle = new RectangleF(Width / 2 - imgSize.Width / 2, imagePadding.Top + 8, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(Width / 2 - _imageSize.Width / 2, _imagePadding.Top + 8, _imageSize.Width, _imageSize.Height);
                             break;
                         case ContentAlignment.TopRight:
-                            drawRectangle = new RectangleF(Width - radius.TopRight - imagePadding.Right - imgSize.Width - 8, imagePadding.Top + 8, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(Width - _cornerRadius.TopRight - _imagePadding.Right - _imageSize.Width - 8, _imagePadding.Top + 8, _imageSize.Width, _imageSize.Height);
                             break;
                         case ContentAlignment.BottomLeft:
-                            drawRectangle = new RectangleF(imagePadding.Left + radius.BottomLeft + 8, Height - 8 - imagePadding.Bottom - imgSize.Height, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(_imagePadding.Left + _cornerRadius.BottomLeft + 8, Height - 8 - _imagePadding.Bottom - _imageSize.Height, _imageSize.Width, _imageSize.Height);
                             break;
                         case ContentAlignment.BottomCenter:
-                            drawRectangle = new RectangleF(Width / 2 - imgSize.Width / 2, Height - imagePadding.Bottom - 8 - imgSize.Height, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(Width / 2 - _imageSize.Width / 2, Height - _imagePadding.Bottom - 8 - _imageSize.Height, _imageSize.Width, _imageSize.Height);
                             break;
                         case ContentAlignment.BottomRight:
-                            drawRectangle = new RectangleF(Width - imagePadding.Right - imgSize.Width - 8 - radius.BottomRight, Height - imagePadding.Bottom - 8 - imgSize.Height, imgSize.Width, imgSize.Height);
+                            drawRectangle = new RectangleF(Width - _imagePadding.Right - _imageSize.Width - 8 - _cornerRadius.BottomRight, Height - _imagePadding.Bottom - 8 - _imageSize.Height, _imageSize.Width, _imageSize.Height);
                             break;
                         default:
                             drawRectangle = RectangleF.Empty;
@@ -414,16 +430,16 @@ namespace HeCopUI_Framework.Controls.Button
 
                     // Chỉ vẽ hình ảnh nếu hình chữ nhật vẽ đã được xác định
                     if (drawRectangle != RectangleF.Empty)
-                        g.DrawImage(image, drawRectangle, new RectangleF(0, 0, Image.Width, Image.Height), GraphicsUnit.Pixel);
+                        g.DrawImage(_image, drawRectangle, new RectangleF(0, 0, Image.Width, Image.Height), GraphicsUnit.Pixel);
                 }
 
                 g.DrawString(Text, Font, sbText, RF, SF);
-                Pen pen = new Pen(new SolidBrush(ButDo ? BorderDownColor : ButHo ? BorderHoverColor : BorderColor), BT)
+                Pen pen = new Pen(new SolidBrush(_isButtonPressed ? BorderPressColor : _isButtonHovered ? BorderHoverColor : BorderColor), _borderThickness)
                 {
                     Alignment = PenAlignment.Inset
                 };
                 if (Radius.All == 0) g.SmoothingMode = SmoothingMode.Default;
-                if (BT != 0) g.DrawPath(pen, GP);
+                if (_borderThickness != 0) g.DrawPath(pen, GP);
                 g.SmoothingMode = SmoothingMode.HighQuality;
                 if (AnimationMode == AnimationMode.Ripple && _animationManager.IsAnimating())
                     for (var i = 0; i < _animationManager.GetAnimationCount(); i++)
@@ -441,8 +457,8 @@ namespace HeCopUI_Framework.Controls.Button
                 if (DesignMode == false && Focused)
                 {
                     g.SmoothingMode = SmoothingMode.None;
-                    using (GraphicsPath gpf = HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(b + (shadowPadding.Left), b + (shadowPadding.Top), (Width - shadowPadding.Left) - (shadowPadding.Right), (Height - shadowPadding.Top) - (shadowPadding.Bottom)), radius, BorderThickness * 2 + 3))
-                    using (var p = new Pen(new SolidBrush(fbc), 1) { Alignment = PenAlignment.Inset, DashStyle = dashStyle })
+                    using (GraphicsPath gpf = HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(b + (_shadowPadding.Left), b + (_shadowPadding.Top), (Width - _shadowPadding.Left) - (_shadowPadding.Right), (Height - _shadowPadding.Top) - (_shadowPadding.Bottom)), _cornerRadius, BorderThickness * 2 + 3))
+                    using (var p = new Pen(new SolidBrush(_focusBorderColor), 1) { Alignment = PenAlignment.Inset, DashStyle = _dashStyle })
                         g.DrawPath(p, gpf);
 
                 }
@@ -464,39 +480,43 @@ namespace HeCopUI_Framework.Controls.Button
             base.OnLostFocus(e);
         }
 
-        Color fbc = Color.White;
+        private Color _focusBorderColor = Color.White;
         public Color FocusBorderColor
         {
-            get { return fbc; }
-            set { fbc = value; Invalidate(); }
+            get { return _focusBorderColor; }
+            set { _focusBorderColor = value; Invalidate(); }
         }
 
-        private DashStyle dashStyle = DashStyle.Dot;
+        private DashStyle _dashStyle = DashStyle.Dot;
         public DashStyle DashStyle
         {
             get
             {
-                return dashStyle;
+                return _dashStyle;
             }
             set
             {
-                dashStyle = value; Invalidate();
+                _dashStyle = value; Invalidate();
             }
         }
 
         public bool ClipRegion { get; set; } = false;
 
-        private Padding textPadding = new Padding(0, 0, 0, 0);
+        private Padding _textPadding = new Padding(0, 0, 0, 0);
+        /// <summary>
+        /// Gets or sets the text padding of the button.
+        /// </summary>
+        [Description("Gets or sets the text padding of the button.")]
         public Padding TextPadding
         {
-            get { return textPadding; }
+            get { return _textPadding; }
             set
             {
-                textPadding = value;
-                if (value.Left < 0) textPadding.Left = 0;
-                if (value.Top < 0) textPadding.Top = 0;
-                if (value.Right < 0) textPadding.Right = 0;
-                if (value.Bottom < 0) textPadding.Bottom = 0;
+                _textPadding = value;
+                if (value.Left < 0) _textPadding.Left = 0;
+                if (value.Top < 0) _textPadding.Top = 0;
+                if (value.Right < 0) _textPadding.Right = 0;
+                if (value.Bottom < 0) _textPadding.Bottom = 0;
                 SetAutoSize();
                 Invalidate();
             }
@@ -512,7 +532,7 @@ namespace HeCopUI_Framework.Controls.Button
         {
             if (AutoSize == true)
             {
-                int Pad = Math.Abs(GetMaxPad(textPadding.Left + shadowPadding.Left, textPadding.Top + shadowPadding.Top, textPadding.Right + shadowPadding.Right, textPadding.Bottom + shadowPadding.Bottom));
+                int Pad = Math.Abs(GetMaxPad(_textPadding.Left + _shadowPadding.Left, _textPadding.Top + _shadowPadding.Top, _textPadding.Right + _shadowPadding.Right, _textPadding.Bottom + _shadowPadding.Bottom));
                 Size n = TextRenderer.MeasureText(Text, Font);
                 Regex regex = new Regex("\n");
                 int i = regex.Matches(Text).Count;
@@ -520,15 +540,15 @@ namespace HeCopUI_Framework.Controls.Button
                 if (i == 0) a = n.Height;
                 else a += n.Height;
                 int imax = 0; int imay = 0;
-                if (image != null)
+                if (_image != null)
                 {
-                    imax = imgSize.Width; imay = imgSize.Height;
+                    imax = _imageSize.Width; imay = _imageSize.Height;
                 }
                 Size = new Size(imax + n.Width + 8 + Pad, a + 8 + Pad + imay);
             }
         }
 
-        bool currentlyAnimating = false;
+        private bool _currentlyAnimating = false;
         private void OnFrameChanged(object o, EventArgs e)
         {
             Invalidate();
@@ -536,72 +556,72 @@ namespace HeCopUI_Framework.Controls.Button
 
         private void AnimateImage()
         {
-            if (!currentlyAnimating)
+            if (!_currentlyAnimating)
             {
-                ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
-                currentlyAnimating = true;
+                ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
+                _currentlyAnimating = true;
             }
         }
 
-        private bool supportImageGif = false;
+        private bool _supportImageGif = false;
         public bool SupportImageGif
         {
-            get { return supportImageGif; }
+            get { return _supportImageGif; }
             set
             {
-                supportImageGif = value; Invalidate();
+                _supportImageGif = value; Invalidate();
             }
         }
 
-        private Padding imagePadding = new Padding(0, 0, 0, 0);
+        private Padding _imagePadding = new Padding(0, 0, 0, 0);
         public Padding ImagePadding
         {
-            get { return imagePadding; }
+            get { return _imagePadding; }
             set
             {
-                imagePadding = value; Invalidate();
+                _imagePadding = value; Invalidate();
             }
         }
 
-        private Size imgSize = new Size(20, 20);
+        private Size _imageSize = new Size(20, 20);
         public Size ImageSize
         {
-            get { return imgSize; }
+            get { return _imageSize; }
             set
             {
-                imgSize = value; Invalidate();
+                _imageSize = value; Invalidate();
             }
         }
 
-        private Image image = null;
+        private Image _image = null;
         public Image Image
         {
-            get { return image; }
+            get { return _image; }
             set
             {
-                image = value; Invalidate();
+                _image = value; Invalidate();
             }
         }
 
-        private ContentAlignment textImageRelation = ContentAlignment.MiddleLeft;
+        private ContentAlignment _imageAlignment = ContentAlignment.MiddleLeft;
         public ContentAlignment ImageAlign
         {
-            get { return textImageRelation; }
+            get { return _imageAlignment; }
             set
             {
-                textImageRelation = value; Invalidate();
+                _imageAlignment = value; Invalidate();
             }
         }
 
 
-        AnimationMode animationMode = AnimationMode.None;
+        private AnimationMode _animationMode = AnimationMode.None;
         public AnimationMode AnimationMode
         {
-            get { return animationMode; }
+            get { return _animationMode; }
             set
             {
-                animationMode = value;
-                switch (animationMode)
+                _animationMode = value;
+                switch (_animationMode)
                 {
                     case AnimationMode.None:
                         _animationManager.Singular = true;
@@ -659,15 +679,15 @@ namespace HeCopUI_Framework.Controls.Button
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            ButDo = false;
+            _isButtonPressed = false;
             Invalidate();
             base.OnMouseUp(e);
         }
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            ButHo = true;
-            if (animationMode == AnimationMode.ColorTransition)
+            _isButtonHovered = true;
+            if (_animationMode == AnimationMode.ColorTransition)
                 _animationManager.StartNewAnimation(AnimationDirection.In);
 
             Invalidate();
@@ -676,7 +696,7 @@ namespace HeCopUI_Framework.Controls.Button
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            ButHo = false;
+            _isButtonHovered = false;
             if (AnimationMode == AnimationMode.ColorTransition)
                 _animationManager.StartNewAnimation(AnimationDirection.Out);
             Invalidate();
@@ -686,7 +706,7 @@ namespace HeCopUI_Framework.Controls.Button
         private Animations.AnimationManager _animationManager;
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            ButDo = true;
+            _isButtonPressed = true;
             if (AnimationMode == AnimationMode.Ripple)
                 _animationManager.StartNewAnimation(Animations.AnimationDirection.In, e.Location);
             Invalidate();
@@ -698,52 +718,52 @@ namespace HeCopUI_Framework.Controls.Button
         protected override void OnMouseClick(MouseEventArgs e)
         {
             var a = FindForm();
-            if (a != null) a.DialogResult = DR;
+            if (a != null) a.DialogResult = _dialogResult;
             base.OnMouseClick(e);
         }
 
-        private System.Drawing.Text.TextRenderingHint textRenderHint = Helper.TextHelper.SetTextRender();
+        private System.Drawing.Text.TextRenderingHint _textRenderHint = Helper.TextHelper.SetTextRender();
         /// <summary>
         /// Gets or sets TextRenderingHint for text button.
         /// </summary>
         public System.Drawing.Text.TextRenderingHint TextRenderHint
         {
-            get { return textRenderHint; }
+            get { return _textRenderHint; }
             set
             {
-                textRenderHint = value; Invalidate();
+                _textRenderHint = value; Invalidate();
             }
         }
 
 
-        private StringTrimming STA = StringTrimming.EllipsisCharacter;
+        private StringTrimming _stringTrimming = StringTrimming.EllipsisCharacter;
         public StringTrimming TextTrim
         {
-            get { return STA; }
+            get { return _stringTrimming; }
             set
             {
-                STA = value; Invalidate();
+                _stringTrimming = value; Invalidate();
             }
         }
 
-        private ContentAlignment CA = ContentAlignment.MiddleCenter;
+        private ContentAlignment _buttonTextAlignment = ContentAlignment.MiddleCenter;
         public ContentAlignment ButtonTextAlign
         {
-            get { return CA; }
+            get { return _buttonTextAlignment; }
             set
             {
-                CA = value; Invalidate();
+                _buttonTextAlignment = value; Invalidate();
             }
         }
 
-        private ShapeType ST = ShapeType.RoundedRectangle;
+        private ShapeType _shapeType = ShapeType.RoundedRectangle;
 
         public ShapeType ShapeButtonType
         {
-            get { return ST; }
+            get { return _shapeType; }
             set
             {
-                ST = value; Invalidate();
+                _shapeType = value; Invalidate();
             }
         }
 

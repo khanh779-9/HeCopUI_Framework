@@ -266,7 +266,8 @@ namespace HeCopUI_Framework.Controls.Progress
                 if (SliderValueChanged != null)
                 {
                     SliderValueChanged(this, EventArgs.Empty);
-                };
+                }
+                ;
                 Invalidate();
             }
         }

@@ -51,7 +51,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
 
         public override RPoint MouseLocation
         {
-            get { return Utils.Convert(_control.PointFromScreen(Mouse.GetPosition(_control))); }
+            get { return WpfUtils.Convert(_control.PointFromScreen(Mouse.GetPosition(_control))); }
         }
 
         public override bool LeftMouseButton

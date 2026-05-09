@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -16,13 +16,13 @@ namespace HeCopUI_Framework.Controls.TextControl
     {
         RichTextBox richTextBox;
 
-        private System.Drawing.Text.TextRenderingHint textRenderHint = Helper.TextHelper.SetTextRender();
+        private System.Drawing.Text.TextRenderingHint _textRenderingHint = Helper.TextHelper.SetTextRender();
         public System.Drawing.Text.TextRenderingHint TextRenderHint
         {
-            get { return textRenderHint; }
+            get { return _textRenderingHint; }
             set
             {
-                textRenderHint = value; Invalidate();
+                _textRenderingHint = value; Invalidate();
             }
         }
 
@@ -30,14 +30,12 @@ namespace HeCopUI_Framework.Controls.TextControl
 
         public HRichTextBox()
         {
-
             SetStyle(GetAppResources.SetControlStyles(), true);
             richTextBox = new RichTextBox();
             _animationManager = new Animations.AnimationManager()
             {
                 Increment = 0.08
             };
-            //Inti();
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
@@ -60,13 +58,11 @@ namespace HeCopUI_Framework.Controls.TextControl
 
             richTextBox.Leave += delegate
             {
-
                 _animationManager.StartNewAnimation(Animations.AnimationDirection.Out);
             };
 
             richTextBox.Enter += (sender, e) =>
             {
-
                 if (richTextBox.IsHandleCreated && richTextBox.Created)
                     _animationManager.StartNewAnimation(Animations.AnimationDirection.In);
                 Invalidate();
@@ -108,7 +104,6 @@ namespace HeCopUI_Framework.Controls.TextControl
 
         void Inti()
         {
-
             richTextBox.SelectionRightIndent = SelectionRightIndent;
             richTextBox.AcceptsTab = AcceptsTab;
             richTextBox.HideSelection = HideSelection;
@@ -124,7 +119,6 @@ namespace HeCopUI_Framework.Controls.TextControl
             richTextBox.Multiline = MultiLine;
             richTextBox.DetectUrls = DetectUrls;
             richTextBox.MaxLength = MaxLength;
-            // richTextBox.ZoomFactor = ZoomFactor;
             richTextBox.BorderStyle = BorderStyle.None;
             richTextBox.TextChanged += (ob, send) =>
             {
@@ -193,7 +187,7 @@ namespace HeCopUI_Framework.Controls.TextControl
             if (BorderThickness != 0)
                 g.DrawPath(new Pen(new SolidBrush(richTextBox.Focused ?
                     HeCopUI_Framework.Helper.DrawHelper.BlendColor(BorderHoverColor, BorderFocusColor, _animationManager.GetProgress() * 255) :
-                    Hover ? HeCopUI_Framework.Helper.DrawHelper.BlendColor(bc, BorderHoverColor, _animationManager.GetProgress() * 255) :
+                    Hover ? HeCopUI_Framework.Helper.DrawHelper.BlendColor(BorderColor, BorderHoverColor, _animationManager.GetProgress() * 255) :
                     HeCopUI_Framework.Helper.DrawHelper.BlendColor(BorderColor, BorderHoverColor, _animationManager.GetProgress() * 255)),
                     BorderThickness),
                     HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ClientRectangle, Radius, BorderThickness));
@@ -209,7 +203,6 @@ namespace HeCopUI_Framework.Controls.TextControl
             {
                 ra = value; Invalidate();
             }
-
         }
 
         int bt = 1;
@@ -220,22 +213,18 @@ namespace HeCopUI_Framework.Controls.TextControl
             {
                 bt = value; Invalidate();
             }
-
         }
 
 
-        private int sel = 0;
+        private int _selectionRightIndent = 0;
         public int SelectionRightIndent
         {
-            get { return sel; }
+            get { return _selectionRightIndent; }
             set
             {
-                sel = value; Invalidate();
-
+                _selectionRightIndent = value; Invalidate();
             }
         }
-
-
 
         private bool hideSelection = false;
         public bool HideSelection
@@ -254,17 +243,13 @@ namespace HeCopUI_Framework.Controls.TextControl
             set
             {
                 showSelectionMargin = value; Invalidate();
-
             }
         }
 
         private bool shortcutsEnabled = false;
         public bool ShorcutEnabled
         {
-            get
-            {
-                return shortcutsEnabled;
-            }
+            get { return shortcutsEnabled; }
             set
             {
                 shortcutsEnabled = value; Invalidate();
@@ -272,7 +257,6 @@ namespace HeCopUI_Framework.Controls.TextControl
         }
 
         private int bulletIndent = 0;
-
         public int BulletIndent
         {
             get { return bulletIndent; }
@@ -283,7 +267,6 @@ namespace HeCopUI_Framework.Controls.TextControl
         }
 
         public event EventMultilineChanged MultilineChanged;
-
         public delegate void EventMultilineChanged(object sender, EventArgs e);
 
         private bool autoWordSelection = false;
@@ -297,7 +280,6 @@ namespace HeCopUI_Framework.Controls.TextControl
         }
 
         private bool enableAutoDragDrop = false;
-
         public bool EnableAutoDragDrop
         {
             get { return enableAutoDragDrop; }
@@ -305,7 +287,6 @@ namespace HeCopUI_Framework.Controls.TextControl
             {
                 enableAutoDragDrop = value; Invalidate();
             }
-
         }
 
         public bool MultiLine
@@ -313,16 +294,16 @@ namespace HeCopUI_Framework.Controls.TextControl
             get
             {
                 bool a = false;
-                if (richTextBox == null && !richTextBox.IsHandleCreated) richTextBox = new RichTextBox();
-                else a = richTextBox.Multiline;
+                if (richTextBox != null) a = richTextBox.Multiline;
                 return a;
             }
             set
             {
-
-                richTextBox.Multiline = value;
-                Invalidate();
-
+                if (richTextBox != null)
+                {
+                    richTextBox.Multiline = value;
+                    Invalidate();
+                }
             }
         }
 
@@ -331,15 +312,13 @@ namespace HeCopUI_Framework.Controls.TextControl
             get
             {
                 bool a = false;
-                if (richTextBox == null && !richTextBox.IsHandleCreated) richTextBox = new RichTextBox();
-                else a = richTextBox.WordWrap;
+                if (richTextBox != null) a = richTextBox.WordWrap;
                 return a;
             }
-            set { richTextBox.WordWrap = value; Invalidate(); }
+            set { if (richTextBox != null) { richTextBox.WordWrap = value; Invalidate(); } }
         }
 
         private Point autoScrollOffset = new Point(0, 0);
-
         public new Point AutoScrollOffset
         {
             get { return autoScrollOffset; }
@@ -349,7 +328,7 @@ namespace HeCopUI_Framework.Controls.TextControl
             }
         }
 
-        int maxLength = new RichTextBox().MaxLength;
+        int maxLength = 32767;
         public int MaxLength
         {
             get { return maxLength; }
@@ -360,7 +339,6 @@ namespace HeCopUI_Framework.Controls.TextControl
         }
 
         bool acceptsTab = false;
-
         public bool AcceptsTab
         {
             get { return acceptsTab; }
@@ -380,8 +358,7 @@ namespace HeCopUI_Framework.Controls.TextControl
             }
         }
 
-        RightToLeft rightToLeft = new RichTextBox().RightToLeft;
-
+        RightToLeft rightToLeft = RightToLeft.No;
         public new RightToLeft RightToLeft
         {
             get { return rightToLeft; }
@@ -391,9 +368,7 @@ namespace HeCopUI_Framework.Controls.TextControl
             }
         }
 
-        RichTextBoxScrollBars richTextBoxScrollBars = new RichTextBox().ScrollBars;
-
-
+        RichTextBoxScrollBars richTextBoxScrollBars = RichTextBoxScrollBars.Both;
         public RichTextBoxScrollBars RichTextBoxScrollBars
         {
             get { return richTextBoxScrollBars; }
@@ -407,7 +382,7 @@ namespace HeCopUI_Framework.Controls.TextControl
 
         void UpdateR()
         {
-            if (IsHandleCreated && richTextBox.IsHandleCreated)
+            if (richTextBox != null)
             {
                 richTextBox.Location = new Point(BorderThickness + 2 + Radius / 2, BorderThickness + 2 + Radius / 2);
                 richTextBox.Size = new Size(Width - BorderThickness * 2 - 2 - Radius, Height - BorderThickness * 2 - 2 - Radius);
@@ -430,113 +405,90 @@ namespace HeCopUI_Framework.Controls.TextControl
             base.OnSizeChanged(e);
         }
 
-
         public string[] Lines
         {
             get
             {
-
-                string[] a = { };
-                if (richTextBox == null && !richTextBox.IsHandleCreated) richTextBox = new RichTextBox();
-                else a = richTextBox.Lines;
-                return a;
-
+                if (richTextBox != null) return richTextBox.Lines;
+                return new string[] { };
             }
             set
             {
-                richTextBox.Lines = value; Invalidate();
+                if (richTextBox != null) { richTextBox.Lines = value; Invalidate(); }
             }
         }
-
-
 
         public bool ReadOnly
         {
             get
             {
-                bool a = false;
-                if (richTextBox == null && !richTextBox.IsHandleCreated) richTextBox = new RichTextBox();
-                else a = richTextBox.ReadOnly;
-                return a;
+                if (richTextBox != null) return richTextBox.ReadOnly;
+                return false;
             }
             set
             {
-                richTextBox.ReadOnly = value; Invalidate();
+                if (richTextBox != null) { richTextBox.ReadOnly = value; Invalidate(); }
             }
         }
 
         protected override void OnGotFocus(EventArgs e)
         {
-            if (richTextBox.IsHandleCreated)
+            if (richTextBox != null)
                 richTextBox.Focus();
             base.OnGotFocus(e);
         }
 
-
-        private Color bc = Global.PrimaryColors.BorderNormalColor1;
+        private Color _borderColor = Global.PrimaryColors.BorderNormalColor1;
         public Color BorderColor
         {
-            get { return bc; }
+            get { return _borderColor; }
             set
             {
-                bc = value; Invalidate();
+                _borderColor = value; Invalidate();
             }
         }
 
-
-        private Color bhc = Global.PrimaryColors.BackHoverColor1;
+        private Color _borderHoverColor = Global.PrimaryColors.BackHoverColor1;
         public Color BorderHoverColor
         {
-            get { return bhc; }
+            get { return _borderHoverColor; }
             set
             {
-                bhc = value; Invalidate();
+                _borderHoverColor = value; Invalidate();
             }
         }
 
-        private Color tbc = Color.White;
+        private Color _richTextBoxColor = Color.White;
         public Color RichTextBoxColor
         {
-            get { return tbc; }
+            get { return _richTextBoxColor; }
             set
             {
-                if (value.A == 0)
-                {
-                    if (richTextBox.IsHandleCreated)
-                        richTextBox.BackColor = Color.White;
-                }
-                else
-                    tbc = value;
-                if (richTextBox.IsHandleCreated)
-                    richTextBox.BackColor = tbc;
+                _richTextBoxColor = value;
+                if (richTextBox != null) richTextBox.BackColor = value;
                 Invalidate();
             }
         }
 
-        private Color tbhc = Color.White;
+        private Color _richTextBoxHoverColor = Color.White;
         public Color RichTextBoxHoverColor
         {
-            get { return tbhc; }
+            get { return _richTextBoxHoverColor; }
             set
             {
-                if (value.A == 255)
-                    tbhc = value;
+                _richTextBoxHoverColor = value;
                 Invalidate();
             }
         }
 
-
-        /// <summary>
-        ///   Gets or sets the text associated with this control.
-        /// </summary>
         [Editor("System.ComponentModel.Design.MultilineStringEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(System.Drawing.Design.UITypeEditor))]
-        public new string Text
+        public override string Text
         {
             get { return base.Text; }
             set
             {
                 base.Text = value;
-                richTextBox.Text = value;
+                if (richTextBox != null) richTextBox.Text = value;
                 Invalidate();
             }
         }

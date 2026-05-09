@@ -572,7 +572,6 @@ namespace HeCopUI_Framework.Controls.TreeView
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            Debug.WriteLine("Key pressed: " + e.KeyCode); // Debug statement
 
             if (!DesignMode)
             {

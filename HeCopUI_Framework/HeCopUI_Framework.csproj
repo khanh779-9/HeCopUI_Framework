@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -142,9 +142,6 @@
     <Compile Include="Animations\Flags.cs" />
     <Compile Include="Animations\PointFConverter.cs" />
     <Compile Include="Animations\TransfromHelper.cs" />
-    <Compile Include="Controls\Button\DKButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Controls\Calendar\CalendarControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -218,7 +215,7 @@
     <Compile Include="Controls\ListControl\HListBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\HRadialRangeSlider .cs">
+    <Compile Include="Controls\HRadialRangeSlider.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\Progress\HProgressRing.cs">
@@ -281,7 +278,7 @@
     <Compile Include="Controls\Progress\HProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\Container\HPanel .cs">
+    <Compile Include="Controls\Container\HPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\Button\HButton.cs">
@@ -455,7 +452,7 @@
     </Compile>
     <Compile Include="TaskSchedulerManager.cs" />
     <Compile Include="TaskShedulerService.cs" />
-    <Compile Include="Ultils\DropShadow.cs" />
+    <Compile Include="Utils\DropShadow.cs" />
     <Compile Include="Win32\Enums\AnimateWindowFlags.cs" />
     <Compile Include="Win32\Struct\APPBARDATA.cs" />
     <Compile Include="Win32\Struct\DeviceScaleFactor.cs" />
@@ -503,6 +500,58 @@
     <Compile Include="Win32\Enums\WindowStyles.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\Indicators\ArcRotateIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\BouncingBarsIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\CirclePulseIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\DashesIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\DualRingIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\FadingCircleIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\FourDotsIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\GrowingDotsIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\InfinityIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\LoadingBarIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\OrbitIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\PieSpinnerIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\PulseRingIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\RingIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\SpinnerIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\Indicators\WaveDotsIndicator.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\HImageBlur.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Helper\HBlurs.cs" />
     <Compile Include="Child\HItemCollection.cs" />
     <Compile Include="Components\HSetToolTip.cs">
       <SubType>Component</SubType>
@@ -540,9 +589,6 @@
     <Compile Include="Controls\Button\HImageButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\HLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Controls\TextControl\HNumeric.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -550,6 +596,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\TextControl\HRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TextControl\HLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\HShowFormLocation.cs">
@@ -729,7 +778,6 @@
     <Resource Include="HtmlRenderer\HtmlRenderer\Core\Utils\ImageLoad.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="TextFile1.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\arrow_right_green.png" />
@@ -775,13 +823,11 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>::mkdir C:\Lib\$(ProjectName)
- 
-::copy $(TargetDir)$(TargetFileName) C:\Lib\HeCopUI_Framework\$(TargetFileName) /y</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PostBuildEvent>mkdir C:\Lib\$(ProjectName)
- 
-copy $(TargetDir)$(TargetFileName) C:\Lib\HeCopUI_Framework\$(TargetFileName) /y</PostBuildEvent>
+    <PostBuildEvent>if not exist "C:\Lib\$(ProjectName)" mkdir "C:\Lib\$(ProjectName)"
+if exist "$(TargetDir)$(TargetFileName)" copy "$(TargetDir)$(TargetFileName)" "C:\Lib\HeCopUI_Framework\$(TargetFileName)" /y</PostBuildEvent>
   </PropertyGroup>
 </Project>

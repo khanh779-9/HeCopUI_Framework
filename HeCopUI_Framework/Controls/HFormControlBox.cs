@@ -18,39 +18,39 @@ namespace HeCopUI_Framework.Controls
 
         protected override void OnHandleCreated(EventArgs e)
         {
-            timer = new System.Windows.Forms.Timer();
-            timer.Tick += Timer_Tick;
+            _timer = new System.Windows.Forms.Timer();
+            _timer.Tick += Timer_Tick;
             base.OnHandleCreated(e);
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
         {
-            timer.Interval = 15;
+            _timer.Interval = 15;
             base.OnInvalidated(e);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (hovered == true)
+            if (_hovered == true)
             {
-                step += (step < 255) ? 15 : 0;
-                if (step >= 255) timer.Stop();
+                _step += (_step < 255) ? 15 : 0;
+                if (_step >= 255) _timer.Stop();
             }
             else
             {
-                step -= (step > 0) ? 15 : 0;
-                if (step <= 0) timer.Stop();
+                _step -= (_step > 0) ? 15 : 0;
+                if (_step <= 0) _timer.Stop();
             }
             Invalidate();
         }
 
-        int step = 0;
-        System.Windows.Forms.Timer timer;
-        bool hovered = false;
+        private int _step = 0;
+        private System.Windows.Forms.Timer _timer;
+        private bool _hovered = false;
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            hovered = true; if (IsHandleCreated) timer.Start();
+            _hovered = true; if (IsHandleCreated) _timer.Start();
             Invalidate();
             base.OnMouseEnter(e);
         }
@@ -65,7 +65,7 @@ namespace HeCopUI_Framework.Controls
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            hovered = false; if (IsHandleCreated) timer.Start();
+            _hovered = false; if (IsHandleCreated) _timer.Start();
             Invalidate();
             base.OnMouseLeave(e);
         }
@@ -76,7 +76,7 @@ namespace HeCopUI_Framework.Controls
         {
             if (e.Button == MouseButtons.Left)
             {
-                switch (iT)
+                switch (_iconType)
                 {
                     case IconType.Hide:
                         TargetForm.Hide();
@@ -129,13 +129,13 @@ namespace HeCopUI_Framework.Controls
 
         public ShapeType HoverColorType { get; set; } = ShapeType.RoundedRectangle;
 
-        private int rad = 5;
+        private int _radius = 5;
         public int Radius
         {
-            get { return rad; }
+            get { return _radius; }
             set
             {
-                rad = value; Invalidate();
+                _radius = value; Invalidate();
             }
         }
 
@@ -144,7 +144,7 @@ namespace HeCopUI_Framework.Controls
             Graphics g = e.Graphics;
 
             Helper.GraphicsHelper.SetHightGraphics(g);
-            SolidBrush SB = new SolidBrush(hovered ? HeCopUI_Framework.Helper.DrawHelper.BlendColor(ControlBoxColor, ControlBoxHoverColor, step) : ControlBoxColor);
+            SolidBrush SB = new SolidBrush(_hovered ? HeCopUI_Framework.Helper.DrawHelper.BlendColor(ControlBoxColor, ControlBoxHoverColor, _step) : ControlBoxColor);
             switch (HoverColorType)
             {
 
@@ -152,7 +152,7 @@ namespace HeCopUI_Framework.Controls
                     g.FillEllipse(SB, new Rectangle(0, 0, Width, Height));
                     break;
                 case ShapeType.RoundedRectangle:
-                    g.FillPath(SB, HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ClientRectangle, rad));
+                    g.FillPath(SB, HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ClientRectangle, _radius));
                     break;
             }
 
@@ -165,31 +165,31 @@ namespace HeCopUI_Framework.Controls
 
         }
 
-        private System.Drawing.Color iconColor = System.Drawing.Color.FromArgb(80, 80, 80);
+        private System.Drawing.Color _iconColor = System.Drawing.Color.FromArgb(80, 80, 80);
         public System.Drawing.Color IconColor
         {
             get
             {
-                return iconColor;
+                return _iconColor;
             }
             set
             {
-                iconColor = value; Invalidate();
+                _iconColor = value; Invalidate();
             }
         }
 
         public System.Drawing.Color IconHoverColor { get; set; } = System.Drawing.Color.FromArgb(120, 120, 120);
 
-        private System.Drawing.Color controlBoxColor = System.Drawing.Color.WhiteSmoke;
+        private System.Drawing.Color _controlBoxColor = System.Drawing.Color.WhiteSmoke;
         public System.Drawing.Color ControlBoxColor
         {
             get
             {
-                return controlBoxColor;
+                return _controlBoxColor;
             }
             set
             {
-                controlBoxColor = value; Invalidate();
+                _controlBoxColor = value; Invalidate();
             }
         }
 
@@ -198,9 +198,9 @@ namespace HeCopUI_Framework.Controls
         void DrawIcon2(Graphics g, RectangleF rect)
         {
             float penw = 2f;
-            System.Drawing.Pen pen = new System.Drawing.Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(IconColor, IconHoverColor, step)), penw) { Alignment = PenAlignment.Inset };
+            System.Drawing.Pen pen = new System.Drawing.Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(IconColor, IconHoverColor, _step)), penw) { Alignment = PenAlignment.Inset };
             float offs = penw - 1;
-            switch (iT)
+            switch (_iconType)
             {
                 case IconType.Hide:
                     g.DrawLine(pen, rect.X, rect.Y, rect.Width - offs, rect.Height - offs);
@@ -237,13 +237,13 @@ namespace HeCopUI_Framework.Controls
 
         public Form TargetForm => FindForm();
         public enum IconType { NormalAndMaximize, Minimize, Close, Hide }
-        private IconType iT = IconType.Close;
+        private IconType _iconType = IconType.Close;
         public IconType IconButtonType
         {
-            get { return iT; }
+            get { return _iconType; }
             set
             {
-                iT = value; Invalidate();
+                _iconType = value; Invalidate();
             }
         }
 

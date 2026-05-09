@@ -1,4 +1,4 @@
-﻿using HeCopUI_Framework.Global;
+using HeCopUI_Framework.Global;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -160,13 +160,13 @@ namespace HeCopUI_Framework.Controls.Gauge
             }
         }
 
-        private int BT = 12;
+        private int _solidGaugeWidth = 12;
         public int SolidGaugeWidth
         {
-            get { return BT; }
+            get { return _solidGaugeWidth; }
             set
             {
-                BT = value; Invalidate();
+                _solidGaugeWidth = value; Invalidate();
             }
         }
 
@@ -183,13 +183,13 @@ namespace HeCopUI_Framework.Controls.Gauge
             Size = new Size(_Size, _Size);
         }
 
-        private Color BG = HeCopUI_Framework.Global.PrimaryColors.BaseGaugeColor;
+        private Color _baseGauge = HeCopUI_Framework.Global.PrimaryColors.BaseGaugeColor;
         public Color BaseGauge
         {
-            get { return BG; }
+            get { return _baseGauge; }
             set
             {
-                BG = value; Invalidate();
+                _baseGauge = value; Invalidate();
             }
 
         }
@@ -204,23 +204,23 @@ namespace HeCopUI_Framework.Controls.Gauge
             }
         }
 
-        private Color circularColor = Color.DimGray;
+        private Color _circularDiskColor = Color.DimGray;
         public Color CircularDiskColor
         {
-            get { return circularColor; }
+            get { return _circularDiskColor; }
             set
             {
-                circularColor = value; Invalidate();
+                _circularDiskColor = value; Invalidate();
             }
         }
 
-        private int circularSize = 20;
+        private int _circularSize = 20;
         public int CircularSize
         {
-            get { return circularSize; }
+            get { return _circularSize; }
             set
             {
-                circularSize = value; Invalidate();
+                _circularSize = value; Invalidate();
             }
         }
 
@@ -277,11 +277,11 @@ namespace HeCopUI_Framework.Controls.Gauge
                         brush = new LinearGradientBrush(ClientRectangle, _GaugeColor1, _GaugeColor2, LBV);
                     if (gaugeMode == GaugeType.Transition)
                     {
-                        double blend = 255 * _Value / MaximumValue;
-                        brush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(GaugeColor1, GaugeColor2, blend));
+                        double blend = (double)_Value / m_MaxValue;
+                        brush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(GaugeColor1, GaugeColor2, (int)(blend * 255)));
                     }
-                    using (Pen pen = new Pen(brush, BT))
-                    using (Pen BasePen = new Pen(new SolidBrush(BG), BT - 1.5f))
+                    using (Pen pen = new Pen(brush, _solidGaugeWidth))
+                    using (Pen BasePen = new Pen(new SolidBrush(_baseGauge), _solidGaugeWidth - 1.5f))
                     {
                         BasePen.StartCap = BasePen.EndCap = LC;
                         graphics.DrawArc(BasePen, 10, 10, (Width - 20) - 2, (Height - 20) - 2, 135, 270);
@@ -300,7 +300,7 @@ namespace HeCopUI_Framework.Controls.Gauge
                             needleRadius = needleLong;
                             break;
                         case NeedleLongType.Auto:
-                            needleRadius = Width / 2 - SolidGaugeWidth;
+                            needleRadius = Width / 2 - _solidGaugeWidth;
                             //center = new Point((int)(Center.X * widthFactor), (int)(Center.Y * heightFactor));
                             break;
                     }
@@ -325,7 +325,7 @@ namespace HeCopUI_Framework.Controls.Gauge
                         graphics.DrawLine(pnLine, Width / 2, Height / 2, endPoint.X, endPoint.Y);
                         //e.Graphics.DrawLine(pnLine, Width/2, Height /2, startPoint.X, startPoint.Y);
                     }
-                    using (var brDisk = new SolidBrush(circularColor))
+                    using (var brDisk = new SolidBrush(_circularDiskColor))
                     {
 
                         switch (circularSizeType)
@@ -336,7 +336,7 @@ namespace HeCopUI_Framework.Controls.Gauge
                                 graphics.FillEllipse(brDisk, Width / 2 - ma / 2 - 4, Height / 2 - ma / 2 - 4, ma + 6, ma + 6);
                                 break;
                             case DiskSizeMode.Custom:
-                                graphics.FillEllipse(brDisk, Width / 2 - circularSize / 2, Height / 2 - circularSize / 2, circularSize, circularSize);
+                                graphics.FillEllipse(brDisk, Width / 2 - _circularSize / 2, Height / 2 - _circularSize / 2, _circularSize, _circularSize);
                                 break;
                         }
                     }

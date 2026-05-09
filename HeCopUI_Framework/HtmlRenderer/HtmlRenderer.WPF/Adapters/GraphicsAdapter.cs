@@ -76,15 +76,15 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
         public override void PushClip(RRect rect)
         {
             _clipStack.Push(rect);
-            _g.PushClip(new RectangleGeometry(Utils.Convert(rect)));
+            _g.PushClip(new RectangleGeometry(WpfUtils.Convert(rect)));
         }
 
         public override void PushClipExclude(RRect rect)
         {
             var geometry = new CombinedGeometry
             {
-                Geometry1 = new RectangleGeometry(Utils.Convert(_clipStack.Peek())),
-                Geometry2 = new RectangleGeometry(Utils.Convert(rect)),
+                Geometry1 = new RectangleGeometry(WpfUtils.Convert(_clipStack.Peek())),
+                Geometry2 = new RectangleGeometry(WpfUtils.Convert(rect)),
                 GeometryCombineMode = GeometryCombineMode.Exclude
             };
 
@@ -208,7 +208,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
 
                     glyphRendered = true;
 #pragma warning disable CS0618 // Type or member is obsolete
-                    var glyphRun = new GlyphRun(glyphTypeface, rtl ? 1 : 0, false, 96d / 72d * font.Size, glyphs, Utils.ConvertRound(point), widths, null, null, null, null, null, null);
+                    var glyphRun = new GlyphRun(glyphTypeface, rtl ? 1 : 0, false, 96d / 72d * font.Size, glyphs, WpfUtils.ConvertRound(point), widths, null, null, null, null, null, null);
 #pragma warning restore CS0618 // Type or member is obsolete
                     _g.DrawGlyphRun(colorConv, glyphRun);
                 }
@@ -220,7 +220,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
                 var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, rtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, colorConv);
 #pragma warning restore CS0618 // Type or member is obsolete
                 point.X += rtl ? formattedText.Width : 0;
-                _g.DrawText(formattedText, Utils.ConvertRound(point));
+                _g.DrawText(formattedText, WpfUtils.ConvertRound(point));
             }
         }
 
@@ -230,7 +230,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
             {
                 Stretch = Stretch.None,
                 TileMode = TileMode.Tile,
-                Viewport = Utils.Convert(dstRect),
+                Viewport = WpfUtils.Convert(dstRect),
                 ViewportUnits = BrushMappingMode.Absolute,
                 Transform = new TranslateTransform(translateTransformLocation.X, translateTransformLocation.Y)
             };
@@ -294,12 +294,12 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
         public override void DrawImage(RImage image, RRect destRect, RRect srcRect)
         {
             CroppedBitmap croppedImage = new CroppedBitmap(((ImageAdapter)image).Image, new Int32Rect((int)srcRect.X, (int)srcRect.Y, (int)srcRect.Width, (int)srcRect.Height));
-            _g.DrawImage(croppedImage, Utils.ConvertRound(destRect));
+            _g.DrawImage(croppedImage, WpfUtils.ConvertRound(destRect));
         }
 
         public override void DrawImage(RImage image, RRect destRect)
         {
-            _g.DrawImage(((ImageAdapter)image).Image, Utils.ConvertRound(destRect));
+            _g.DrawImage(((ImageAdapter)image).Image, WpfUtils.ConvertRound(destRect));
         }
 
         public override void DrawPath(RPen pen, RGraphicsPath path)
@@ -319,9 +319,9 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
                 var g = new StreamGeometry();
                 using (var context = g.Open())
                 {
-                    context.BeginFigure(Utils.Convert(points[0]), true, true);
+                    context.BeginFigure(WpfUtils.Convert(points[0]), true, true);
                     for (int i = 1; i < points.Length; i++)
-                        context.LineTo(Utils.Convert(points[i]), true, true);
+                        context.LineTo(WpfUtils.Convert(points[i]), true, true);
                 }
                 g.Freeze();
 

@@ -1,4 +1,4 @@
-﻿using HeCopUI_Framework.Animations;
+using HeCopUI_Framework.Animations;
 using HeCopUI_Framework.Helper;
 using System;
 using System.ComponentModel;
@@ -16,12 +16,12 @@ namespace HeCopUI_Framework.Controls.TextControls
     public class HTextBox : Control
     {
         private bool _underlineStyle = true;
-        private TextBox innerTextBox;
-        warterMark wm = new warterMark();
-        Color watermarkForeColor = Color.Gray;
-        Color borderColor = Color.Gray;
-        Color focusBorderColor = Color.FromArgb(86, 169, 128);
-        Image _image;
+        private TextBox _innerTextBox;
+        private WatermarkControl _watermarkControl = new WatermarkControl();
+        private Color _watermarkForeColor = Color.Gray;
+        private Color _borderColor = Color.Gray;
+        private Color _focusBorderColor = Color.FromArgb(86, 169, 128);
+        private Image _image;
 
 
         AnimationManager _animationManager;
@@ -37,16 +37,16 @@ namespace HeCopUI_Framework.Controls.TextControls
             _animationManager.OnAnimationProgress += sender => Invalidate();
             _animationManager.Increment = 0.08;
 
-            innerTextBox = new TextBox();
-            Text = innerTextBox.Text;
-            innerTextBox.BorderStyle = BorderStyle.None;
-            innerTextBox.TextChanged += InnerTextBox_TextChanged;
+            _innerTextBox = new TextBox();
+            Text = _innerTextBox.Text;
+            _innerTextBox.BorderStyle = BorderStyle.None;
+            _innerTextBox.TextChanged += InnerTextBox_TextChanged;
 
-            innerTextBox.GotFocus += InnerTextBox_GotFocus;
-            innerTextBox.LostFocus += InnerTextBox_LostFocus;
+            _innerTextBox.GotFocus += InnerTextBox_GotFocus;
+            _innerTextBox.LostFocus += InnerTextBox_LostFocus;
 
 
-            wm.Click += Wm_Click;
+            _watermarkControl.Click += Watermark_Click;
 
 
             UpdateInnerTextBoxPosition();
@@ -56,7 +56,7 @@ namespace HeCopUI_Framework.Controls.TextControls
 
         private void InnerTextBox_LostFocus(object sender, EventArgs e)
         {
-            if (innerTextBox != null && innerTextBox.IsHandleCreated && useAnimation && !DesignMode)
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated && _useAnimation && !DesignMode)
             {
                 _animationManager.StartNewAnimation(AnimationDirection.Out);
             }
@@ -64,7 +64,7 @@ namespace HeCopUI_Framework.Controls.TextControls
 
         private void InnerTextBox_GotFocus(object sender, EventArgs e)
         {
-            if (innerTextBox != null && innerTextBox.IsHandleCreated && useAnimation && !DesignMode)
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated && _useAnimation && !DesignMode)
             {
                 _animationManager.StartNewAnimation(AnimationDirection.In);
             }
@@ -72,9 +72,9 @@ namespace HeCopUI_Framework.Controls.TextControls
 
         private void InnerTextBox_TextChanged(object sender, EventArgs e)
         {
-            Text = innerTextBox.Text;
-            if (innerTextBox != null && innerTextBox.IsHandleCreated)
-                innerTextBox.Text = Text;
+            Text = _innerTextBox.Text;
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
+                _innerTextBox.Text = Text;
             Invalidate();
         }
 
@@ -120,17 +120,17 @@ namespace HeCopUI_Framework.Controls.TextControls
         }
 
         /// <summary>
-        /// Gets or sets the foreground color of wartermark text.
+        /// Gets or sets the foreground color of watermark text.
         /// </summary>
         [Browsable(true)]
         [Category("Misc")]
-        [Description("The foreground color of wartermark text.")]
+        [Description("The foreground color of watermark text.")]
         public Color WatermarkForeColor
         {
-            get { return watermarkForeColor; }
+            get { return _watermarkForeColor; }
             set
             {
-                watermarkForeColor = value;
+                _watermarkForeColor = value;
                 Invalidate();
             }
         }
@@ -149,7 +149,7 @@ namespace HeCopUI_Framework.Controls.TextControls
             }
         }
 
-        Size _imageSize = new Size(20, 20);
+        private Size _imageSize = new Size(20, 20);
         /// <summary>
         /// Gets or sets the size of the image in the TextBox control.
         /// </summary>
@@ -164,32 +164,32 @@ namespace HeCopUI_Framework.Controls.TextControls
             }
         }
 
-        bool imageVisible = false;
+        private bool _imageVisible = false;
         /// <summary>
         /// Gets or sets a value indicating whether the image is visible in the TextBox control.
         /// </summary>
         [Description("Indicates whether the image is visible in the TextBox control.")]
         public bool ImageVisible
         {
-            get { return imageVisible; }
+            get { return _imageVisible; }
             set
             {
-                imageVisible = value;
+                _imageVisible = value;
                 Invalidate();
             }
         }
 
-        bool imageAlignRight = false;
+        private bool _imageAlignRight = false;
         /// <summary>
         /// Gets or sets a value indicating whether the image is aligned to the right in the TextBox control.
         /// </summary>
         [Description("Indicates whether the image is aligned to the right in the TextBox control.")]
         public bool ImageAlignRight
         {
-            get { return imageAlignRight; }
+            get { return _imageAlignRight; }
             set
             {
-                imageAlignRight = value;
+                _imageAlignRight = value;
                 Invalidate();
             }
         }
@@ -223,8 +223,8 @@ namespace HeCopUI_Framework.Controls.TextControls
             set
             {
                 _readOnly = value;
-                if (innerTextBox != null && innerTextBox.IsHandleCreated)
-                    innerTextBox.ReadOnly = value;
+                if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
+                    _innerTextBox.ReadOnly = value;
                 Invalidate();
             }
         }
@@ -253,10 +253,10 @@ namespace HeCopUI_Framework.Controls.TextControls
         [Description("The border color of the TextBox control when it has focus.")]
         public Color FocusBorderColor
         {
-            get { return focusBorderColor; }
+            get { return _focusBorderColor; }
             set
             {
-                focusBorderColor = value;
+                _focusBorderColor = value;
                 Invalidate();
             }
         }
@@ -304,15 +304,15 @@ namespace HeCopUI_Framework.Controls.TextControls
         [Description("The border color of the TextBox control.")]
         public Color BorderColor
         {
-            get { return borderColor; }
+            get { return _borderColor; }
             set
             {
-                borderColor = value;
+                _borderColor = value;
                 Invalidate();
             }
         }
 
-        string _wartermark = "Type watermark text here.";
+        private string _watermark = "Type watermark text here.";
         [Editor("System.ComponentModel.Design.MultilineStringEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
         [SettingsBindable(true)]
         /// <summary>
@@ -321,10 +321,10 @@ namespace HeCopUI_Framework.Controls.TextControls
         [Description("The watermark text of the TextBox control.")]
         public string Watermark
         {
-            get { return _wartermark; }
+            get { return _watermark; }
             set
             {
-                _wartermark = value;
+                _watermark = value;
                 Invalidate();
             }
         }
@@ -344,32 +344,32 @@ namespace HeCopUI_Framework.Controls.TextControls
             }
         }
 
-        TextRenderingHint textRenderingHint = TextRenderingHint.ClearTypeGridFit;
+        private TextRenderingHint _textRenderingHint = TextRenderingHint.ClearTypeGridFit;
         /// <summary>
         /// Gets or sets the text rendering hint of the text in the TextBox control.
         /// </summary>
         [Description("The text rendering hint of the text in the TextBox control.")]
         public TextRenderingHint TextRenderHint
         {
-            get { return textRenderingHint; }
+            get { return _textRenderingHint; }
             set
             {
-                textRenderingHint = value;
+                _textRenderingHint = value;
                 Invalidate();
             }
         }
 
-        Font wartermarkFont = Control.DefaultFont;
+        private Font _watermarkFont = Control.DefaultFont;
         /// <summary>
         /// Gets or sets the font of the watermark text in the TextBox control.
         /// </summary>
         [Description("The font of the watermark text in the TextBox control.")]
-        public Font WartermarkFont
+        public Font WatermarkFont
         {
-            get { return wartermarkFont; }
+            get { return _watermarkFont; }
             set
             {
-                wartermarkFont = value;
+                _watermarkFont = value;
                 Invalidate();
             }
         }
@@ -390,13 +390,13 @@ namespace HeCopUI_Framework.Controls.TextControls
             set
             {
                 base.Text = value;
-                if (innerTextBox != null && innerTextBox.IsHandleCreated)
-                    innerTextBox.Text = value;
+                if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
+                    _innerTextBox.Text = value;
                 Invalidate();
             }
         }
 
-        CharacterCasing characterCasing = CharacterCasing.Normal;
+        private CharacterCasing _characterCasing = CharacterCasing.Normal;
 
         /// <summary>
         /// Gets or sets the character casing of the text in the TextBox control.
@@ -405,119 +405,119 @@ namespace HeCopUI_Framework.Controls.TextControls
         [Description("The character casing of the text in the TextBox control.")]
         public CharacterCasing CharacterCasing
         {
-            get { return characterCasing; }
+            get { return _characterCasing; }
             set
             {
-                characterCasing = value;
+                _characterCasing = value;
                 Invalidate();
             }
         }
 
-        int maxLength = 32767;
+        private int _maxLength = 32767;
         /// <summary>
         /// Gets or sets the maximum number of characters the user can type or paste into the text box control.
         /// </summary>
         [Description("The maximum number of characters the user can type or paste into the text box control.")]
         public int MaxLength
         {
-            get { return maxLength; }
+            get { return _maxLength; }
             set
             {
-                maxLength = value;
+                _maxLength = value;
                 Invalidate();
             }
         }
 
-        char passwordChar = '\0';
+        private char _passwordChar = '\0';
         /// <summary>
         /// Gets or sets the character used to mask characters of a password in a single-line TextBox control.
         /// </summary>
         [Description("The character used to mask characters of a password in a single-line TextBox control.")]
         public char PasswordChar
         {
-            get { return passwordChar; }
+            get { return _passwordChar; }
             set
             {
-                passwordChar = value;
+                _passwordChar = value;
                 Invalidate();
             }
         }
 
-        bool shortCutKeysEnabled = true;
+        private bool _shortCutKeysEnabled = true;
         /// <summary>
         /// Gets or sets a value indicating whether the defined shortcuts are enabled.
         /// </summary>
         [Description("A value indicating whether the defined shortcuts are enabled.")]
         public bool ShortCutKeysEnabled
         {
-            get { return shortCutKeysEnabled; }
+            get { return _shortCutKeysEnabled; }
             set
             {
-                shortCutKeysEnabled = value;
+                _shortCutKeysEnabled = value;
                 Invalidate();
             }
         }
 
-        bool hideSelection = true;
+        private bool _hideSelection = true;
         /// <summary>
         /// Gets or sets a value indicating whether the selected text in the text box control remains highlighted when the control loses focus.
         /// </summary>
         public bool HideSelection
         {
-            get { return hideSelection; }
+            get { return _hideSelection; }
             set
             {
-                hideSelection = value;
+                _hideSelection = value;
                 Invalidate();
             }
         }
 
-        bool acceptReturn = false;
+        private bool _acceptReturn = false;
         /// <summary>
         /// Gets or sets a value indicating whether pressing ENTER in a multiline TextBox control creates a new line of text in the control or activates the default button for the form.
         /// </summary>
         [Description("A value indicating whether pressing ENTER in a multiline TextBox control creates a new line of text in the control or activates the default button for the form.")]
         public bool AcceptReturn
         {
-            get { return acceptReturn; }
+            get { return _acceptReturn; }
             set
             {
-                acceptReturn = value;
+                _acceptReturn = value;
                 Invalidate();
             }
         }
 
-        bool acceptTab = false;
+        private bool _acceptTab = false;
         /// <summary>
         /// Gets or sets a value indicating whether pressing the TAB key in a multiline text box control types a TAB character in the control instead of moving the focus to the next control in the tab order.
         /// </summary>
         [Description("A value indicating whether pressing the TAB key in a multiline text box control types a TAB character in the control instead of moving the focus to the next control in the tab order.")]
         public bool AcceptTab
         {
-            get { return acceptTab; }
+            get { return _acceptTab; }
             set
             {
-                acceptTab = value;
+                _acceptTab = value;
                 Invalidate();
             }
         }
 
-        bool wordWrap = true;
+        private bool _wordWrap = true;
         /// <summary>
         /// Gets or sets a value indicating whether text in the text box control is displayed using multiple lines.
         /// </summary>
         [Description("A value indicating whether text in the text box control is displayed using multiple lines.")]
         public bool WordWrap
         {
-            get { return wordWrap; }
+            get { return _wordWrap; }
             set
             {
-                wordWrap = value;
+                _wordWrap = value;
                 Invalidate();
             }
         }
 
-        AutoCompleteStringCollection autoCompleteCustomSource = new AutoCompleteStringCollection();
+        private AutoCompleteStringCollection _autoCompleteCustomSource = new AutoCompleteStringCollection();
         /// <summary>
         /// Gets or sets the custom source for auto-complete strings.
         /// </summary>
@@ -529,15 +529,15 @@ namespace HeCopUI_Framework.Controls.TextControls
         [Category("Misc_AutoComplete")]
         public AutoCompleteStringCollection AutoCompleteCustomSource
         {
-            get { return autoCompleteCustomSource; }
+            get { return _autoCompleteCustomSource; }
             set
             {
-                autoCompleteCustomSource = value;
+                _autoCompleteCustomSource = value;
                 Invalidate();
             }
         }
 
-        AutoCompleteMode autoCompleteMode = AutoCompleteMode.None;
+        private AutoCompleteMode _autoCompleteMode = AutoCompleteMode.None;
         /// <summary>
         /// Gets or sets an option that controls how automatic completion works for the TextBox.
         /// </summary>
@@ -547,15 +547,15 @@ namespace HeCopUI_Framework.Controls.TextControls
         [EditorBrowsable(EditorBrowsableState.Always)]
         public AutoCompleteMode AutoCompleteMode
         {
-            get { return autoCompleteMode; }
+            get { return _autoCompleteMode; }
             set
             {
-                autoCompleteMode = value;
+                _autoCompleteMode = value;
                 Invalidate();
             }
         }
 
-        AutoCompleteSource autoCompleteSource = AutoCompleteSource.None;
+        private AutoCompleteSource _autoCompleteSource = AutoCompleteSource.None;
         /// <summary>
         /// Gets or sets a value specifying the source of complete strings used for automatic completion.
         /// </summary>
@@ -565,10 +565,10 @@ namespace HeCopUI_Framework.Controls.TextControls
         [EditorBrowsable(EditorBrowsableState.Always)]
         public AutoCompleteSource AutoCompleteSource
         {
-            get { return autoCompleteSource; }
+            get { return _autoCompleteSource; }
             set
             {
-                autoCompleteSource = value;
+                _autoCompleteSource = value;
                 Invalidate();
             }
         }
@@ -588,7 +588,7 @@ namespace HeCopUI_Framework.Controls.TextControls
             }
         }
 
-        RightToLeft rightToLeft = RightToLeft.No;
+        private RightToLeft _rightToLeft = RightToLeft.No;
         /// <summary>
         /// Gets or sets a value indicating whether control's elements are aligned to support locales using right-to-left fonts.
         /// </summary>
@@ -597,15 +597,15 @@ namespace HeCopUI_Framework.Controls.TextControls
         //[AmbientValue(RightToLeft.Inherit)]
         public override RightToLeft RightToLeft
         {
-            get { return rightToLeft; }
+            get { return _rightToLeft; }
             set
             {
-                rightToLeft = value;
+                _rightToLeft = value;
                 Invalidate();
             }
         }
 
-        bool useAnimation = false;
+        private bool _useAnimation = false;
         /// <summary>
         /// Gets or sets a value indicating whether the TextBox control uses animation.
         /// </summary>
@@ -613,10 +613,10 @@ namespace HeCopUI_Framework.Controls.TextControls
         [Description("A value indicating whether the TextBox control uses animation.")]
         public bool UseAnimation
         {
-            get { return useAnimation; }
+            get { return _useAnimation; }
             set
             {
-                useAnimation = value;
+                _useAnimation = value;
                 Invalidate();
             }
         }
@@ -630,9 +630,9 @@ namespace HeCopUI_Framework.Controls.TextControls
             base.OnPaint(e);
             Graphics g = e.Graphics;
 
-            Pen pen = new Pen(new SolidBrush(innerTextBox.Focused ?
-                (useAnimation ? ColorHelper.BlendColor(borderColor, focusBorderColor, _animationManager.GetProgress() * 255) : focusBorderColor) :
-                borderColor), _underlineStyle ? BorderWidth + 1 : BorderWidth);
+            Pen pen = new Pen(new SolidBrush(_innerTextBox.Focused ?
+                (_useAnimation ? ColorHelper.BlendColor(_borderColor, _focusBorderColor, _animationManager.GetProgress() * 255) : _focusBorderColor) :
+                _borderColor), _underlineStyle ? BorderWidth + 1 : BorderWidth);
 
 
             // Draw image
@@ -657,7 +657,7 @@ namespace HeCopUI_Framework.Controls.TextControls
                 float startX = midPoint * (1 - progress);
                 float endX = midPoint + (midPoint * progress);
 
-                if (useAnimation)
+                if (_useAnimation)
                 {
                     var pen1 = new Pen(new SolidBrush(BorderColor), BorderWidth);
                     g.DrawLine(pen1, 0, Height - 1, Width, Height - 1);
@@ -691,8 +691,8 @@ namespace HeCopUI_Framework.Controls.TextControls
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            if (innerTextBox != null && innerTextBox.IsHandleCreated)
-                innerTextBox.Focus();
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
+                _innerTextBox.Focus();
             Invalidate();
         }
 
@@ -705,15 +705,15 @@ namespace HeCopUI_Framework.Controls.TextControls
         protected override void OnEnter(EventArgs e)
         {
             base.OnEnter(e);
-            if (innerTextBox != null && innerTextBox.IsHandleCreated)
-                innerTextBox.Focus();
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
+                _innerTextBox.Focus();
             Invalidate();
         }
 
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
-            innerTextBox.Text = Text;
+            _innerTextBox.Text = Text;
             Invalidate();
         }
 
@@ -726,14 +726,14 @@ namespace HeCopUI_Framework.Controls.TextControls
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            if (innerTextBox != null && innerTextBox.IsHandleCreated)
-                innerTextBox.Focus();
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
+                _innerTextBox.Focus();
         }
 
-        private void Wm_Click(object sender, EventArgs e)
+        private void Watermark_Click(object sender, EventArgs e)
         {
-            if (innerTextBox != null && innerTextBox.IsHandleCreated)
-                innerTextBox.Focus();
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
+                _innerTextBox.Focus();
             Invalidate();
         }
 
@@ -741,7 +741,7 @@ namespace HeCopUI_Framework.Controls.TextControls
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            UpdateTextAndWarter();
+            UpdateTextAndWatermark();
             UpdateInnerTextBoxPosition();
 
         }
@@ -752,15 +752,15 @@ namespace HeCopUI_Framework.Controls.TextControls
             base.OnInvalidated(e);
         }
 
-        void UpdateTextAndWarter()
+        void UpdateTextAndWatermark()
         {
-            if (innerTextBox != null && !Controls.Contains(innerTextBox))
-                Controls.Add(innerTextBox);
+            if (_innerTextBox != null && !Controls.Contains(_innerTextBox))
+                Controls.Add(_innerTextBox);
 
-            if (wm != null && !Controls.Contains(wm))
+            if (_watermarkControl != null && !Controls.Contains(_watermarkControl))
             {
-                Controls.Add(wm);
-                wm.BringToFront();
+                Controls.Add(_watermarkControl);
+                _watermarkControl.BringToFront();
             }
             Invalidate();
         }
@@ -768,63 +768,63 @@ namespace HeCopUI_Framework.Controls.TextControls
         protected override void OnCursorChanged(EventArgs e)
         {
             base.OnCursorChanged(e);
-            if (innerTextBox != null && innerTextBox.IsHandleCreated)
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
             {
-                innerTextBox.Cursor = Cursor;
+                _innerTextBox.Cursor = Cursor;
             }
-            if (wm != null && wm.IsHandleCreated)
+            if (_watermarkControl != null && _watermarkControl.IsHandleCreated)
             {
-                wm.Cursor = Cursor;
+                _watermarkControl.Cursor = Cursor;
 
             }
             Invalidate();
         }
 
-        int offx = 1;
+        int _offsetX = 1;
 
         void UpdateInnerTextBoxPosition()
         {
 
-            if (innerTextBox != null && innerTextBox.IsHandleCreated)
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
             {
-                innerTextBox.Location = new Point(BorderWidth + (imageVisible && _image != null ? ImageSize.Width : 0) + offx, (Height - innerTextBox.Height) / 2);
+                _innerTextBox.Location = new Point(BorderWidth + (_imageVisible && _image != null ? ImageSize.Width : 0) + _offsetX, (Height - _innerTextBox.Height) / 2);
 
-                if (wm != null && wm.IsHandleCreated)
+                if (_watermarkControl != null && _watermarkControl.IsHandleCreated)
                 {
-                    wm.Size = new Size(Width - offx - 1 - BorderWidth * 2 - (imageVisible && _image != null ? ImageSize.Width : 0) - 3, innerTextBox.Height);
-                    wm.Location = new Point(innerTextBox.Location.X + (TextAlign == HorizontalAlignment.Left ? 1 : TextAlign == HorizontalAlignment.Right ? -1 : 0),
-                        innerTextBox.Location.Y);
+                    _watermarkControl.Size = new Size(Width - _offsetX - 1 - BorderWidth * 2 - (_imageVisible && _image != null ? ImageSize.Width : 0) - 3, _innerTextBox.Height);
+                    _watermarkControl.Location = new Point(_innerTextBox.Location.X + (TextAlign == HorizontalAlignment.Left ? 1 : TextAlign == HorizontalAlignment.Right ? -1 : 0),
+                        _innerTextBox.Location.Y);
 
-                    wm.Text = _wartermark;
-                    wm.Font = WartermarkFont;
-                    wm.ForeColor = WatermarkForeColor;
-                    wm.TextRenderHint = TextRenderHint;
-                    wm.TextAlign = TextAlign;
-                    wm.BackColor = BackColor;
+                    _watermarkControl.Text = _watermark;
+                    _watermarkControl.Font = WatermarkFont;
+                    _watermarkControl.ForeColor = WatermarkForeColor;
+                    _watermarkControl.TextRenderHint = TextRenderHint;
+                    _watermarkControl.TextAlign = TextAlign;
+                    _watermarkControl.BackColor = BackColor;
 
                 }
-                if (innerTextBox != null && innerTextBox.IsHandleCreated)
+                if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
                 {
-                    if (wm != null && wm.IsHandleCreated)
-                        wm.Visible = string.IsNullOrEmpty(innerTextBox.Text) && !Multiline && TextAlign != HorizontalAlignment.Center;
+                    if (_watermarkControl != null && _watermarkControl.IsHandleCreated)
+                        _watermarkControl.Visible = string.IsNullOrEmpty(_innerTextBox.Text) && !Multiline && TextAlign != HorizontalAlignment.Center;
 
-                    innerTextBox.Font = Font;
-                    innerTextBox.BackColor = BackColor;
-                    innerTextBox.ForeColor = ForeColor;
-                    innerTextBox.Multiline = Multiline;
-                    innerTextBox.ReadOnly = ReadOnly;
-                    innerTextBox.UseSystemPasswordChar = UseSystemPasswordChar;
-                    innerTextBox.TextAlign = TextAlign;
-                    innerTextBox.CharacterCasing = CharacterCasing;
-                    innerTextBox.MaxLength = MaxLength;
-                    innerTextBox.PasswordChar = PasswordChar;
-                    innerTextBox.ShortcutsEnabled = ShortCutKeysEnabled;
-                    innerTextBox.HideSelection = HideSelection;
-                    innerTextBox.AcceptsReturn = AcceptReturn;
-                    innerTextBox.AcceptsTab = AcceptTab;
-                    innerTextBox.WordWrap = WordWrap;
+                    _innerTextBox.Font = Font;
+                    _innerTextBox.BackColor = BackColor;
+                    _innerTextBox.ForeColor = ForeColor;
+                    _innerTextBox.Multiline = Multiline;
+                    _innerTextBox.ReadOnly = ReadOnly;
+                    _innerTextBox.UseSystemPasswordChar = UseSystemPasswordChar;
+                    _innerTextBox.TextAlign = TextAlign;
+                    _innerTextBox.CharacterCasing = CharacterCasing;
+                    _innerTextBox.MaxLength = MaxLength;
+                    _innerTextBox.PasswordChar = PasswordChar;
+                    _innerTextBox.ShortcutsEnabled = ShortCutKeysEnabled;
+                    _innerTextBox.HideSelection = HideSelection;
+                    _innerTextBox.AcceptsReturn = AcceptReturn;
+                    _innerTextBox.AcceptsTab = AcceptTab;
+                    _innerTextBox.WordWrap = WordWrap;
 
-                    innerTextBox.RightToLeft = RightToLeft;
+                    _innerTextBox.RightToLeft = RightToLeft;
 
                     //innerTextBox.AutoCompleteCustomSource = AutoCompleteCustomSource;
                     //if (innerTextBox.Created && innerTextBox.IsHandleCreated)
@@ -834,7 +834,7 @@ namespace HeCopUI_Framework.Controls.TextControls
                     //innerTextBox.AutoCompleteSource = AutoCompleteSource;
 
                     if (Lines.Length > 0)
-                        innerTextBox.Lines = Lines;
+                        _innerTextBox.Lines = Lines;
                 }
 
 
@@ -844,22 +844,22 @@ namespace HeCopUI_Framework.Controls.TextControls
 
         void UpdateInnerTextBoxSize()
         {
-            if (innerTextBox != null && innerTextBox.IsHandleCreated)
+            if (_innerTextBox != null && _innerTextBox.IsHandleCreated)
             {
-                innerTextBox.Width = Width - offx - 2 - BorderWidth * 2 - (imageVisible && _image != null ? ImageSize.Width : 0);
+                _innerTextBox.Width = Width - _offsetX - 2 - BorderWidth * 2 - (_imageVisible && _image != null ? ImageSize.Width : 0);
 
 
-                if (Height <= (Multiline ? 40 : innerTextBox.Height + BorderWidth * 2 + 4))
+                if (Height <= (Multiline ? 40 : _innerTextBox.Height + BorderWidth * 2 + 4))
                 {
-                    Height = Multiline ? 40 : innerTextBox.Height + BorderWidth * 2 + 4;
+                    Height = Multiline ? 40 : _innerTextBox.Height + BorderWidth * 2 + 4;
 
                 }
                 if (Multiline)
-                    innerTextBox.Height = Height - 2 - BorderWidth * 2;
+                    _innerTextBox.Height = Height - 2 - BorderWidth * 2;
 
                 if (Width < 100)
                 {
-                    Width = innerTextBox.Width + BorderWidth * 2 + 4;
+                    Width = _innerTextBox.Width + BorderWidth * 2 + 4;
                 }
 
             }
@@ -867,15 +867,15 @@ namespace HeCopUI_Framework.Controls.TextControls
 
         #endregion
 
-        private class warterMark : Control
+        private class WatermarkControl : Control
         {
-            public warterMark()
+            public WatermarkControl()
             {
                 SetStyle(ControlStyles.OptimizedDoubleBuffer |
                          ControlStyles.SupportsTransparentBackColor, true);
             }
 
-            TextRenderingHint trd = TextRenderingHint.ClearTypeGridFit;
+            private TextRenderingHint _textRenderingHint = TextRenderingHint.ClearTypeGridFit;
             /// <summary>
             /// Gets or sets the text rendering hint of the text in the TextBox control.
             /// </summary>
@@ -884,16 +884,16 @@ namespace HeCopUI_Framework.Controls.TextControls
             {
                 get
                 {
-                    return trd;
+                    return _textRenderingHint;
                 }
                 set
                 {
-                    trd = value;
+                    _textRenderingHint = value;
                     Invalidate();
                 }
             }
 
-            HorizontalAlignment _textAlign = HorizontalAlignment.Left;
+            private HorizontalAlignment _textAlign = HorizontalAlignment.Left;
             /// <summary>
             /// Gets or sets the text alignment within the text box.
             /// </summary>
@@ -914,21 +914,15 @@ namespace HeCopUI_Framework.Controls.TextControls
             protected override void OnPaint(PaintEventArgs e)
             {
                 base.OnPaint(e);
-                Bitmap bmp = new Bitmap(Width, Height);
-                bmp.MakeTransparent();
+                Graphics g = e.Graphics;
 
-                using (Graphics g = Graphics.FromImage(bmp))
+                g.TextRenderingHint = _textRenderingHint;
+
+                using (StringFormat sf = new StringFormat
                 {
-                    g.SmoothingMode = SmoothingMode.HighQuality;
-                    g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                    g.TextRenderingHint = trd;
-
-                    StringFormat sf = new StringFormat
-                    {
-                        LineAlignment = StringAlignment.Center
-                    };
+                    LineAlignment = StringAlignment.Center
+                })
+                {
                     switch (_textAlign)
                     {
                         case HorizontalAlignment.Left:
@@ -944,15 +938,8 @@ namespace HeCopUI_Framework.Controls.TextControls
                     sf.Trimming = StringTrimming.EllipsisCharacter;
 
                     using (var bru = new SolidBrush(ForeColor))
-                        g.DrawString(Text, Font, bru, new RectangleF(0, 0, Width, Height), sf);
-
-
-                    sf.Dispose();
-
+                        g.DrawString(Text, Font, bru, ClientRectangle, sf);
                 }
-                e.Graphics.DrawImage(bmp, 0, 0);
-
-
             }
         }
     }

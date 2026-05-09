@@ -72,7 +72,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
 
         public override void Show(RControl parent, RPoint location)
         {
-            _contextMenu.Show(((ControlAdapter)parent).Control, Utils.ConvertRound(location));
+            _contextMenu.Show(((ControlAdapter)parent).Control, WinFormsUtils.ConvertRound(location));
         }
 
         public override void Dispose()

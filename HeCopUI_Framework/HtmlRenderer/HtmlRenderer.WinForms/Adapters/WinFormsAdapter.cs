@@ -1,4 +1,4 @@
-﻿// "Therefore those skilled at the unorthodox
+// "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
 // inexhaustible as the great rivers.
 // When they come to an end,
@@ -60,12 +60,12 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
         protected override RColor GetColorInt(string colorName)
         {
             var color = Color.FromName(colorName);
-            return Utils.Convert(color);
+            return WinFormsUtils.Convert(color);
         }
 
         protected override RPen CreatePen(RColor color)
         {
-            return new PenAdapter(new Pen(Utils.Convert(color)));
+            return new PenAdapter(new Pen(WinFormsUtils.Convert(color)));
         }
 
         protected override RBrush CreateSolidBrush(RColor color)
@@ -78,14 +78,14 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
             else if (color.A < 1)
                 solidBrush = Brushes.Transparent;
             else
-                solidBrush = new SolidBrush(Utils.Convert(color));
+                solidBrush = new SolidBrush(WinFormsUtils.Convert(color));
 
             return new BrushAdapter(solidBrush, false);
         }
 
         protected override RBrush CreateLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle)
         {
-            return new BrushAdapter(new LinearGradientBrush(Utils.Convert(rect), Utils.Convert(color1), Utils.Convert(color2), (float)angle), true);
+            return new BrushAdapter(new LinearGradientBrush(WinFormsUtils.Convert(rect), WinFormsUtils.Convert(color1), WinFormsUtils.Convert(color2), (float)angle), true);
         }
 
         protected override RImage ConvertImageInt(object image)

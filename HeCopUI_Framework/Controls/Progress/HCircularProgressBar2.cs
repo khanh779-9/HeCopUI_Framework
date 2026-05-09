@@ -327,7 +327,6 @@ namespace HeCopUI_Framework.Controls.Progress
 
                     #endregion
 
-                    //Aqui se Dibuja todo el Control:
                     e.Graphics.DrawImage(bitmap, 0, 0);
                     graphics.Dispose();
                     bitmap.Dispose();

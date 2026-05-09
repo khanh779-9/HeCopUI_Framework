@@ -33,43 +33,43 @@ namespace HeCopUI_Framework.Controls.ListControl
         public new FlatStyle FlatStyle { get; set; } = FlatStyle.Flat;
 
 
-        private Color it = Color.White;
+        private Color _selectedItemForeColor = Color.White;
         public Color SelectedItemForeColor
         {
-            get { return it; }
+            get { return _selectedItemForeColor; }
             set
             {
-                it = value; Invalidate();
+                _selectedItemForeColor = value; Invalidate();
             }
         }
 
-        private Color ita = Color.FromArgb(80, 80, 80);
+        private Color _itemForeColor = Color.FromArgb(80, 80, 80);
         public Color ItemForeColor
         {
-            get { return ita; }
+            get { return _itemForeColor; }
             set
             {
-                ita = value; Invalidate();
+                _itemForeColor = value; Invalidate();
             }
         }
 
-        private Color itb = Color.FromArgb(0, 168, 148);
+        private Color _selectedItemBackColor = Color.FromArgb(0, 168, 148);
         public Color SelectedItemBackColor
         {
-            get { return itb; }
+            get { return _selectedItemBackColor; }
             set
             {
-                itb = value; Invalidate();
+                _selectedItemBackColor = value; Invalidate();
             }
         }
 
-        private Font IFo = Control.DefaultFont;
+        private Font _itemsFont = Control.DefaultFont;
         public Font ItemsFont
         {
-            get { return IFo; }
+            get { return _itemsFont; }
             set
             {
-                IFo = value; Invalidate();
+                _itemsFont = value; Invalidate();
             }
         }
 
@@ -77,7 +77,7 @@ namespace HeCopUI_Framework.Controls.ListControl
         {
             var g = e.Graphics;
             e.DrawBackground();
-            g.TextRenderingHint = textRendering;
+            g.TextRenderingHint = _textRenderingHint;
 
             if (e.Index == -1)
             {
@@ -88,14 +88,14 @@ namespace HeCopUI_Framework.Controls.ListControl
             {
                 Alignment = StringAlignment.Near,
                 LineAlignment = StringAlignment.Center,
-                Trimming = st
+                Trimming = _textTrim
             };
 
             var itemState = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
             using (var bg = new SolidBrush(itemState ? SelectedItemBackColor : BackgroundColor))
             using (var tc = new SolidBrush(itemState ? SelectedItemForeColor : ItemForeColor))
             {
-                SizeF a = g.MeasureString(GetItemText(Items[e.Index]), IFo);
+                SizeF a = g.MeasureString(GetItemText(Items[e.Index]), _itemsFont);
                 g.FillRectangle(bg, e.Bounds);
                 g.DrawString(GetItemText(Items[e.Index]), ItemsFont, tc, new RectangleF(
                     e.Bounds.X, e.Bounds.Y, e.Bounds.Width, e.Bounds.Height), sf);
@@ -123,13 +123,13 @@ namespace HeCopUI_Framework.Controls.ListControl
 
 
 
-        System.Drawing.Text.TextRenderingHint textRendering = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
+        System.Drawing.Text.TextRenderingHint _textRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
         public System.Drawing.Text.TextRenderingHint TextRendergHint
         {
-            get { return textRendering; }
+            get { return _textRenderingHint; }
             set
             {
-                textRendering = value; Invalidate();
+                _textRenderingHint = value; Invalidate();
             }
         }
 
@@ -137,74 +137,74 @@ namespace HeCopUI_Framework.Controls.ListControl
 
 
 
-        private Color bc = Global.PrimaryColors.BorderNormalColor1;
+        private Color _borderColor = Global.PrimaryColors.BorderNormalColor1;
         public Color BorderColor
         {
-            get { return bc; }
+            get { return _borderColor; }
             set
             {
-                bc = value; Invalidate();
+                _borderColor = value; Invalidate();
             }
         }
 
-        private Color bacg = Color.White;
+        private Color _backgroundColor = Color.White;
         public Color BackgroundColor
         {
-            get { return bacg; }
+            get { return _backgroundColor; }
             set
             {
-                bacg = value; Invalidate();
+                _backgroundColor = value; Invalidate();
             }
         }
 
-        private Color dis = Color.WhiteSmoke;
+        private Color _disabledBackColor = Color.WhiteSmoke;
         public Color DisabledBackColor
         {
-            get { return dis; }
+            get { return _disabledBackColor; }
             set
             {
-                dis = value; Invalidate();
+                _disabledBackColor = value; Invalidate();
             }
         }
 
-        private Color bdis = Color.FromArgb(60, 60, 60);
+        private Color _disabledBorderColor = Color.FromArgb(60, 60, 60);
         public Color DisabledBorderColor
         {
-            get { return bdis; }
+            get { return _disabledBorderColor; }
             set
             {
-                bdis = value; Invalidate();
+                _disabledBorderColor = value; Invalidate();
             }
         }
 
 
-        private Color att = Color.FromArgb(0, 168, 118);
+        private Color _arrowColor = Color.FromArgb(0, 168, 118);
         public Color ArrowColor
         {
-            get { return att; }
+            get { return _arrowColor; }
             set
             {
-                att = value; Invalidate();
+                _arrowColor = value; Invalidate();
             }
         }
 
-        private Color df = Color.FromArgb(64, 64, 64);
+        private Color _disabledForeColor = Color.FromArgb(64, 64, 64);
         public Color DisabledForeColor
         {
-            get { return df; }
+            get { return _disabledForeColor; }
             set
             {
-                df = value; Invalidate();
+                _disabledForeColor = value; Invalidate();
             }
         }
 
-        private StringTrimming st = StringTrimming.EllipsisCharacter;
+        private StringTrimming _textTrim = StringTrimming.EllipsisCharacter;
         public StringTrimming TextTrim
         {
-            get { return st; }
+            get { return _textTrim; }
             set
             {
-                st = value; Invalidate();
+                _textTrim = value; Invalidate();
             }
         }
 
@@ -218,8 +218,8 @@ namespace HeCopUI_Framework.Controls.ListControl
                 Alignment = StringAlignment.Near,
                 LineAlignment = StringAlignment.Center
             };
-            g.TextRenderingHint = textRendering;
-            sf.Trimming = st;
+            g.TextRenderingHint = _textRenderingHint;
+            sf.Trimming = _textTrim;
 
             using (var bg = new SolidBrush(Enabled ? BackgroundColor : DisabledBackColor))
             {

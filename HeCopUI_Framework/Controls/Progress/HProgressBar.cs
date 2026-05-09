@@ -1,4 +1,4 @@
-﻿using HeCopUI_Framework.Structs;
+using HeCopUI_Framework.Structs;
 using System;
 using System.ComponentModel;
 using System.Drawing;
@@ -26,7 +26,6 @@ namespace HeCopUI_Framework.Controls.Progress
         protected override void OnCreateControl()
         {
             if (IsHandleCreated)
-                // if (!DesignMode)
                 tmrIndi.Start();
             base.OnCreateControl();
         }
@@ -37,25 +36,22 @@ namespace HeCopUI_Framework.Controls.Progress
             {
                 case Enums.ProgressAnimationMode.Indeterminate:
                     int a = ((Or == Orientation.Horizontal) ? Width - 1 : Height - 1);
-                    if (locx >= a) locx = 0 - ((PV - MV) * a) / MAV;
+                    if (locx >= a) locx = 0 - ((_progressValue - _minimumValue) * a) / _maximumValue;
                     else locx += 2;
-
                     break;
+
                 case Enums.ProgressAnimationMode.Value:
-                    if (AnV != PV)
+                    if (AnV != _progressValue)
                     {
-                        if (AnV < PV)
-                        {
-                            AnV += 1;
-                        }
-                        if (AnV > PV) AnV -= 1;
+                        if (AnV < _progressValue) AnV += 1;
+                        else if (AnV > _progressValue) AnV -= 1;
                     }
                     else tmrIndi.Stop();
                     break;
+
                 case Enums.ProgressAnimationMode.None:
                     tmrIndi.Stop();
                     break;
-
             }
 
             Invalidate();
@@ -102,20 +98,20 @@ namespace HeCopUI_Framework.Controls.Progress
             using (Bitmap bitm = new Bitmap(Width, Height))
             using (Graphics g = Graphics.FromImage(bitm))
             using (GraphicsPath GP = HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(recf, Radius, 0))
-            using (LinearGradientBrush LB = new LinearGradientBrush(recPro, BPC1, BPC2, Linear))
-            using (LinearGradientBrush LB1 = new LinearGradientBrush(recPro, PC1, PC2, Linear))
+            using (LinearGradientBrush LB = new LinearGradientBrush(recPro, BaseProgressColor1, BaseProgressColor2, Linear))
+            using (LinearGradientBrush LB1 = new LinearGradientBrush(recPro, ProgressColor1, ProgressColor2, Linear))
             {
                 switch (AnimationMode)
                 {
                     case Enums.ProgressAnimationMode.None:
                         if (Or == Orientation.Horizontal)
-                            recPro.Width = (float)(((PV - MV) * recf.Width) / MAV);
-                        else recPro.Height = (float)(((PV - MV) * recf.Height) / MAV);
+                            recPro.Width = (float)(((_progressValue - _minimumValue) * (float)recf.Width) / _maximumValue);
+                        else recPro.Height = (float)(((_progressValue - _minimumValue) * (float)recf.Height) / _maximumValue);
                         break;
                     case Enums.ProgressAnimationMode.Value:
                         if (Or == Orientation.Horizontal)
-                            recPro.Width = (float)(((AnV - MV) * recf.Width) / MAV);
-                        else recPro.Height = (float)(((AnV - MV) * recf.Height) / MAV);
+                            recPro.Width = (float)(((AnV - _minimumValue) * (float)recf.Width) / _maximumValue);
+                        else recPro.Height = (float)(((AnV - _minimumValue) * (float)recf.Height) / _maximumValue);
                         break;
                     case Enums.ProgressAnimationMode.Indeterminate:
                         break;
@@ -124,19 +120,19 @@ namespace HeCopUI_Framework.Controls.Progress
                 using (GraphicsPath GPV = (AnimationMode == Enums.ProgressAnimationMode.Indeterminate) ? HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(
                     0.5f + (Or == Orientation.Horizontal ? locx : 0),
                     0.5f + (Or == Orientation.Vertical ? locx : 0),
-                    (Or == Orientation.Horizontal ? 30 + locx : Width - 1),
-                    (Or == Orientation.Vertical ? 30 + locx : Height - 1)), Radius, 0) :
-                    HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(recPro, Ra, 0))
+                    (Or == Orientation.Horizontal ? 30 : Width - 1),
+                    (Or == Orientation.Vertical ? 30 : Height - 1)), Radius, 0) :
+                    HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(recPro, Radius, 0))
                 {
                     Helper.GraphicsHelper.SetHightGraphics(g);
                     g.FillPath(LB, GP);
-                    if (PV != 0) g.FillPath(LB1, GPV);
-                    if (BT != 0)
+                    if (_progressValue != 0 || AnimationMode == Enums.ProgressAnimationMode.Indeterminate) g.FillPath(LB1, GPV);
+                    if (_borderThickness != 0)
                     {
-                        using (Pen pen = new Pen(new SolidBrush(BC), BT))
+                        using (Pen pen = new Pen(new SolidBrush(_borderColor), _borderThickness))
                         {
                             pen.Alignment = PenAlignment.Inset;
-                            g.DrawPath(pen, HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(recf, Radius, BorderWidth));
+                            g.DrawPath(pen, HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(recf, Radius, _borderThickness));
                         }
                     }
                     e.Graphics.FillPath(new TextureBrush(bitm), GP);
@@ -152,7 +148,6 @@ namespace HeCopUI_Framework.Controls.Progress
             get { return Or; }
             set
             {
-
                 Or = value; Invalidate();
             }
         }
@@ -170,18 +165,13 @@ namespace HeCopUI_Framework.Controls.Progress
         int AnV = 0;
         public int ProgressValue
         {
-            get { return PV; }
+            get { return _progressValue; }
             set
             {
-                if (value > MAV)
-                {
-                    PV = MAV;
-                }
-                if (value < MV)
-                {
-                    PV = MV;
-                }
-                if (value >= MV || value <= MAV) PV = value;
+                if (value > _maximumValue) _progressValue = _maximumValue;
+                else if (value < _minimumValue) _progressValue = _minimumValue;
+                else _progressValue = value;
+
                 if (AnimationMode == Enums.ProgressAnimationMode.Value && IsHandleCreated) tmrIndi.Start();
                 Invalidate();
             }
@@ -198,111 +188,106 @@ namespace HeCopUI_Framework.Controls.Progress
                 if (animationMode != Enums.ProgressAnimationMode.None)
                 {
                     if (IsHandleCreated)
-                        //if(!DesignMode)
                         tmrIndi.Start();
                 }
                 Invalidate();
-
             }
         }
 
-        private CornerRadius Ra = new CornerRadius(2);
-        private int BT = 1;
+        private CornerRadius _cornerRadius = new CornerRadius(2);
+        private int _borderThickness = 1;
 
-        private int MAV = 100;
-        private int MV = 0;
-        private int PV = 0;
-        private Color BC = Global.PrimaryColors.BorderProgressBarColor1;
-        private Color BPC2 = Global.PrimaryColors.BaseProgressBarColor1;
-        private Color PC2 = Global.PrimaryColors.ProgressBarColor1;
+        private int _maximumValue = 100;
+        private int _minimumValue = 0;
+        private int _progressValue = 0;
+        private Color _borderColor = Global.PrimaryColors.BorderProgressBarColor1;
+        private Color _baseProgressColor2 = Global.PrimaryColors.BaseProgressBarColor1;
+        private Color _progressColor2 = Global.PrimaryColors.ProgressBarColor1;
 
         public Color ProgressColor2
         {
-            get { return PC2; }
+            get { return _progressColor2; }
             set
             {
-                PC2 = value; Invalidate();
+                _progressColor2 = value; Invalidate();
             }
         }
 
         public Color BaseProgressColor2
         {
-            get { return BPC2; }
+            get { return _baseProgressColor2; }
             set
             {
-                BPC2 = value; Invalidate();
+                _baseProgressColor2 = value; Invalidate();
             }
         }
 
-        private Color BPC1 = Global.PrimaryColors.BaseProgressBarColor1;
-        private Color PC1 = Global.PrimaryColors.ProgressBarColor1;
+        private Color _baseProgressColor1 = Global.PrimaryColors.BaseProgressBarColor1;
+        private Color _progressColor1 = Global.PrimaryColors.ProgressBarColor1;
 
         public Color ProgressColor1
         {
-            get { return PC1; }
+            get { return _progressColor1; }
             set
             {
-                PC1 = value; Invalidate();
+                _progressColor1 = value; Invalidate();
             }
         }
 
         public Color BaseProgressColor1
         {
-            get { return BPC1; }
+            get { return _baseProgressColor1; }
             set
             {
-                BPC1 = value; Invalidate();
+                _baseProgressColor1 = value; Invalidate();
             }
         }
 
         public Color BorderColor
         {
-            get { return BC; }
+            get { return _borderColor; }
             set
             {
-                BC = value; Invalidate();
+                _borderColor = value; Invalidate();
             }
         }
 
-        /// <summary>
-        /// Get or set radius of progress bar
-        /// </summary>
         [Localizable(true)]
         public CornerRadius Radius
         {
-            get { return Ra; }
+            get { return _cornerRadius; }
             set
             {
-                Ra = value; Invalidate();
+                _cornerRadius = value; Invalidate();
             }
         }
 
         public int BorderWidth
         {
-            get { return BT; }
+            get { return _borderThickness; }
             set
             {
-                BT = value; Invalidate();
+                _borderThickness = value; Invalidate();
             }
         }
 
         public int MinimumValue
         {
-            get { return MV; }
+            get { return _minimumValue; }
             set
             {
-                if (value < 0) MV = 0;
-                else MV = value; Invalidate();
+                if (value < 0) _minimumValue = 0;
+                else _minimumValue = value; Invalidate();
             }
         }
 
         public int MaximumValue
         {
-            get { return MAV; }
+            get { return _maximumValue; }
             set
             {
-                if (value < PV) MAV = PV;
-                else MAV = value; Invalidate();
+                if (value < _progressValue) _maximumValue = _progressValue;
+                else _maximumValue = value; Invalidate();
             }
         }
     }

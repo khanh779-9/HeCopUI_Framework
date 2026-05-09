@@ -16,53 +16,50 @@ namespace HeCopUI_Framework.Controls.Button
             DoubleBuffered = true;
             BackColor = Color.Transparent;
             Size = new Size(50, 50);
-            Paint += PictuButton_Paint;
+            Paint += PictureButton_Paint;
             MouseHover += (sender, e) =>
               {
-                  //hov = true;
                   Invalidate();
               };
             TT = new ToolTip();
             MouseEnter += (sender, e) =>
             {
-                hov = true;
+                _isHovering = true;
                 Invalidate();
             };
             MouseLeave += (sender, e) =>
             {
-                hov = false;
+                _isHovering = false;
                 Invalidate();
             };
             MouseDown += (sender, e) =>
               {
-                  dow = true;
+                  _isPressed = true;
                   Invalidate();
               };
             MouseUp += (sender, e) =>
             {
-                dow = false;
+                _isPressed = false;
                 Invalidate();
             };
         }
 
-        bool hov;
-        bool dow;
+        private bool _isHovering = false;
+        private bool _isPressed = false;
 
         public bool ShowTip { get; set; } = false;
         public string TipText { get; set; } = "Enter Text Here";
 
 
-        private void PictuButton_Paint(object sender, PaintEventArgs e)
+        private void PictureButton_Paint(object sender, PaintEventArgs e)
         {
-
             Graphics g = e.Graphics;
             Helper.GraphicsHelper.SetHightGraphics(g);
             GraphicsPath path = new GraphicsPath();
-            float sizex = dow ? BS.Width : hov ? BSH.Width : BS.Width;
-            float sizey = dow ? BS.Height : hov ? BSH.Height : BS.Height;
-            if (ButtonImage != null)
-                g.DrawImage(CropCircle(ButtonImage, path), (Width / 2 - sizex / 2), (Height / 2 - sizey / 2), sizex, sizey);
-
+            float sizex = _isPressed ? _buttonSize.Width : _isHovering ? _buttonHoverSize.Width : _buttonSize.Width;
+            float sizey = _isPressed ? _buttonSize.Height : _isHovering ? _buttonHoverSize.Height : _buttonSize.Height;
+            if (_buttonImage != null)
+                g.DrawImage(CropCircle(_buttonImage, path), (Width / 2 - sizex / 2), (Height / 2 - sizey / 2), sizex, sizey);
         }
 
         protected override void OnInvalidated(InvalidateEventArgs e)
@@ -75,13 +72,13 @@ namespace HeCopUI_Framework.Controls.Button
             base.OnInvalidated(e);
         }
 
-        private ShapeType ShapeType = ShapeType.RoundedRectangle;
-        public ShapeType HShapeType
+        private ShapeType _shapeType = ShapeType.RoundedRectangle;
+        public ShapeType ShapeType
         {
-            get { return ShapeType; }
+            get { return _shapeType; }
             set
             {
-                ShapeType = value; Invalidate();
+                _shapeType = value; Invalidate();
             }
         }
 
@@ -90,14 +87,14 @@ namespace HeCopUI_Framework.Controls.Button
             AnimateImage();
             var roundedImage = new Bitmap(img.Width, img.Height, img.PixelFormat);
             roundedImage.MakeTransparent();
-            float sizex = dow ? BS.Width : hov ? BSH.Width : BS.Width;
-            float sizey = dow ? BS.Height : hov ? BSH.Height : BS.Height;
+            float sizex = _isPressed ? _buttonSize.Width : _isHovering ? _buttonHoverSize.Width : _buttonSize.Width;
+            float sizey = _isPressed ? _buttonSize.Height : _isHovering ? _buttonHoverSize.Height : _buttonSize.Height;
             ImageAnimator.UpdateFrames();
             using (var g = Graphics.FromImage(roundedImage))
             {
                 Helper.GraphicsHelper.SetHightGraphics(g);
                 Brush brush = new TextureBrush(img);
-                switch (HShapeType)
+                switch (_shapeType)
                 {
                     case ShapeType.RoundedRectangle:
                         gp.AddRectangle(new RectangleF(0, 0, img.Width, img.Height));
@@ -112,7 +109,7 @@ namespace HeCopUI_Framework.Controls.Button
         }
 
 
-        bool currentlyAnimating = false;
+        private bool _currentlyAnimating = false;
         private void OnFrameChanged(object o, EventArgs e)
         {
 
@@ -120,43 +117,40 @@ namespace HeCopUI_Framework.Controls.Button
         }
         public void AnimateImage()
         {
-
-            if (!currentlyAnimating)
+            if (!_currentlyAnimating)
             {
-
-                //Begin the animation only once.
-                ImageAnimator.Animate(BI, new EventHandler(OnFrameChanged));
-                currentlyAnimating = true;
+                ImageAnimator.Animate(_buttonImage, new EventHandler(OnFrameChanged));
+                _currentlyAnimating = true;
             }
         }
 
-        private Size BSH = new Size(20, 20);
+        private Size _buttonHoverSize = new Size(20, 20);
         public Size ImageHoverSize
         {
-            get { return BSH; }
+            get { return _buttonHoverSize; }
             set
             {
-                BSH = value; Invalidate();
+                _buttonHoverSize = value; Invalidate();
             }
         }
 
-        private Size BS = new Size(20, 20);
+        private Size _buttonSize = new Size(20, 20);
         public Size ImageSize
         {
-            get { return BS; }
+            get { return _buttonSize; }
             set
             {
-                BS = value; Invalidate();
+                _buttonSize = value; Invalidate();
             }
         }
 
-        private Image BI;
+        private Image _buttonImage = null;
         public Image ButtonImage
         {
-            get { return BI; }
+            get { return _buttonImage; }
             set
             {
-                BI = value; Invalidate();
+                _buttonImage = value; Invalidate();
             }
         }
     }

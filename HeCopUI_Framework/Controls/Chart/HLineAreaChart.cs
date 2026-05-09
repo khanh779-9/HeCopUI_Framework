@@ -277,8 +277,8 @@ namespace HeCopUI_Framework.Controls.Chart
                                         g.DrawBeziers(linePen, bezierPoints);
                                     }
 
-                                    //path.Dispose();
-                                    //brush?.Dispose();
+                                    path?.Dispose();
+                                    brush?.Dispose();
                                 }
 
                                 break;
@@ -290,7 +290,7 @@ namespace HeCopUI_Framework.Controls.Chart
                             {
                                 g.FillEllipse(pointBrush, point.X - 3, point.Y - 3, 6, 6);
 
-                                if(new RectangleF(point.X - 3, point.Y - 3, 6, 6).Contains(PointToClient(MousePosition)))
+                                if (new RectangleF(point.X - 3, point.Y - 3, 6, 6).Contains(PointToClient(MousePosition)))
                                 {
                                     DrawPopupTip(g, dataset.LegendText + " : " + (int)((_maximumValue - (point.Y - offsetY) * _maximumValue / (chartHeight - offsetY))), point.X + 10, point.Y - 10);
                                 }

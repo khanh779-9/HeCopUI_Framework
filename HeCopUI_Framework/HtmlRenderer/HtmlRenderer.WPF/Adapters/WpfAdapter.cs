@@ -1,4 +1,4 @@
-﻿// "Therefore those skilled at the unorthodox
+// "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
 // inexhaustible as the great rivers.
 // When they come to an end,
@@ -88,7 +88,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
                 return RColor.Empty;
 
             var convertFromString = ColorConverter.ConvertFromString(colorName) ?? Colors.Black;
-            return Utils.Convert((Color)convertFromString);
+            return WpfUtils.Convert((Color)convertFromString);
         }
 
         protected override RPen CreatePen(RColor color)
@@ -104,8 +104,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
 
         protected override RBrush CreateLinearGradientBrush(RRect rect, RColor color1, RColor color2, double angle)
         {
-            var startColor = angle <= 180 ? Utils.Convert(color1) : Utils.Convert(color2);
-            var endColor = angle <= 180 ? Utils.Convert(color2) : Utils.Convert(color1);
+            var startColor = angle <= 180 ? WpfUtils.Convert(color1) : WpfUtils.Convert(color2);
+            var endColor = angle <= 180 ? WpfUtils.Convert(color2) : WpfUtils.Convert(color1);
             angle = angle <= 180 ? angle : angle - 180;
             double x = angle < 135 ? Math.Max((angle - 45) / 90, 0) : 1;
             double y = angle <= 45 ? Math.Max(0.5 - angle / 90, 0) : angle > 135 ? Math.Abs(1.5 - angle / 90) : 0;
@@ -177,7 +177,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
             var dialogResult = saveDialog.ShowDialog();
             if (dialogResult.GetValueOrDefault())
             {
-                var encoder = Utils.GetBitmapEncoder(Path.GetExtension(saveDialog.FileName));
+                var encoder = WpfUtils.GetBitmapEncoder(Path.GetExtension(saveDialog.FileName));
                 encoder.Frames.Add(BitmapFrame.Create(((ImageAdapter)image).Image));
                 using (FileStream stream = new FileStream(saveDialog.FileName, FileMode.OpenOrCreate))
                     encoder.Save(stream);
@@ -200,7 +200,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
             else if (color.A < 1)
                 solidBrush = Brushes.Transparent;
             else
-                solidBrush = new SolidColorBrush(Utils.Convert(color));
+                solidBrush = new SolidColorBrush(WpfUtils.Convert(color));
             return solidBrush;
         }
 

@@ -1,7 +1,8 @@
-﻿using HeCopUI_Framework.Structs;
+using HeCopUI_Framework.Structs;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System;
 
 namespace HeCopUI_Framework.Controls.Container
 {
@@ -12,7 +13,6 @@ namespace HeCopUI_Framework.Controls.Container
         {
             SetStyle(GetAppResources.SetControlStyles(), true);
             BackColor = Color.Transparent;
-
         }
 
         private Color panelColor1 = Color.LightGray;
@@ -35,40 +35,37 @@ namespace HeCopUI_Framework.Controls.Container
             }
         }
 
-        private Color borderColor = Color.Transparent;
+        private Color _borderColor = Color.Transparent;
         public Color BorderColor
         {
-            get { return borderColor; }
+            get { return _borderColor; }
             set
             {
-                borderColor = value; Invalidate();
+                _borderColor = value; Invalidate();
             }
         }
 
-        private float bordw = 2;
-        public float BorderThickness
-        {
-            get { return bordw; }
-            set
-            {
-                bordw = value; Invalidate();
-            }
-        }
-
-        private CornerRadius Ra = new CornerRadius();
+        private CornerRadius _radius = new CornerRadius();
         public CornerRadius Radius
         {
-            get { return Ra; }
+            get { return _radius; }
             set
             {
-                Ra = value; Invalidate();
+                _radius = value; Invalidate();
+            }
+        }
+
+        private int _borderThickness = 0;
+        public int BorderThickness
+        {
+            get { return _borderThickness; }
+            set
+            {
+                _borderThickness = value; Invalidate();
             }
         }
 
         private bool roundTopLeft = true;
-        private bool roundTopRight = true;
-        private bool roundBottomLeft = true;
-        private bool roundBottomRight = true;
         public bool RoundTopLeft
         {
             get => roundTopLeft;
@@ -77,6 +74,8 @@ namespace HeCopUI_Framework.Controls.Container
                 roundTopLeft = value; Invalidate();
             }
         }
+
+        private bool roundTopRight = true;
         public bool RoundTopRight
         {
             get => roundTopRight;
@@ -86,6 +85,7 @@ namespace HeCopUI_Framework.Controls.Container
             }
         }
 
+        private bool roundBottomLeft = true;
         public bool RoundBottomLeft
         {
             get => roundBottomLeft;
@@ -94,6 +94,8 @@ namespace HeCopUI_Framework.Controls.Container
                 roundBottomLeft = value; Invalidate();
             }
         }
+
+        private bool roundBottomRight = true;
         public bool RoundBottomRight
         {
             get => roundBottomRight;
@@ -112,7 +114,6 @@ namespace HeCopUI_Framework.Controls.Container
                 LinearGradient = value; Invalidate();
             }
         }
-
 
         private Padding shadowPadding = new Padding(0, 0, 0, 0);
         public Padding ShadowPadding
@@ -152,21 +153,18 @@ namespace HeCopUI_Framework.Controls.Container
               Width - ShadowPadding.Right - ShadowPadding.Left, Height - ShadowPadding.Bottom - ShadowPadding.Top), Radius, BorderThickness))
             using (LinearGradientBrush LB = new LinearGradientBrush(gp.GetBounds(), panelColor1, panelColor2, LinearGradient))
             using (GraphicsPath sgp = HeCopUI_Framework.Helper.DrawHelper.SetRoundedCornerRectangle(new RectangleF(0, 0, Width, Height), Radius))
-            using (Bitmap Shado = HeCopUI_Framework.Ultils.DropShadow.Create(sgp, ShadowColor, shadowRad))
+            using (Bitmap Shado = HeCopUI_Framework.Utils.DropShadow.Create(sgp, ShadowColor, shadowRad))
             {
                 Shado.MakeTransparent();
-                // Tạo một đối tượng Graphics từ Bitmap để vẽ shadow
                 using (Graphics shadowGraphics = Graphics.FromImage(Shado))
                 {
                     Helper.GraphicsHelper.SetHightGraphics(shadowGraphics);
                     Helper.GraphicsHelper.SetHightGraphics(e.Graphics);
-                    // Vẽ shadow
                     shadowGraphics.FillPath(LB, gp);
                     if (BorderThickness > 0)
-                        shadowGraphics.DrawPath(new Pen(borderColor, bordw) { Alignment = PenAlignment.Inset }, gp);
+                        shadowGraphics.DrawPath(new Pen(_borderColor, BorderThickness) { Alignment = PenAlignment.Inset }, gp);
                 }
 
-                // Vẽ shadow lên đối tượng Graphics chính
                 using (var a = new TextureBrush(Shado))
                     e.Graphics.FillPath(a, sgp);
             }

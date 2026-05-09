@@ -1,4 +1,4 @@
-﻿// "Therefore those skilled at the unorthodox
+// "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
 // inexhaustible as the great rivers.
 // When they come to an end,
@@ -247,8 +247,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
         /// </example>
         public Point ScrollOffset
         {
-            get { return Utils.ConvertRound(_htmlContainerInt.ScrollOffset); }
-            set { _htmlContainerInt.ScrollOffset = Utils.Convert(value); }
+            get { return WinFormsUtils.ConvertRound(_htmlContainerInt.ScrollOffset); }
+            set { _htmlContainerInt.ScrollOffset = WinFormsUtils.Convert(value); }
         }
 
         /// <summary>
@@ -257,8 +257,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
         /// </summary>
         public PointF Location
         {
-            get { return Utils.Convert(_htmlContainerInt.Location); }
-            set { _htmlContainerInt.Location = Utils.Convert(value); }
+            get { return WinFormsUtils.Convert(_htmlContainerInt.Location); }
+            set { _htmlContainerInt.Location = WinFormsUtils.Convert(value); }
         }
 
         /// <summary>
@@ -270,8 +270,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
         /// </summary>
         public SizeF MaxSize
         {
-            get { return Utils.Convert(_htmlContainerInt.MaxSize); }
-            set { _htmlContainerInt.MaxSize = Utils.Convert(value); }
+            get { return WinFormsUtils.Convert(_htmlContainerInt.MaxSize); }
+            set { _htmlContainerInt.MaxSize = WinFormsUtils.Convert(value); }
         }
 
         /// <summary>
@@ -279,8 +279,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
         /// </summary>
         public SizeF ActualSize
         {
-            get { return Utils.Convert(_htmlContainerInt.ActualSize); }
-            internal set { _htmlContainerInt.ActualSize = Utils.Convert(value); }
+            get { return WinFormsUtils.Convert(_htmlContainerInt.ActualSize); }
+            internal set { _htmlContainerInt.ActualSize = WinFormsUtils.Convert(value); }
         }
 
         /// <summary>
@@ -336,7 +336,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
         /// <returns>found attribute value or null if not found</returns>
         public string GetAttributeAt(Point location, string attribute)
         {
-            return _htmlContainerInt.GetAttributeAt(Utils.Convert(location), attribute);
+            return _htmlContainerInt.GetAttributeAt(WinFormsUtils.Convert(location), attribute);
         }
 
         /// <summary>
@@ -348,7 +348,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
             var linkElements = new List<LinkElementData<RectangleF>>();
             foreach (var link in HtmlContainerInt.GetLinks())
             {
-                linkElements.Add(new LinkElementData<RectangleF>(link.Id, link.Href, Utils.Convert(link.Rectangle)));
+                linkElements.Add(new LinkElementData<RectangleF>(link.Id, link.Href, WinFormsUtils.Convert(link.Rectangle)));
             }
             return linkElements;
         }
@@ -360,7 +360,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
         /// <returns>css link href if exists or null</returns>
         public string GetLinkAt(Point location)
         {
-            return _htmlContainerInt.GetLinkAt(Utils.Convert(location));
+            return _htmlContainerInt.GetLinkAt(WinFormsUtils.Convert(location));
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
         public RectangleF? GetElementRectangle(string elementId)
         {
             var r = _htmlContainerInt.GetElementRectangle(elementId);
-            return r.HasValue ? Utils.Convert(r.Value) : (RectangleF?)null;
+            return r.HasValue ? WinFormsUtils.Convert(r.Value) : (RectangleF?)null;
         }
 
         /// <summary>
@@ -414,7 +414,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
             ArgChecker.AssertArgNotNull(parent, "parent");
             ArgChecker.AssertArgNotNull(e, "e");
 
-            _htmlContainerInt.HandleMouseDown(new ControlAdapter(parent, _useGdiPlusTextRendering), Utilities.Utils.Convert(e.Location));
+            _htmlContainerInt.HandleMouseDown(new ControlAdapter(parent, _useGdiPlusTextRendering), Utilities.WinFormsUtils.Convert(e.Location));
         }
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
             ArgChecker.AssertArgNotNull(parent, "parent");
             ArgChecker.AssertArgNotNull(e, "e");
 
-            _htmlContainerInt.HandleMouseUp(new ControlAdapter(parent, _useGdiPlusTextRendering), Utils.Convert(e.Location), CreateMouseEvent(e));
+            _htmlContainerInt.HandleMouseUp(new ControlAdapter(parent, _useGdiPlusTextRendering), WinFormsUtils.Convert(e.Location), CreateMouseEvent(e));
         }
 
         /// <summary>
@@ -440,7 +440,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
             ArgChecker.AssertArgNotNull(parent, "parent");
             ArgChecker.AssertArgNotNull(e, "e");
 
-            _htmlContainerInt.HandleMouseDoubleClick(new ControlAdapter(parent, _useGdiPlusTextRendering), Utils.Convert(e.Location));
+            _htmlContainerInt.HandleMouseDoubleClick(new ControlAdapter(parent, _useGdiPlusTextRendering), WinFormsUtils.Convert(e.Location));
         }
 
         /// <summary>
@@ -453,7 +453,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
             ArgChecker.AssertArgNotNull(parent, "parent");
             ArgChecker.AssertArgNotNull(e, "e");
 
-            _htmlContainerInt.HandleMouseMove(new ControlAdapter(parent, _useGdiPlusTextRendering), Utils.Convert(e.Location));
+            _htmlContainerInt.HandleMouseMove(new ControlAdapter(parent, _useGdiPlusTextRendering), WinFormsUtils.Convert(e.Location));
         }
 
         /// <summary>

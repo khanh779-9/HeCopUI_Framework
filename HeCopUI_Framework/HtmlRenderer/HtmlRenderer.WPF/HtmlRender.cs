@@ -337,10 +337,10 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
             // use desktop created graphics to measure the HTML
             using (var mg = new GraphicsAdapter())
             {
-                var sizeInt = HtmlRendererUtils.MeasureHtmlByRestrictions(mg, htmlContainer.HtmlContainerInt, Utils.Convert(minSize), Utils.Convert(maxSize));
+                var sizeInt = HtmlRendererUtils.MeasureHtmlByRestrictions(mg, htmlContainer.HtmlContainerInt, WpfUtils.Convert(minSize), WpfUtils.Convert(maxSize));
                 if (maxSize.Width < 1 && sizeInt.Width > 4096)
                     sizeInt.Width = 4096;
-                return Utils.ConvertRound(sizeInt);
+                return WpfUtils.ConvertRound(sizeInt);
             }
         }
 

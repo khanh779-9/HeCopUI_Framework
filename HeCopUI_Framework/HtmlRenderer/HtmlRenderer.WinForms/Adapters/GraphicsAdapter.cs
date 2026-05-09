@@ -102,7 +102,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
         /// <param name="useGdiPlusTextRendering">Use GDI+ text rendering to measure/draw text</param>
         /// <param name="releaseGraphics">optional: if to release the graphics object on dispose (default - false)</param>
         public GraphicsAdapter(Graphics g, bool useGdiPlusTextRendering, bool releaseGraphics = false)
-            : base(WinFormsAdapter.Instance, Utils.Convert(g.ClipBounds))
+            : base(WinFormsAdapter.Instance, WinFormsUtils.Convert(g.ClipBounds))
         {
             ArgChecker.AssertArgNotNull(g, "g");
 
@@ -120,21 +120,21 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
         {
             ReleaseHdc();
             _clipStack.Pop();
-            _g.SetClip(Utils.Convert(_clipStack.Peek()), CombineMode.Replace);
+            _g.SetClip(WinFormsUtils.Convert(_clipStack.Peek()), CombineMode.Replace);
         }
 
         public override void PushClip(RRect rect)
         {
             ReleaseHdc();
             _clipStack.Push(rect);
-            _g.SetClip(Utils.Convert(rect), CombineMode.Replace);
+            _g.SetClip(WinFormsUtils.Convert(rect), CombineMode.Replace);
         }
 
         public override void PushClipExclude(RRect rect)
         {
             ReleaseHdc();
             _clipStack.Push(_clipStack.Peek());
-            _g.SetClip(Utils.Convert(rect), CombineMode.Exclude);
+            _g.SetClip(WinFormsUtils.Convert(rect), CombineMode.Exclude);
         }
 
         public override Object SetAntiAliasSmoothingMode()
@@ -177,7 +177,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
 
                 }
 
-                return Utils.Convert(size);
+                return WinFormsUtils.Convert(size);
             }
             else
             {
@@ -193,7 +193,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
                     ((FontAdapter)font).SetMetrics(size.Height, lptm.tmHeight - lptm.tmDescent + lptm.tmUnderlined + 1);
                 }
 
-                return Utils.Convert(size);
+                return WinFormsUtils.Convert(size);
 #else
                 throw new InvalidProgramException("Invalid Mono code");
 #endif
@@ -245,8 +245,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
             else
             {
 #if !MONO
-                var pointConv = Utils.ConvertRound(point);
-                var colorConv = Utils.Convert(color);
+                var pointConv = WinFormsUtils.ConvertRound(point);
+                var colorConv = WinFormsUtils.Convert(color);
 
                 if (color.A == 255)
                 {
@@ -260,7 +260,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
                 {
                     InitHdc();
                     SetRtlAlignGdi(rtl);
-                    DrawTransparentText(_hdc, str, font, pointConv, Utils.ConvertRound(size), colorConv);
+                    DrawTransparentText(_hdc, str, font, pointConv, WinFormsUtils.ConvertRound(size), colorConv);
                 }
 #endif
             }
@@ -268,7 +268,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
 
         public override RBrush GetTextureBrush(RImage image, RRect dstRect, RPoint translateTransformLocation)
         {
-            var brush = new TextureBrush(((ImageAdapter)image).Image, Utils.Convert(dstRect));
+            var brush = new TextureBrush(((ImageAdapter)image).Image, WinFormsUtils.Convert(dstRect));
             brush.TranslateTransform((float)translateTransformLocation.X, (float)translateTransformLocation.Y);
             return new BrushAdapter(brush, true);
         }
@@ -312,13 +312,13 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
         public override void DrawImage(RImage image, RRect destRect, RRect srcRect)
         {
             ReleaseHdc();
-            _g.DrawImage(((ImageAdapter)image).Image, Utils.Convert(destRect), Utils.Convert(srcRect), GraphicsUnit.Pixel);
+            _g.DrawImage(((ImageAdapter)image).Image, WinFormsUtils.Convert(destRect), WinFormsUtils.Convert(srcRect), GraphicsUnit.Pixel);
         }
 
         public override void DrawImage(RImage image, RRect destRect)
         {
             ReleaseHdc();
-            _g.DrawImage(((ImageAdapter)image).Image, Utils.Convert(destRect));
+            _g.DrawImage(((ImageAdapter)image).Image, WinFormsUtils.Convert(destRect));
         }
 
         public override void DrawPath(RPen pen, RGraphicsPath path)
@@ -337,7 +337,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Adapters
             if (points != null && points.Length > 0)
             {
                 ReleaseHdc();
-                _g.FillPolygon(((BrushAdapter)brush).Brush, Utils.Convert(points));
+                _g.FillPolygon(((BrushAdapter)brush).Brush, WinFormsUtils.Convert(points));
             }
         }
 

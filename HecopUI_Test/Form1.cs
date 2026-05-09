@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -12,13 +12,16 @@ namespace HecopUI_Test
         {
             InitializeComponent();
 
+            
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.Size = new Size(1300, 850);
             loadDataChart();
-
         }
+
 
         private void hCheckBox1_CheckedChanged(object sender, EventArgs e)
         {
@@ -124,7 +127,7 @@ namespace HecopUI_Test
             #endregion
 
             #region Radar Chart
-           
+
             List<HeCopUI_Framework.Controls.Chart.Series> series = new List<HeCopUI_Framework.Controls.Chart.Series>();
 
             HeCopUI_Framework.Controls.Chart.Series s1 = new HeCopUI_Framework.Controls.Chart.Series

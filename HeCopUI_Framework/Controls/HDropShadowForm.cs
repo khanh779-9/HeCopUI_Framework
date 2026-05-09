@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -33,17 +33,19 @@ namespace HeCopUI_Framework.Controls
         public int ShadowBlur { get; set; } = 10;
 
         public Color ShadowColor { get; set; } = Color.Black;
-        public int alphaColor = 150;
+        
+        private int _alphaColor = 150;
+        
 #pragma warning disable CS3005 // Identifier differing only in case is not CLS-compliant
         public int AlphaColor
 #pragma warning restore CS3005 // Identifier differing only in case is not CLS-compliant
         {
-            get { return alphaColor; }
+            get { return _alphaColor; }
             set
             {
-                if (value >= 255) alphaColor = 255;
-                else if (value <= 0) alphaColor = 0;
-                else alphaColor = value;
+                if (value >= 255) _alphaColor = 255;
+                else if (value <= 0) _alphaColor = 0;
+                else _alphaColor = value;
             }
         }
 
@@ -53,7 +55,7 @@ namespace HeCopUI_Framework.Controls
             {
                 DS = new Dropshadow(_targetform)
                 {
-                    ShadowColor = Color.FromArgb(alphaColor, ShadowColor.R, ShadowColor.G, ShadowColor.B),
+                    ShadowColor = Color.FromArgb(_alphaColor, ShadowColor.R, ShadowColor.G, ShadowColor.B),
                     ShadowSpread = ShadowSpread,
                     ShadowBlur = ShadowBlur,
                     ShadowVisible = ShadowVisible,
@@ -208,6 +210,9 @@ namespace HeCopUI_Framework.Controls
                 get { return Owner.Height + (ShadowSpread + ShadowBlur) * 2; }
             }
 
+            public int ShadowSpread { get; set; } = 0;
+            public int ShadowBlur { get; set; } = 10;
+
             public int ShadowV
             {
                 get { return _shadowV; }
@@ -217,9 +222,6 @@ namespace HeCopUI_Framework.Controls
                     RefreshShadow(false);
                 }
             }
-
-            public int ShadowBlur { get; set; }
-            public int ShadowSpread { get; set; }
 
             protected override CreateParams CreateParams
             {

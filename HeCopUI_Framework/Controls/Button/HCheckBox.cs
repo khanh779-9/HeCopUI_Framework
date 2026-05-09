@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -13,86 +13,84 @@ namespace HeCopUI_Framework.Controls.Button
 
         static Point[] CHECKMARK_LINE = { new Point(3, 8), new Point(7, 12), new Point(14, 5) };
 
-        Color disabledColor = Color.Gray;
-        Color enabledTextColor = ColorTranslator.FromHtml("#999999");
-        Color disabledTextColor = ColorTranslator.FromHtml("#babbbd");
+        private Color _disabledColor = Color.Gray;
+        private Color _enabledTextColor = ColorTranslator.FromHtml("#999999");
+        private Color _disabledTextColor = ColorTranslator.FromHtml("#babbbd");
 
-        Color checkedBoxColor1 = Color.FromArgb(0, 168, 148);
-        Color checkedBoxColor2 = Color.DodgerBlue;
-        Color unCheckedBoxColor = Color.DimGray;
+        private Color _checkedColor1 = Color.FromArgb(0, 168, 148);
+        private Color _checkedColor2 = Color.DodgerBlue;
+        private Color _uncheckedColor = Color.DimGray;
 
-        Color borderBox = Color.Transparent;
+        private Color _borderColor = Color.Transparent;
         public Color BorderBox
         {
-            get { return borderBox; }
+            get { return _borderColor; }
             set
             {
-                borderBox = value; Invalidate();
+                _borderColor = value; Invalidate();
             }
         }
 
-        public Color UnCheckedBoxColor
+        public Color UncheckedColor
         {
-            get { return unCheckedBoxColor; }
+            get { return _uncheckedColor; }
             set
             {
-                unCheckedBoxColor = value; Invalidate();
+                _uncheckedColor = value; Invalidate();
             }
         }
 
-        public Color CheckedBoxColor1
+        public Color CheckedColor1
         {
-            get { return checkedBoxColor1; }
+            get { return _checkedColor1; }
             set
             {
-                checkedBoxColor1 = value; Invalidate();
+                _checkedColor1 = value; Invalidate();
             }
         }
 
-        public Color CheckedBoxColor2
+        public Color CheckedColor2
         {
-            get { return checkedBoxColor2; }
+            get { return _checkedColor2; }
             set
             {
-                checkedBoxColor2 = value; Invalidate();
+                _checkedColor2 = value; Invalidate();
             }
         }
 
-
-        public Color DisabledCheckBoxColor
+        public Color DisabledColor
         {
-            get { return disabledColor; }
+            get { return _disabledColor; }
             set
             {
-                disabledColor = value; Invalidate();
+                _disabledColor = value; Invalidate();
             }
         }
 
         public Color EnabledTextColor
         {
-            get { return enabledTextColor; }
+            get { return _enabledTextColor; }
             set
             {
-                enabledTextColor = value; Invalidate();
+                _enabledTextColor = value; Invalidate();
             }
         }
 
         public Color DisabledTextColor
         {
-            get { return disabledTextColor; }
+            get { return _disabledTextColor; }
             set
             {
-                disabledTextColor = value; Invalidate();
+                _disabledTextColor = value; Invalidate();
             }
         }
 
 
-        Timer AnimationTimer = new Timer { Interval = 17 };
+        private Timer _animationTimer = new Timer { Interval = 17 };
 
-
-        int SizeAnimationNum = 14;
-        int PointAnimationNum = 3;
-        int Alpha = 0;
+        private int _sizeAnimationNum = 14;
+        private int _pointAnimationNum = 3;
+        private int _alpha = 0;
 
         #endregion
 
@@ -100,56 +98,53 @@ namespace HeCopUI_Framework.Controls.Button
         public HCheckBox()
         {
             SetStyle(HeCopUI_Framework.GetAppResources.SetControlStyles(), true);
-            AnimationTimer = new Timer() { Interval = 10 };
-            AnimationTimer.Tick += new EventHandler(AnimationTick);
-            RippleAnimate = new Timer() { Interval = 5 };
-
-            RippleAnimate.Tick += RippleAnimate_Tick;
+            _animationTimer = new Timer() { Interval = 10 };
+            _animationTimer.Tick += new EventHandler(AnimationTick);
+            _rippleAnimate = new Timer() { Interval = 5 };
+            _rippleAnimate.Tick += RippleAnimate_Tick;
         }
 
 
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            Hover = true;
-            RippleAnimate.Start();
+            _hover = true;
+            _rippleAnimate.Start();
             base.OnMouseEnter(e);
         }
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            Hover = false;
-            RippleAnimate.Start();
+            _hover = false;
+            _rippleAnimate.Start();
             base.OnMouseLeave(e);
         }
 
-
-        int rippleCenter = 30;
-        int rippleWidth = 0;
+        private int _rippleCenter = 30;
+        private int _rippleWidth = 0;
         private void RippleAnimate_Tick(object sender, EventArgs e)
         {
-            if (Hover == true)
+            if (_hover == true)
             {
-                if (rippleWidth < 28)
+                if (_rippleWidth < 28)
                 {
-                    rippleWidth += 2;
+                    _rippleWidth += 2;
                 }
-                else RippleAnimate.Stop();
+                else _rippleAnimate.Stop();
             }
             else
             {
-                if (rippleWidth > 0)
+                if (_rippleWidth > 0)
                 {
-                    rippleWidth -= 2;
+                    _rippleWidth -= 2;
                 }
-                else RippleAnimate.Stop();
+                else _rippleAnimate.Stop();
             }
             Invalidate();
         }
 
-        Timer RippleAnimate;
-
-        bool Hover = false;
+        private Timer _rippleAnimate;
+        private bool _hover = false;
 
         private bool _checked = false;
         ///<summary>
@@ -161,12 +156,10 @@ namespace HeCopUI_Framework.Controls.Button
             set
             {
                 _checked = value;
-                //if(IsHandleCreated)
-                AnimationTimer.Start();
+                _animationTimer.Start();
                 CheckedChanged?.Invoke(this, null);
                 Invalidate();
             }
-
         }
 
         public event EventHandler CheckedChanged;
@@ -210,37 +203,33 @@ namespace HeCopUI_Framework.Controls.Button
             }
         }
 
-        Color checkboxc1 = Global.PrimaryColors.BackNormalColor1;
+        private Color _checkBoxColor1 = Global.PrimaryColors.BackNormalColor1;
         public Color CheckBoxColor1
         {
-            get { return checkboxc1; }
+            get { return _checkBoxColor1; }
             set
             {
-                checkboxc1 = value; Invalidate();
+                _checkBoxColor1 = value; Invalidate();
             }
         }
 
-        Color checkboxc2 = Global.PrimaryColors.BackNormalColor2;
+        private Color _checkBoxColor2 = Global.PrimaryColors.BackNormalColor2;
         public Color CheckBoxColor2
         {
-            get { return checkboxc2; }
+            get { return _checkBoxColor2; }
             set
             {
-                checkboxc2 = value; Invalidate();
+                _checkBoxColor2 = value; Invalidate();
             }
         }
 
-        LinearGradientMode linear = LinearGradientMode.Vertical;
-
-        ///<summary>
-        /// Gets or sets the direction of the gradient.
-        //</summary>
-        public LinearGradientMode CheckBoxGradientMode
+        private LinearGradientMode _gradientMode = LinearGradientMode.Vertical;
+        public LinearGradientMode GradientMode
         {
-            get { return linear; }
+            get { return _gradientMode; }
             set
             {
-                linear = value; Invalidate();
+                _gradientMode = value; Invalidate();
             }
         }
 
@@ -249,8 +238,8 @@ namespace HeCopUI_Framework.Controls.Button
         {
 
             using (var checkmarkPath = HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(new RectangleF(6f, 6, 15, 15), 0))
-            using (var BG = new LinearGradientBrush(new Rectangle(0, 0, checkBoxSize, checkBoxSize), Enabled ? (Checked ? checkedBoxColor1 : unCheckedBoxColor) : disabledColor,
-                Enabled ? (Checked ? checkedBoxColor2 : unCheckedBoxColor) : disabledColor, linear))
+            using (var BG = new LinearGradientBrush(new RectangleF(0, 0, checkBoxSize, checkBoxSize), Enabled ? (Checked ? _checkedColor1 : _uncheckedColor) : _disabledColor,
+                Enabled ? (Checked ? _checkedColor2 : _uncheckedColor) : _disabledColor, _gradientMode))
             using (Pen Pen = new Pen(new SolidBrush(BorderBox), 1) { Alignment = PenAlignment.Inset })
 
             using (var ripplebac = new SolidBrush(Color.FromArgb(RippleAlpha, RippleColor)))
@@ -269,7 +258,7 @@ namespace HeCopUI_Framework.Controls.Button
                     new RectangleF(28, 30 / 2 - g.MeasureString(Text, Font).Height / 2, Width - 30, Height - 6), SF);
                 //Draw Ripple when mouse horver.
                 g.FillEllipse(ripplebac,
-                       new RectangleF((rippleCenter - rippleWidth) / 2 - 1.25f, (rippleCenter - rippleWidth) / 2 - 1.25f, rippleWidth, rippleWidth));
+                       new RectangleF((_rippleCenter - _rippleWidth) / 2 - 1.25f, (_rippleCenter - _rippleWidth) / 2 - 1.25f, _rippleWidth, _rippleWidth));
                 //CheckMark
                 g.DrawImage(CheckMarkBitmap(), 5f, 5);
                 if (DesignMode == false)
@@ -341,44 +330,44 @@ namespace HeCopUI_Framework.Controls.Button
         {
             if (Checked)
             {
-                if (Alpha < 250)
+                if (_alpha < 250)
                 {
-                    Alpha += 25;
+                    _alpha += 25;
                     Invalidate();
 
-                    if (SizeAnimationNum > 0)
+                    if (_sizeAnimationNum > 0)
                     {
-                        SizeAnimationNum -= 2;
+                        _sizeAnimationNum -= 2;
                         Invalidate();
                     }
 
-                    if (PointAnimationNum < 10)
+                    if (_pointAnimationNum < 10)
                     {
-                        PointAnimationNum += 1;
+                        _pointAnimationNum += 1;
                         Invalidate();
                     }
                 }
-                else if (Alpha > 250) AnimationTimer.Stop();
+                else if (_alpha > 250) _animationTimer.Stop();
             }
-            else if (Alpha > 0)
+            else if (_alpha > 0)
             {
-                Alpha -= 25;
+                _alpha -= 25;
                 Invalidate();
 
-                if (SizeAnimationNum < 14)
+                if (_sizeAnimationNum < 14)
                 {
-                    SizeAnimationNum += 2;
+                    _sizeAnimationNum += 2;
                     Invalidate();
                 }
 
 
-                if (PointAnimationNum > 3)
+                if (_pointAnimationNum > 3)
                 {
-                    PointAnimationNum -= 1;
+                    _pointAnimationNum -= 1;
                     Invalidate();
                 }
             }
-            else if (Alpha < -250) AnimationTimer.Stop();
+            else if (_alpha < -250) _animationTimer.Stop();
         }
 
         private Color checkColor = Color.White;
@@ -399,7 +388,7 @@ namespace HeCopUI_Framework.Controls.Button
             checkMark.MakeTransparent();
             var g = Graphics.FromImage(checkMark);
             g.SmoothingMode = SmoothingMode.HighQuality;
-            using (var pen = new Pen(new SolidBrush(Color.FromArgb(Alpha, checkColor)), 2))
+            using (var pen = new Pen(new SolidBrush(Color.FromArgb(_alpha, checkColor)), 2))
                 g.DrawLines(pen, CHECKMARK_LINE);
             return checkMark;
         }

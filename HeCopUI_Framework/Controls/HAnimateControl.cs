@@ -10,22 +10,19 @@ namespace HeCopUI_Framework.Controls
 
         }
 
-        private Control tar;
+        private Control _targetControl;
         /// <summary>
         /// Gets or sets control to show animation.
         /// </summary>
         public Control TargetControl
         {
-            get { return tar; }
+            get { return _targetControl; }
             set
             {
-                tar = value;
+                _targetControl = value;
                 if (DesignMode == false)
-                    HeCopUI_Framework.Win32.User32.AnimateWindow(TargetControl.Handle, Interval, AnimateMode);
-                TargetControl.Invalidate();
-                //System.Drawing.Design.UITypeEditorEditStyle.
-                //EnumSetEditor
-
+                    HeCopUI_Framework.Win32.User32.AnimateWindow(_targetControl.Handle, Interval, AnimateMode);
+                _targetControl.Invalidate();
             }
         }
 

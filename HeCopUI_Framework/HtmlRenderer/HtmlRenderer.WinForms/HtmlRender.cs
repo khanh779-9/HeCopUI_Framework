@@ -673,10 +673,10 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
             using (var g = Graphics.FromHwnd(IntPtr.Zero))
             using (var mg = new GraphicsAdapter(g, htmlContainer.UseGdiPlusTextRendering))
             {
-                var sizeInt = HtmlRendererUtils.MeasureHtmlByRestrictions(mg, htmlContainer.HtmlContainerInt, Utils.Convert(minSize), Utils.Convert(maxSize));
+                var sizeInt = HtmlRendererUtils.MeasureHtmlByRestrictions(mg, htmlContainer.HtmlContainerInt, WinFormsUtils.Convert(minSize), WinFormsUtils.Convert(maxSize));
                 if (maxSize.Width < 1 && sizeInt.Width > 4096)
                     sizeInt.Width = 4096;
-                return Utils.ConvertRound(sizeInt);
+                return WinFormsUtils.ConvertRound(sizeInt);
             }
         }
 

@@ -1,4 +1,4 @@
-﻿// "Therefore those skilled at the unorthodox
+// "Therefore those skilled at the unorthodox
 // are infinite as heaven and earth,
 // inexhaustible as the great rivers.
 // When they come to an end,
@@ -208,8 +208,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         /// </example>
         public Point ScrollOffset
         {
-            get { return Utils.Convert(_htmlContainerInt.ScrollOffset); }
-            set { _htmlContainerInt.ScrollOffset = Utils.Convert(value); }
+            get { return WpfUtils.Convert(_htmlContainerInt.ScrollOffset); }
+            set { _htmlContainerInt.ScrollOffset = WpfUtils.Convert(value); }
         }
 
         /// <summary>
@@ -218,8 +218,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         /// </summary>
         public Point Location
         {
-            get { return Utils.Convert(_htmlContainerInt.Location); }
-            set { _htmlContainerInt.Location = Utils.Convert(value); }
+            get { return WpfUtils.Convert(_htmlContainerInt.Location); }
+            set { _htmlContainerInt.Location = WpfUtils.Convert(value); }
         }
 
         /// <summary>
@@ -231,8 +231,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         /// </summary>
         public Size MaxSize
         {
-            get { return Utils.Convert(_htmlContainerInt.MaxSize); }
-            set { _htmlContainerInt.MaxSize = Utils.Convert(value); }
+            get { return WpfUtils.Convert(_htmlContainerInt.MaxSize); }
+            set { _htmlContainerInt.MaxSize = WpfUtils.Convert(value); }
         }
 
         /// <summary>
@@ -240,8 +240,8 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         /// </summary>
         public Size ActualSize
         {
-            get { return Utils.Convert(_htmlContainerInt.ActualSize); }
-            internal set { _htmlContainerInt.ActualSize = Utils.Convert(value); }
+            get { return WpfUtils.Convert(_htmlContainerInt.ActualSize); }
+            internal set { _htmlContainerInt.ActualSize = WpfUtils.Convert(value); }
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         /// <returns>found attribute value or null if not found</returns>
         public string GetAttributeAt(Point location, string attribute)
         {
-            return _htmlContainerInt.GetAttributeAt(Utils.Convert(location), attribute);
+            return _htmlContainerInt.GetAttributeAt(WpfUtils.Convert(location), attribute);
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
             var linkElements = new List<LinkElementData<Rect>>();
             foreach (var link in HtmlContainerInt.GetLinks())
             {
-                linkElements.Add(new LinkElementData<Rect>(link.Id, link.Href, Utils.Convert(link.Rectangle)));
+                linkElements.Add(new LinkElementData<Rect>(link.Id, link.Href, WpfUtils.Convert(link.Rectangle)));
             }
             return linkElements;
         }
@@ -329,7 +329,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         /// <returns>css link href if exists or null</returns>
         public string GetLinkAt(Point location)
         {
-            return _htmlContainerInt.GetLinkAt(Utils.Convert(location));
+            return _htmlContainerInt.GetLinkAt(WpfUtils.Convert(location));
         }
 
 
@@ -343,7 +343,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         public Rect? GetElementRectangle(string elementId)
         {
             var r = _htmlContainerInt.GetElementRectangle(elementId);
-            return r.HasValue ? Utils.Convert(r.Value) : (Rect?)null;
+            return r.HasValue ? WpfUtils.Convert(r.Value) : (Rect?)null;
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         {
             ArgChecker.AssertArgNotNull(g, "g");
 
-            using (var ig = new GraphicsAdapter(g, Utils.Convert(clip)))
+            using (var ig = new GraphicsAdapter(g, WpfUtils.Convert(clip)))
             {
                 _htmlContainerInt.PerformPaint(ig);
             }
@@ -382,7 +382,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
             ArgChecker.AssertArgNotNull(parent, "parent");
             ArgChecker.AssertArgNotNull(e, "e");
 
-            _htmlContainerInt.HandleMouseDown(new ControlAdapter(parent), Utils.Convert(e.GetPosition(parent)));
+            _htmlContainerInt.HandleMouseDown(new ControlAdapter(parent), WpfUtils.Convert(e.GetPosition(parent)));
         }
 
         /// <summary>
@@ -396,7 +396,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
             ArgChecker.AssertArgNotNull(e, "e");
 
             var mouseEvent = new RMouseEvent(e.ChangedButton == MouseButton.Left);
-            _htmlContainerInt.HandleMouseUp(new ControlAdapter(parent), Utils.Convert(e.GetPosition(parent)), mouseEvent);
+            _htmlContainerInt.HandleMouseUp(new ControlAdapter(parent), WpfUtils.Convert(e.GetPosition(parent)), mouseEvent);
         }
 
         /// <summary>
@@ -409,7 +409,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
             ArgChecker.AssertArgNotNull(parent, "parent");
             ArgChecker.AssertArgNotNull(e, "e");
 
-            _htmlContainerInt.HandleMouseDoubleClick(new ControlAdapter(parent), Utilities.Utils.Convert(e.GetPosition(parent)));
+            _htmlContainerInt.HandleMouseDoubleClick(new ControlAdapter(parent), Utilities.WpfUtils.Convert(e.GetPosition(parent)));
         }
 
         /// <summary>
@@ -421,7 +421,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF
         {
             ArgChecker.AssertArgNotNull(parent, "parent");
 
-            _htmlContainerInt.HandleMouseMove(new ControlAdapter(parent), Utils.Convert(mousePos));
+            _htmlContainerInt.HandleMouseMove(new ControlAdapter(parent), WpfUtils.Convert(mousePos));
         }
 
         /// <summary>

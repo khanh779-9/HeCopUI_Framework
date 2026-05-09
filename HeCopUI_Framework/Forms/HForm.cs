@@ -1,4 +1,4 @@
-﻿using HeCopUI_Framework.Controls;
+using HeCopUI_Framework.Controls;
 using HeCopUI_Framework.Enums;
 using System;
 using System.ComponentModel;
@@ -17,6 +17,9 @@ namespace HeCopUI_Framework.Forms
         public HForm()
         {
             InitializeComponent();
+            // Ensure the client area matches the designer's intended size
+            // Designer sets ClientSize to 321x229; enforce it explicitly to avoid runtime differences
+            this.ClientSize = new System.Drawing.Size(321, 229);
             SetStyle(GetAppResources.SetControlStyles(), true);
             base.FormBorderStyle = FormBorderStyle.None;
 
@@ -26,9 +29,9 @@ namespace HeCopUI_Framework.Forms
 
         private void HForm_MouseLeave(object sender, EventArgs e)
         {
-            hover_min = false;
-            hover_max = false;
-            hover_close = false;
+            _isMinHovered = false;
+            _isMaxHovered = false;
+            _isCloseHovered = false;
             Invalidate();
         }
 
@@ -53,8 +56,6 @@ namespace HeCopUI_Framework.Forms
 
         protected override void OnLoad(EventArgs e)
         {
-            //Size = formSize;
-            //formSize = this.ClientSize;
             hDropShadowForm = new HDropShadowForm
             {
                 ShadowSpread = ShadowSpread,
@@ -80,23 +81,23 @@ namespace HeCopUI_Framework.Forms
         //public new FormBorderStyle FormBorderStyle
         //{ get; set; } = FormBorderStyle.None;
 
-        int closestep = 0;
-        int maxstep = 0;
-        int minstep = 0;
+        int _closeStep = 0;
+        int _maxStep = 0;
+        int _minStep = 0;
 
-        ControlsBox CB = new ControlsBox();
+        ControlsBox _controlBox = new ControlsBox();
         [Browsable(true)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public ControlsBox FormControlBox
         {
             get
             {
-                if (CB == null) CB = new ControlsBox();
-                return CB;
+                if (_controlBox == null) _controlBox = new ControlsBox();
+                return _controlBox;
             }
             set
             {
-                CB = value;
+                _controlBox = value;
                 Invalidate();
             }
         }
@@ -111,51 +112,50 @@ namespace HeCopUI_Framework.Forms
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            hover_min = false;
-            hover_max = false;
-            hover_close = false;
-            //Mintimer.Start();
+            _isMinHovered = false;
+            _isMaxHovered = false;
+            _isCloseHovered = false;
             Invalidate();
             base.OnMouseLeave(e);
         }
 
         protected override void OnLeave(EventArgs e)
         {
-            hover_min = false;
-            hover_max = false;
-            hover_close = false;
+            _isMinHovered = false;
+            _isMaxHovered = false;
+            _isCloseHovered = false;
             Invalidate();
             base.OnLeave(e);
         }
 
-        bool hover_min, hover_max, hover_close = false;
+        bool _isMinHovered, _isMaxHovered, _isCloseHovered = false;
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if (ControlBox)
             {
                 if (ControlBoxRect.Contains(e.Location))
                 {
-                    hover_min = false;
-                    hover_max = false;
-                    hover_close = true; closestep = 255; maxstep = 0; minstep = 0;
+                    _isMinHovered = false;
+                    _isMaxHovered = false;
+                    _isCloseHovered = true; _closeStep = 255; _maxStep = 0; _minStep = 0;
                 }
                 else if (MaximizeBoxRect.Contains(e.Location))
                 {
-                    hover_min = false;
-                    hover_max = true;
-                    hover_close = false; closestep = 0; maxstep = 255; minstep = 0;
+                    _isMinHovered = false;
+                    _isMaxHovered = true;
+                    _isCloseHovered = false; _closeStep = 0; _maxStep = 255; _minStep = 0;
                 }
                 else if (MinimizeBoxRect.Contains(e.Location))
                 {
-                    hover_min = true;
-                    hover_max = false;
-                    hover_close = false; closestep = 0; maxstep = 0; minstep = 255;
+                    _isMinHovered = true;
+                    _isMaxHovered = false;
+                    _isCloseHovered = false; _closeStep = 0; _maxStep = 0; _minStep = 255;
                 }
                 else
                 {
-                    hover_min = false;
-                    hover_max = false;
-                    hover_close = false; closestep = 0; maxstep = 0; minstep = 0;
+                    _isMinHovered = false;
+                    _isMaxHovered = false;
+                    _isCloseHovered = false; _closeStep = 0; _maxStep = 0; _minStep = 0;
                 }
             }
             Invalidate();
@@ -172,7 +172,7 @@ namespace HeCopUI_Framework.Forms
             if (e.Button == MouseButtons.Left)
             {
                 if (MaximizeBox)
-                    if (hover_max)
+                    if (_isMaxHovered)
                     {
                         switch (WindowState)
                         {
@@ -189,10 +189,10 @@ namespace HeCopUI_Framework.Forms
                     }
                 if (MinimizeBox)
                 {
-                    if (hover_min)
+                    if (_isMinHovered)
                         WindowState = FormWindowState.Minimized;
                 }
-                if (hover_close) Close();
+                if (_isCloseHovered) Close();
             }
         }
 
@@ -240,8 +240,6 @@ namespace HeCopUI_Framework.Forms
 
 
 
-        //const int SC_MINIMIZE = 0xF020; //Minimize form (Before)
-        //const int SC_RESTORE = 0xF120; //Restore form (Before)
         const int resizeAreaSize = 10;
         const int HTCLIENT = 1; //Represents the client area of the window
         const int HTLEFT = 10;  //Left border of a window, allows resize horizontally to the left
@@ -252,19 +250,6 @@ namespace HeCopUI_Framework.Forms
         const int HTBOTTOM = 15; //Lower-horizontal border of a window, allows resize vertically down
         const int HTBOTTOMLEFT = 16;//Lower-left corner of a window border, allows resize diagonally to the left
         const int HTBOTTOMRIGHT = 17;//Lower-right corner of a window border, allows resize diagonally to the right     
-        //const int SIZE_MAXHIDE = 4;
-        //const int SIZE_MAXIMIZED = 2;
-        //const int SIZE_MAXSHOW = 3;
-        //const int SIZE_MINIMIZED = 1;
-        //const int SIZE_RESTORED = 0;
-        //private const int WM_GETMINMAXINFO = 0x0024;
-        //private const int PM_REMOVE = 0x0001;
-        //int GWL_STYLE = 0x0;
-        //int WS_MAXIMIZE = 0x01000000;
-        //int SM_CXFIXEDFRAME = 7;
-        //int SM_CXSIZEFRAME = 0x20;//32
-        //int SM_CYSIZEFRAME = 0x21;//33
-        //int SM_CYCAPTION = 4;
         int WS_MINIMIZEBOX = 0x00020000;
 
         [DllImport("dwmapi.dll")]
@@ -413,33 +398,33 @@ namespace HeCopUI_Framework.Forms
             }
         }
 
-        private Color tc = Color.White;
+        private Color _titleColor = Color.White;
         public Color TitleColor
         {
-            get { return tc; }
+            get { return _titleColor; }
             set
             {
-                tc = value; Invalidate();
+                _titleColor = value; Invalidate();
             }
         }
 
-        int shadowtitlehe = 4;
+        int _shadowTitleHeight = 4;
         public int ShadowTitleHeight
         {
-            get { return shadowtitlehe; }
+            get { return _shadowTitleHeight; }
             set
             {
-                shadowtitlehe = value; Invalidate();
+                _shadowTitleHeight = value; Invalidate();
             }
         }
 
-        Color shadowTitleColor = Color.Black;
+        Color _shadowTitleColor = Color.Black;
         public Color ShadowTitleColor
         {
-            get { return shadowTitleColor; }
+            get { return _shadowTitleColor; }
             set
             {
-                shadowTitleColor = value; Invalidate();
+                _shadowTitleColor = value; Invalidate();
             }
         }
 
@@ -570,11 +555,11 @@ namespace HeCopUI_Framework.Forms
                 HeCopUI_Framework.Helper.GraphicsHelper.SetHightGraphics(g);
                 g.CompositingQuality = CompositingQuality.HighQuality;
                 g.TextRenderingHint = texg;
-                using (SolidBrush fillBrush = new SolidBrush(tc))
+                using (SolidBrush fillBrush = new SolidBrush(TitleColor))
                     g.FillRectangle(fillBrush, new RectangleF(0, 0, Width, 37));
 
-                using (LinearGradientBrush gradientBrush = new System.Drawing.Drawing2D.LinearGradientBrush(new Rectangle(0, 37, Width, shadowtitlehe), Color.FromArgb(60, shadowTitleColor), Color.Transparent, LinearGradientMode.Vertical))
-                    g.FillRectangle(gradientBrush, 0, 37, Width, shadowtitlehe);
+                using (LinearGradientBrush gradientBrush = new System.Drawing.Drawing2D.LinearGradientBrush(new Rectangle(0, 37, Width, ShadowTitleHeight), Color.FromArgb(60, ShadowTitleColor), Color.Transparent, LinearGradientMode.Vertical))
+                    g.FillRectangle(gradientBrush, 0, 37, Width, ShadowTitleHeight);
 
                 if (Border.Top > 0)
                     g.DrawLine(new Pen(sb, Border.Top) { Alignment = PenAlignment.Inset }, new Point(0, 0), new Point(Width, 0));
@@ -601,32 +586,32 @@ namespace HeCopUI_Framework.Forms
                 if (ControlBox == true)
                 {
                     int sc = 12;
-                    using (SolidBrush closeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(CB.CloseBoxColor, CB.CloseBoxHoverColor, closestep)))
-                        g.FillPath(closeBrush, (CB.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ControlBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ControlBoxRect, sc));
+                    using (SolidBrush closeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.CloseBoxColor, FormControlBox.CloseBoxHoverColor, _closeStep)))
+                        g.FillPath(closeBrush, (FormControlBox.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ControlBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ControlBoxRect, sc));
 
                     if (MaximizeBox)
-                        using (SolidBrush maximizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(CB.MaximizeBoxColor, CB.MaximizeBoxHoverColor, maxstep)))
-                            g.FillPath(maximizeBrush, (CB.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MaximizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MaximizeBoxRect, sc));
+                        using (SolidBrush maximizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.MaximizeBoxColor, FormControlBox.MaximizeBoxHoverColor, _maxStep)))
+                            g.FillPath(maximizeBrush, (FormControlBox.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MaximizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MaximizeBoxRect, sc));
 
                     if (MinimizeBox)
-                        using (SolidBrush minimizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(CB.MinimizeBoxColor, CB.MinimizeBoxHoverColor, minstep)))
-                            g.FillPath(minimizeBrush, (CB.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, sc));
+                        using (SolidBrush minimizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.MinimizeBoxColor, FormControlBox.MinimizeBoxHoverColor, _minStep)))
+                            g.FillPath(minimizeBrush, (FormControlBox.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, sc));
 
                     if (MaximizeBox == false)
-                        using (SolidBrush minimizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(CB.MinimizeBoxColor, CB.MinimizeBoxHoverColor, minstep)))
-                            g.FillPath(minimizeBrush, (CB.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, sc));
+                        using (SolidBrush minimizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.MinimizeBoxColor, FormControlBox.MinimizeBoxHoverColor, _minStep)))
+                            g.FillPath(minimizeBrush, (FormControlBox.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, sc));
 
                     #region CB
                     g.PixelOffsetMode = PixelOffsetMode.Default;
-                    using (Pen closePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(CB.IconCloseColor, CB.IconCloseHoverColor, closestep)), 1.5f))
+                    using (Pen closePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.IconCloseColor, FormControlBox.IconCloseHoverColor, _closeStep)), 1.5f))
                         DrawClose(g, closePen);
 
                     if (MaximizeBox == true)
-                        using (Pen maximizePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(CB.IconMaximizeColor, CB.IconMinimizeHoverColor, maxstep)), 1.5f))
+                        using (Pen maximizePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.IconMaximizeColor, FormControlBox.IconMinimizeHoverColor, _maxStep)), 1.5f))
                             DrawMaximize_Restore(g, maximizePen);
 
                     //if (MaximizeBox == false)
-                    using (Pen minimizePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(CB.IconMinimizeColor, CB.IconMinimizeHoverColor, minstep)), 1.5f))
+                    using (Pen minimizePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.IconMinimizeColor, FormControlBox.IconMinimizeHoverColor, _minStep)), 1.5f))
                         DrawMinimize(g, minimizePen);
 
                     #endregion

@@ -1,4 +1,4 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
@@ -12,87 +12,87 @@ namespace HeCopUI_Framework.Controls
             SetStyle(GetAppResources.SetControlStyles(), true);
         }
 
-        private int step = 3;
+        private int _steps = 3;
         public int Steps
         {
-            get { return step; }
+            get { return _steps; }
             set
             {
-                if (value <= 1) step = 2;
-                else step = value;
+                if (value <= 1) _steps = 2;
+                else _steps = value;
                 Invalidate();
             }
         }
 
-        private int radisbi = 20;
+        private int _radiusBig = 20;
         public int RadiusBig
         {
-            get { return radisbi; }
+            get { return _radiusBig; }
             set
             {
-                radisbi = value; Invalidate();
+                _radiusBig = value; Invalidate();
             }
         }
 
-        private int radisSma = 15;
+        private int _radiusSmall = 15;
         public int RadiusSmall
         {
-            get { return radisSma; }
+            get { return _radiusSmall; }
             set
             {
-                radisSma = value; Invalidate();
+                _radiusSmall = value; Invalidate();
             }
         }
 
-        private int bgHe = 10;
+        private int _backgroundHeight = 10;
         public int BGHeight
         {
-            get { return bgHe; }
+            get { return _backgroundHeight; }
             set
             {
-                bgHe = value; Invalidate();
+                _backgroundHeight = value; Invalidate();
             }
         }
 
-        Color indicatorBarColor1 = Global.PrimaryColors.BaseProgressBarColor1;
+        Color _indicatorBarColor1 = Global.PrimaryColors.BaseProgressBarColor1;
         public Color IndicatorBarColor1
         {
-            get { return indicatorBarColor1; }
+            get { return _indicatorBarColor1; }
             set
             {
-                indicatorBarColor1 = value; Invalidate();
+                _indicatorBarColor1 = value; Invalidate();
             }
         }
 
-        private Color indicatorStepColor1 = Global.PrimaryColors.ProgressBarColor1;
+        private Color _indicatorStepColor1 = Global.PrimaryColors.ProgressBarColor1;
 
         public Color IndicatorStepColor1
         {
-            get { return indicatorStepColor1; }
+            get { return _indicatorStepColor1; }
             set
             {
-                indicatorStepColor1 = value; Invalidate();
+                _indicatorStepColor1 = value; Invalidate();
             }
         }
 
-        Color indicatorBarColor2 = Global.PrimaryColors.BaseProgressBarColor2;
+        Color _indicatorBarColor2 = Global.PrimaryColors.BaseProgressBarColor2;
         public Color IndicatorBarColor2
         {
-            get { return indicatorBarColor2; }
+            get { return _indicatorBarColor2; }
             set
             {
-                indicatorBarColor2 = value; Invalidate();
+                _indicatorBarColor2 = value; Invalidate();
             }
         }
 
-        private Color indicatorStepColor2 = Color.DodgerBlue;
+        private Color _indicatorStepColor2 = Color.DodgerBlue;
 
         public Color IndicatorStepColor2
         {
-            get { return indicatorStepColor2; }
+            get { return _indicatorStepColor2; }
             set
             {
-                indicatorStepColor2 = value; Invalidate();
+                _indicatorStepColor2 = value; Invalidate();
             }
         }
 
@@ -103,17 +103,17 @@ namespace HeCopUI_Framework.Controls
             var g = e.Graphics;
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
-            int steps = step;
-            int radiusBig = radisbi;
-            int radiusSmall = radisSma;
-            int bgHeight = bgHe;
+            int steps = _steps;
+            int radiusBig = _radiusBig;
+            int radiusSmall = _radiusSmall;
+            int bgHeight = _backgroundHeight;
 
             var gradientRect = new Rectangle(ClientRectangle.X + (ClientRectangle.Width - radiusBig * 2) / (steps - 1),
                                              ClientRectangle.Y + ClientRectangle.Height / 2 - radiusBig - 1, radiusBig * 2, radiusBig * 2);
 
-            var lightGrayBrush = new LinearGradientBrush(ClientRectangle, indicatorBarColor1, indicatorBarColor2, LinearGradientMode.Vertical);
+            var lightGrayBrush = new LinearGradientBrush(ClientRectangle, _indicatorBarColor1, _indicatorBarColor2, LinearGradientMode.Vertical);
             //var darkGrayBrush = new LinearGradientBrush(gradientRect, Color.DarkGray, Color.Gray, LinearGradientMode.Vertical);
-            var lightGreenBrush = new LinearGradientBrush(ClientRectangle, indicatorStepColor1, indicatorStepColor2, LinearGradientMode.Vertical);
+            var lightGreenBrush = new LinearGradientBrush(ClientRectangle, _indicatorStepColor1, _indicatorStepColor2, LinearGradientMode.Vertical);
             //var darkGreenBrush = new LinearGradientBrush(ClientRectangle, Color.YellowGreen, Color.ForestGreen, LinearGradientMode.Vertical);
 
             //g.FillRectangle(darkGrayBrush, ClientRectangle.X + radiusBig, ClientRectangle.Y + ClientRectangle.Height / 2 - bgHeight / 2 - 1,

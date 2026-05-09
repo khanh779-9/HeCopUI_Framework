@@ -76,7 +76,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Adapters
         public override void Show(RControl parent, RPoint location)
         {
             _contextMenu.PlacementTarget = ((ControlAdapter)parent).Control;
-            _contextMenu.PlacementRectangle = new Rect(Utils.ConvertRound(location), Size.Empty);
+            _contextMenu.PlacementRectangle = new Rect(WpfUtils.ConvertRound(location), Size.Empty);
             _contextMenu.IsOpen = true;
         }
 

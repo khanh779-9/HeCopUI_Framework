@@ -26,30 +26,30 @@ namespace HeCopUI_Framework.Controls.Gauge
             base.OnPaint(e);
             Graphics g = e.Graphics;
             Helper.GraphicsHelper.SetHightGraphics(g);
-            GraphicsPath gp = HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ClientRectangle, rad);
+            GraphicsPath gp = HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ClientRectangle, _radius);
             g.FillPath(new SolidBrush(_GaugeColor), gp);
-            g.DrawPath(new Pen(new SolidBrush(borC), Borw) { Alignment = PenAlignment.Inset }, HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ClientRectangle, rad, BorderThickness));
+            g.DrawPath(new Pen(new SolidBrush(_borderColor), _borderThickness) { Alignment = PenAlignment.Inset }, HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ClientRectangle, _radius, BorderThickness));
             DisplayNumber(g, _value, new RectangleF(Width / 2 - recw / 2 - 2, Height / 2 - NumberHeigh / 2, recw - 4, NumberHeigh));
 
         }
 
-        private Color borC = Color.Gray;
+        private Color _borderColor = Color.Gray;
         public Color BorderColor
         {
-            get { return borC; }
+            get { return _borderColor; }
             set
             {
-                borC = value; Invalidate();
+                _borderColor = value; Invalidate();
             }
         }
 
-        private int Borw = 2;
+        private int _borderThickness = 2;
         public int BorderThickness
         {
-            get { return Borw; }
+            get { return _borderThickness; }
             set
             {
-                Borw = value; Invalidate();
+                _borderThickness = value; Invalidate();
             }
         }
 
@@ -66,13 +66,13 @@ namespace HeCopUI_Framework.Controls.Gauge
 
 
 
-        private int rad = 0;
+        private int _radius = 0;
         public int Radius
         {
-            get { return rad; }
+            get { return _radius; }
             set
             {
-                rad = value; Invalidate();
+                _radius = value; Invalidate();
             }
         }
 
@@ -93,13 +93,13 @@ namespace HeCopUI_Framework.Controls.Gauge
 
         public int MinimumValue { get; set; } = 0;
 
-        private int max = 100;
+        private int _maximumValue = 100;
         public int MaximumValue
         {
-            get { return max; }
+            get { return _maximumValue; }
             set
             {
-                max = value; Invalidate();
+                _maximumValue = value; Invalidate();
             }
         }
 

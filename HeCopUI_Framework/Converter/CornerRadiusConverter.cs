@@ -4,148 +4,91 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
+using System.Reflection;
 
 namespace HeCopUI_Framework.Converter
 {
-    public class CornerRadiusConverter : ExpandableObjectConverter
+    public class CornerRadiusConverter : TypeConverter
     {
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
-        }
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) =>
+            sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
 
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        {
-            return destinationType == typeof(InstanceDescriptor) || base.CanConvertTo(context, destinationType);
-        }
+        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) =>
+            destinationType == typeof(InstanceDescriptor) || base.CanConvertTo(context, destinationType);
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (value is string text)
+            if (value is string str)
             {
-                string text2 = text.Trim().Replace(" ", "");
-                if (text2.Length == 0)
-                {
-                    return null;
-                }
+                str = str.Trim();
+                if (string.IsNullOrEmpty(str)) return null;
 
                 if (culture == null)
-                {
                     culture = CultureInfo.CurrentCulture;
-                }
 
-                char c = ',';
-                string[] array = text2.Split(c);
-                int[] array2 = new int[array.Length];
-                TypeConverter converter = TypeDescriptor.GetConverter(typeof(int));
-                for (int i = 0; i < array2.Length; i++)
-                {
-                    array2[i] = (int)converter.ConvertFromString(context, culture, array[i]);
-                }
+                string separator = culture.TextInfo.ListSeparator;
+                string[] parts = str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length != 4)
+                    throw new ArgumentException($"Cannot parse '{str}' as CornerRadius.");
 
-                if (array2.Length == 4)
-                {
-                    return new CornerRadius(array2[0], array2[1], array2[2], array2[3]);
-                }
+                for (int i = 0; i < parts.Length; i++)
+                    parts[i] = parts[i].Trim();
 
-                // return error
-                throw new ArgumentException("Invalid format");
+                float[] vals = Array.ConvertAll(parts, s => float.Parse(s, culture));
+                return new CornerRadius(vals[0], vals[1], vals[2], vals[3]);
             }
 
             return base.ConvertFrom(context, culture, value);
         }
 
+
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (destinationType == null)
+            if (value is CornerRadius cr)
             {
-                throw new ArgumentNullException("destinationType");
-            }
+                if (culture == null)
+                    culture = CultureInfo.CurrentCulture;
 
-            if (value is CornerRadius)
-            {
                 if (destinationType == typeof(string))
                 {
-                    CornerRadius padding = (CornerRadius)value;
-                    if (culture == null)
-                    {
-                        culture = CultureInfo.CurrentCulture;
-                    }
-
-                    string separator = culture.TextInfo.ListSeparator + " ";
-                    TypeConverter converter = TypeDescriptor.GetConverter(typeof(int));
-                    string[] array = new string[4];
-                    int num = 0;
-                    array[num++] = converter.ConvertToString(context, culture, padding.TopLeft);
-                    array[num++] = converter.ConvertToString(context, culture, padding.TopRight);
-                    array[num++] = converter.ConvertToString(context, culture, padding.BottomLeft);
-                    array[num++] = converter.ConvertToString(context, culture, padding.BottomRight);
-                    return string.Join(separator, array);
+                    return string.Join(culture.TextInfo.ListSeparator + " ",
+                        new object[] { cr.TopLeft, cr.TopRight, cr.BottomLeft, cr.BottomRight });
                 }
-
-                if (destinationType == typeof(InstanceDescriptor))
+                else if (destinationType == typeof(InstanceDescriptor))
                 {
-                    CornerRadius padding2 = (CornerRadius)value;
-                    if (padding2.ShouldSerializeAll())
-                    {
-                        return new InstanceDescriptor(typeof(CornerRadius).GetConstructor(new Type[1] { typeof(int) }), new object[1] { padding2.All });
-                    }
-
-                    return new InstanceDescriptor(typeof(CornerRadius).GetConstructor(new Type[4]
-                    {
-                        typeof(int),
-                        typeof(int),
-                        typeof(int),
-                        typeof(int)
-                    }), new object[4] { padding2.TopLeft, padding2.TopRight, padding2.BottomLeft, padding2.BottomRight });
+                    return cr.ShouldSerializeAll()
+                        ? new InstanceDescriptor(typeof(CornerRadius).GetConstructor(new[] { typeof(float) }),
+                                                 new object[] { cr.All })
+                        : new InstanceDescriptor(typeof(CornerRadius).GetConstructor(new[] { typeof(float), typeof(float), typeof(float), typeof(float) }),
+                                                 new object[] { cr.TopLeft, cr.TopRight, cr.BottomLeft, cr.BottomRight });
                 }
             }
-
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            if (propertyValues is null) throw new ArgumentNullException(nameof(propertyValues));
 
-            if (propertyValues == null)
-            {
-                throw new ArgumentNullException("propertyValues");
-            }
-
-            CornerRadius padding = (CornerRadius)context.PropertyDescriptor.GetValue(context.Instance);
-            int num = (int)propertyValues["All"];
-            if (padding.All != num)
-            {
-                return new CornerRadius(num);
-            }
-
-            return new CornerRadius((int)propertyValues["TopLeft"], (int)propertyValues["TopRight"], (int)propertyValues["BottomLeft"], (int)propertyValues["BottomRight"]);
+            return new CornerRadius(
+                (float)propertyValues[nameof(CornerRadius.TopLeft)],
+                (float)propertyValues[nameof(CornerRadius.TopRight)],
+                (float)propertyValues[nameof(CornerRadius.BottomLeft)],
+                (float)propertyValues[nameof(CornerRadius.BottomRight)]
+            );
         }
 
-        public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
+        public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) => true;
+        public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
 
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(CornerRadius), attributes);
-            return properties.Sort(new string[5] { "All", "TopLeft", "TopRight", "BottomLeft", "BottomRight" });
-        }
+            var properties = TypeDescriptor.GetProperties(typeof(CornerRadius), attributes);
+            //return properties.Sort(nameof(CornerRadius.All), nameof(CornerRadius.TopLeft), nameof(CornerRadius.TopRight), nameof(CornerRadius.BottomLeft), nameof(CornerRadius.BottomRight));
 
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
+            string[] order = new string[] { "All", "TopLeft", "TopRight", "BottomLeft", "BottomRight" };
 
-
-        public CornerRadiusConverter()
-        {
+            return properties.Sort(order);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms.Utilities
     /// <summary>
     /// Utilities for converting WinForms entities to HtmlRenderer core entities.
     /// </summary>
-    internal static class Utils
+    internal static class WinFormsUtils
     {
         /// <summary>
         /// Convert from WinForms point to core point.

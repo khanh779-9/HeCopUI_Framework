@@ -24,25 +24,25 @@ namespace HeCopUI_Framework.Controls
             Custom, Zoom, Fill
         }
 
-        private ImageSizeMode ISM = ImageSizeMode.Zoom;
+        private ImageSizeMode _imageSizeMode = ImageSizeMode.Zoom;
         public ImageSizeMode SetImageSizeMode
         {
-            get { return ISM; }
+            get { return _imageSizeMode; }
             set
             {
-                ISM = value;
+                _imageSizeMode = value;
                 //ProcessImg();
                 Invalidate();
             }
         }
 
-        private Size IS = new Size(150, 150);
+        private Size _imageSize = new Size(150, 150);
         public Size ImageSize
         {
-            get { return IS; }
+            get { return _imageSize; }
             set
             {
-                IS = value;
+                _imageSize = value;
                 //ProcessImg();
                 Invalidate();
             }
@@ -50,37 +50,37 @@ namespace HeCopUI_Framework.Controls
 
 
 
-        private ShapeType ShapeType = ShapeType.RoundedRectangle;
+        private ShapeType _shapeType = ShapeType.RoundedRectangle;
         public ShapeType HShapeType
         {
-            get { return ShapeType; }
+            get { return _shapeType; }
             set
             {
-                ShapeType = value;
+                _shapeType = value;
                 // ProcessImg();
                 Invalidate();
             }
         }
 
-        int blurIntensity = 0;
+        int _blurIntensity = 0;
         public int BlurIntensity
         {
-            get { return blurIntensity; }
+            get { return _blurIntensity; }
             set
             {
-                blurIntensity = value;
+                _blurIntensity = value;
                 //ProcessImg();
                 Invalidate();
             }
         }
 
-        private Image BI;
+        private Image _image;
         public Image Image
         {
-            get { return BI; }
+            get { return _image; }
             set
             {
-                BI = value;
+                _image = value;
                 //ProcessImg();
                 Invalidate();
             }
@@ -105,42 +105,42 @@ namespace HeCopUI_Framework.Controls
                 switch (SetImageSizeMode)
                 {
                     case ImageSizeMode.Zoom:
-                        if (Width <= BI.Width)
+                        if (Width <= _image.Width)
                         {
                             SWi = Width;
                             if (SEnd != 0)
-                                SEnd = Height / 2 - BI.Height / 2;
+                                SEnd = Height / 2 - _image.Height / 2;
                             if (SStart != 0)
-                                SStart = Width / 2 - BI.Height / 2;
+                                SStart = Width / 2 - _image.Height / 2;
                         }
-                        if (Width > BI.Width)
+                        if (Width > _image.Width)
                         {
-                            SWi = BI.Width;
-                            SStart = Width / 2 - BI.Height / 2;
-                            SEnd = Height / 2 - BI.Height / 2;
+                            SWi = _image.Width;
+                            SStart = Width / 2 - _image.Height / 2;
+                            SEnd = Height / 2 - _image.Height / 2;
                             if (SEnd < 0) SEnd = 0;
                         }
-                        if (Height <= BI.Height)
+                        if (Height <= _image.Height)
                         {
                             SHi = Height;
                             if (SStart != 0)
-                                SStart = Width / 2 - BI.Height / 2;
+                                SStart = Width / 2 - _image.Height / 2;
                             if (SEnd != 0)
-                                SEnd = Height / 2 - BI.Height / 2;
+                                SEnd = Height / 2 - _image.Height / 2;
                         }
-                        if (Height > BI.Height)
+                        if (Height > _image.Height)
                         {
-                            SHi = BI.Height;
-                            SStart = Width / 2 - BI.Height / 2;
-                            SEnd = Height / 2 - BI.Height / 2;
+                            SHi = _image.Height;
+                            SStart = Width / 2 - _image.Height / 2;
+                            SEnd = Height / 2 - _image.Height / 2;
                             if (SStart < 0) SStart = 0;
                         }
 
                         break;
                     case ImageSizeMode.Custom:
-                        SStart = Width / 2 - IS.Width / 2;
-                        SEnd = Height / 2 - IS.Height / 2;
-                        SWi = IS.Width; SHi = IS.Height;
+                        SStart = Width / 2 - _imageSize.Width / 2;
+                        SEnd = Height / 2 - _imageSize.Height / 2;
+                        SWi = _imageSize.Width; SHi = _imageSize.Height;
                         break;
                     case ImageSizeMode.Fill:
                         SWi = Width; SHi = Height;
@@ -157,7 +157,7 @@ namespace HeCopUI_Framework.Controls
                 ProcessImg();
 
 
-                if (BI != null && blurBitmap != null)
+                if (_image != null && blurBitmap != null)
                     g.DrawImage(CropCircle(blurBitmap, path), new Rectangle(SStart, SEnd, SWi, SHi));
                 blurBitmap?.Dispose();
                 path?.Dispose();
@@ -170,16 +170,16 @@ namespace HeCopUI_Framework.Controls
 
         void ProcessImg()
         {
-            if (BI != null)
+            if (_image != null)
             {
                 blurBitmap?.Dispose();
                 blurBitmap = new Bitmap(SWi, SHi);
                 blurBitmap.MakeTransparent();
                 using (var gb = Graphics.FromImage(blurBitmap))
                 {
-                    gb.DrawImage((Bitmap)BI, new Rectangle(0, 0, SWi, SHi));
-                    if (blurIntensity > 0)
-                        blurBitmap = ImageBlur.ApplyImageBlur(blurBitmap, blurIntensity, kernelMode);
+                    gb.DrawImage((Bitmap)_image, new Rectangle(0, 0, SWi, SHi));
+                    if (_blurIntensity > 0)
+                        blurBitmap = ImageBlur.ApplyImageBlur(blurBitmap, _blurIntensity, kernelMode);
                 }
             }
         }
@@ -238,9 +238,9 @@ namespace HeCopUI_Framework.Controls
         public void AnimateImage()
         {
 
-            if (ImageAnimator.CanAnimate(BI) && !DesignMode)
+            if (ImageAnimator.CanAnimate(_image) && !DesignMode)
             {
-                ImageAnimator.Animate(BI, new EventHandler(OnFrameChanged));
+                ImageAnimator.Animate(_image, new EventHandler(OnFrameChanged));
             }
         }
     }

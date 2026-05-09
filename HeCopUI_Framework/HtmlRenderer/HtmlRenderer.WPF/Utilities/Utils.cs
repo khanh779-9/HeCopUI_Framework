@@ -20,7 +20,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WPF.Utilities
     /// <summary>
     /// Utilities for converting WPF entities to HtmlRenderer core entities.
     /// </summary>
-    internal static class Utils
+    internal static class WpfUtils
     {
         /// <summary>
         /// Convert from WPF point to core point.

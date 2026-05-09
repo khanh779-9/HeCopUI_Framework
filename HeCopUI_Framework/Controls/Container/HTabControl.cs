@@ -1,4 +1,4 @@
-﻿using HeCopUI_Framework.Animations;
+using HeCopUI_Framework.Animations;
 using HeCopUI_Framework.Enums;
 using System;
 using System.ComponentModel;
@@ -263,13 +263,13 @@ namespace HeCopUI_Framework.Controls.Container
             }
         }
 
-        private Padding tpa = new Padding(0, 0, 0, 0);
+        private Padding _textPadding = new Padding(0, 0, 0, 0);
         public Padding TextPadding
         {
-            get { return tpa; }
+            get { return _textPadding; }
             set
             {
-                tpa = value; Invalidate();
+                _textPadding = value; Invalidate();
             }
         }
 
@@ -392,9 +392,9 @@ namespace HeCopUI_Framework.Controls.Container
                             }
 
                             using (var tb = new SolidBrush(i == SelectedIndex ? SelectedTextColor : UnselectedTextColor))
-                                g.DrawString(TabPages[i].Text, Font, tb, new RectangleF(3 + GetTabRect(i).X + tpa.Left + (ImageList != null ? ImageList.ImageSize.Width + 6 : 0),
-                                    GetTabRect(i).Y + tpa.Top + (Alignment == TabAlignment.Bottom ? 3 : 0), GetTabRect(i).Width - tpa.Right - 2 - (ImageList != null ? ImageList.ImageSize.Width + 6 : 0)
-                                    , GetTabRect(i).Height - tpa.Bottom - (Alignment == TabAlignment.Bottom ? 3 : 0)), SF);
+                                g.DrawString(TabPages[i].Text, Font, tb, new RectangleF(3 + GetTabRect(i).X + _textPadding.Left + (ImageList != null ? ImageList.ImageSize.Width + 6 : 0),
+                                    GetTabRect(i).Y + _textPadding.Top + (Alignment == TabAlignment.Bottom ? 3 : 0), GetTabRect(i).Width - _textPadding.Right - 2 - (ImageList != null ? ImageList.ImageSize.Width + 6 : 0)
+                                    , GetTabRect(i).Height - _textPadding.Bottom - (Alignment == TabAlignment.Bottom ? 3 : 0)), SF);
                         }
 
 
@@ -442,9 +442,9 @@ namespace HeCopUI_Framework.Controls.Container
                                     var imgRect = new RectangleF(r.X + 6, r.Y + ImageList.ImageSize.Height / 2 - (Alignment == TabAlignment.Top ? 3 : 0), ImageList.ImageSize.Width, ImageList.ImageSize.Height);
                                     g.DrawImage(img, imgRect);
                                 }
-                                g.DrawString(TabPages[i].Text, Font, tb, new RectangleF(3 + GetTabRect(i).X + tpa.Left + (ImageList != null ? ImageList.ImageSize.Width + 6 : 0),
-                                    GetTabRect(i).Y + tpa.Top + (Alignment == TabAlignment.Bottom ? 3 : 0), GetTabRect(i).Width - tpa.Right - 2 - (ImageList != null ? ImageList.ImageSize.Width + 6 : 0)
-                                    , GetTabRect(i).Height - tpa.Bottom - (Alignment == TabAlignment.Bottom ? 3 : 0)), SF);
+                                g.DrawString(TabPages[i].Text, Font, tb, new RectangleF(3 + GetTabRect(i).X + _textPadding.Left + (ImageList != null ? ImageList.ImageSize.Width + 6 : 0),
+                                    GetTabRect(i).Y + _textPadding.Top + (Alignment == TabAlignment.Bottom ? 3 : 0), GetTabRect(i).Width - _textPadding.Right - 2 - (ImageList != null ? ImageList.ImageSize.Width + 6 : 0)
+                                    , GetTabRect(i).Height - _textPadding.Bottom - (Alignment == TabAlignment.Bottom ? 3 : 0)), SF);
                             }
 
                         break;

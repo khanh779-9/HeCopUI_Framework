@@ -456,7 +456,7 @@ namespace HeCopUI_Framework.HtmlRenderer.WinForms
                         new RSize(MaximumSize.Width - Padding.Horizontal, MaximumSize.Height - Padding.Vertical),
                         AutoSize,
                         AutoSizeHeightOnly);
-                    ClientSize = Utils.ConvertRound(new RSize(newSize.Width + Padding.Horizontal, newSize.Height + Padding.Vertical));
+                    ClientSize = WinFormsUtils.ConvertRound(new RSize(newSize.Width + Padding.Horizontal, newSize.Height + Padding.Vertical));
                 }
                 _htmlContainer.Location = new PointF(Padding.Left, Padding.Top);
                 _htmlContainer.PerformPaint(g);

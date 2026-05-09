@@ -11,36 +11,38 @@ namespace HeCopUI_Framework.Controls
         {
         }
 
-        int locx = 0; int locy = 0;
-        private Form targetForm;
+        private int _locationX = 0;
+        private int _locationY = 0;
+        private Form _targetForm;
         public Form TargetForm
         {
-            get { return targetForm; }
+            get { return _targetForm; }
             set
             {
-                targetForm = value;
-                targetForm.Load += (sender, e) =>
+                _targetForm = value;
+                _targetForm.Load += (sender, e) =>
                   {
                       if (UseAnimation)
                       {
-                          timeLoad.Interval = Interval;
-                          timeLoad.Tick += timer_Tick;
-                          timeLoad.Start();
+                          _timer.Interval = Interval;
+                          _timer.Tick += OnTimerTick;
+                          _timer.Start();
                       }
                       switch (ShowFormLocation)
                       {
                           case ShowLocation.MiddleCenter:
-                              locx = Screen.PrimaryScreen.WorkingArea.Width / 2 - TargetForm.Width / 2;
-                              locy = Screen.PrimaryScreen.WorkingArea.Height / 2 - TargetForm.Height / 2;
-                              TargetForm.Location = new Point(locx, locy);
+                              _locationX = Screen.PrimaryScreen.WorkingArea.Width / 2 - _targetForm.Width / 2;
+                              _locationY = Screen.PrimaryScreen.WorkingArea.Height / 2 - _targetForm.Height / 2;
+                              _targetForm.Location = new Point(_locationX, _locationY);
                               break;
                           case ShowLocation.TopLeft:
-                              locx = locy = 0;
-                              TargetForm.Location = new Point(locx, locy);
+                              _locationX = _locationY = 0;
+                              _targetForm.Location = new Point(_locationX, _locationY);
                               break;
                           case ShowLocation.BottomRight:
-                              locx = Screen.PrimaryScreen.WorkingArea.Width - TargetForm.Width; locy = Screen.PrimaryScreen.WorkingArea.Height - TargetForm.Height;
-                              TargetForm.Location = new Point(locx, locy);
+                              _locationX = Screen.PrimaryScreen.WorkingArea.Width - _targetForm.Width;
+                              _locationY = Screen.PrimaryScreen.WorkingArea.Height - _targetForm.Height;
+                              _targetForm.Location = new Point(_locationX, _locationY);
                               break;
                       }
 
@@ -48,7 +50,7 @@ namespace HeCopUI_Framework.Controls
             }
         }
 
-        Timer timeLoad = new Timer();
+        private Timer _timer = new Timer();
         public int Interval { get; set; } = 10;
         public bool UseAnimation { get; set; } = false;
         public enum AnimateStyle
@@ -56,22 +58,22 @@ namespace HeCopUI_Framework.Controls
             FadeIn, FadeOut, ZoomIn, None
         }
 
-        double opaci = 0;
-        void timer_Tick(object sender, EventArgs e)
+        private double _opacity = 0;
+        private void OnTimerTick(object sender, EventArgs e)
         {
-            TargetForm.Opacity = opaci;
+            _targetForm.Opacity = _opacity;
             switch (ShowAnimationStyle)
             {
                 case AnimateStyle.FadeIn:
-                    if (opaci < 1)
+                    if (_opacity < 1)
                     {
-                        opaci += 0.1;
-                        TargetForm.Invalidate();
+                        _opacity += 0.1;
+                        _targetForm.Invalidate();
                     }
                     else
                     {
-                        timeLoad.Stop();
-                        timeLoad.Dispose();
+                        _timer.Stop();
+                        _timer.Dispose();
                     }
                     break;
 

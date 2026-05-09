@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -103,13 +103,13 @@ namespace HeCopUI_Framework.Controls.Progress
             }
         }
 
-        private int Pri = 10;
+        private int _progressWidth = 10;
         public int ProgressBarWidth
         {
-            get { return Pri; }
+            get { return _progressWidth; }
             set
             {
-                Pri = value; Invalidate();
+                _progressWidth = value; Invalidate();
             }
         }
 
@@ -118,15 +118,15 @@ namespace HeCopUI_Framework.Controls.Progress
             Graphics g = e.Graphics;
             Helper.GraphicsHelper.SetHightGraphics(g);
             //g.FillRectangle(new SolidBrush(trackColor), new RectangleF(Width / 2 - _TS / 2, 2, _TS, Height - 6));
-            LinearGradientBrush B1 = new LinearGradientBrush(ClientRectangle, trackColor1, trackColor2, LB);
-            LinearGradientBrush B2 = new LinearGradientBrush(ClientRectangle, trackcolor1, trackcolor2, LB1);
-            Pen pen = new Pen(B1, Pri)
+            LinearGradientBrush B1 = new LinearGradientBrush(ClientRectangle, trackColor1, trackColor2, _baseGradientMode);
+            LinearGradientBrush B2 = new LinearGradientBrush(ClientRectangle, trackcolor1, trackcolor2, _progressGradientMode);
+            Pen pen = new Pen(B1, _progressWidth)
             {
                 StartCap = startpen,
                 EndCap = endpen,
                 DashStyle = TDS
             };
-            Pen pent = new Pen((B2), Pri)
+            Pen pent = new Pen((B2), _progressWidth)
             {
                 StartCap = startpenv,
                 EndCap = endpenv,
@@ -137,23 +137,23 @@ namespace HeCopUI_Framework.Controls.Progress
             g.DrawLine(pent, new PointF(6, Height / 2), new PointF(6 + _Value * (Width - 6) / MaximumValue, Height / 2));
         }
 
-        private LinearGradientMode LB1 = LinearGradientMode.Vertical;
+        private LinearGradientMode _progressGradientMode = LinearGradientMode.Vertical;
         public LinearGradientMode ProgressGradientMode
         {
-            get { return LB1; }
+            get { return _progressGradientMode; }
             set
             {
-                LB1 = value; Invalidate();
+                _progressGradientMode = value; Invalidate();
             }
         }
 
-        private LinearGradientMode LB = LinearGradientMode.Vertical;
+        private LinearGradientMode _baseGradientMode = LinearGradientMode.Vertical;
         public LinearGradientMode BaseGradientMode
         {
-            get { return LB; }
+            get { return _baseGradientMode; }
             set
             {
-                LB = value; Invalidate();
+                _baseGradientMode = value; Invalidate();
             }
         }
 
