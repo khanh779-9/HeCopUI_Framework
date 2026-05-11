@@ -18,7 +18,6 @@ namespace HecopUI_Test
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Size = new Size(1300, 850);
             loadDataChart();
         }
 

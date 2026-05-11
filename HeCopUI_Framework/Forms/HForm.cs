@@ -1,765 +1,733 @@
-using HeCopUI_Framework.Controls;
-using HeCopUI_Framework.Enums;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Color = System.Drawing.Color;
-using Pen = System.Drawing.Pen;
-using Point = System.Drawing.Point;
-using Size = System.Drawing.Size;
+using HeCopUI_Framework.Win32;
+using HeCopUI_Framework.Win32.Enums;
+using HeCopUI_Framework.Win32.Struct;
+using HeCopUI_Framework.Controls;
+using static HeCopUI_Framework.Win32.User32;
+
 namespace HeCopUI_Framework.Forms
 {
-    public partial class HForm : Form
+    [ToolboxItem(false)]
+    public class HForm : Form
     {
+        private const int TITLE_HEIGHT_DEFAULT = 34;
+        private const int CAPTION_BUTTON_WIDTH = 46;
+        private const int CAPTION_BUTTON_PADDING = 0;
+        private const int RESIZE_BORDER = 6;
+        private const int TITLE_ICON_SIZE = 18;
+        private const float TITLE_FONT_SIZE = 10f;
+
+        private Color titleBarColor = Color.FromArgb(32, 32, 32);
+        private Color titleTextColor = Color.White;
+        private Color borderColor = Color.FromArgb(70, 70, 70);
+        private Color accentColor = Color.FromArgb(0, 120, 215);
+        private Icon titleIcon = null;
+        private int titleHeight = TITLE_HEIGHT_DEFAULT;
+        private bool isWindowActive = true;
+        private HDropShadowForm dropShadow;
+
+        private enum CaptionButton { None, Minimize, Maximize, Close }
+        private CaptionButton hotButton = CaptionButton.None;
+        private CaptionButton downButton = CaptionButton.None;
+
+        // Smooth hover animation
+        private float _closeHover = 0f;
+        private float _maxHover = 0f;
+        private float _minHover = 0f;
+        private Timer _hoverTimer;
+
         public HForm()
         {
-            InitializeComponent();
-            // Ensure the client area matches the designer's intended size
-            // Designer sets ClientSize to 321x229; enforce it explicitly to avoid runtime differences
-            this.ClientSize = new System.Drawing.Size(321, 229);
-            SetStyle(GetAppResources.SetControlStyles(), true);
-            base.FormBorderStyle = FormBorderStyle.None;
+            DoubleBuffered = true;
+            SetStyle(
+                ControlStyles.ResizeRedraw |
+                ControlStyles.UserPaint |
+                ControlStyles.AllPaintingInWmPaint |
+                ControlStyles.OptimizedDoubleBuffer, true);
+            BackColor = Color.FromArgb(30, 30, 30);
 
-            CalcSystemBoxPos();
-            MouseLeave += HForm_MouseLeave;
-        }
-
-        private void HForm_MouseLeave(object sender, EventArgs e)
-        {
-            _isMinHovered = false;
-            _isMaxHovered = false;
-            _isCloseHovered = false;
-            Invalidate();
-        }
-
-        protected override void OnTextChanged(EventArgs e)
-        {
-            Invalidate();
-            base.OnTextChanged(e);
-        }
-
-        [Category("Shadow")]
-        public int AlphaShadowColor { get; set; } = 150;
-        [Category("Shadow")]
-        public int ShadowBlur { get; set; } = 10;
-        [Category("Shadow")]
-        public int ShadowSpread { get; set; } = 0;
-        [Category("Shadow")]
-        public Color ShadowColor { get; set; } = Color.Black;
-        [Category("Shadow")]
-        public bool HideResizeShadow { get; set; } = false;
-        [Category("Shadow")]
-        public bool ShadowVisible { get; set; } = true;
-
-        protected override void OnLoad(EventArgs e)
-        {
-            hDropShadowForm = new HDropShadowForm
+            dropShadow = new HDropShadowForm
             {
-                ShadowSpread = ShadowSpread,
-                HideResizeShadow = HideResizeShadow,
-                ShadowBlur = ShadowBlur,
-                ShadowColor = ShadowColor,
-                AlphaColor = AlphaShadowColor,
-                ShadowVisible = ShadowVisible
+                TargetForm = this,
+                ShadowVisible = true,
+                HideResizeShadow = false,
+                AlphaColor = 100,
+                ShadowBlur = 16,
+                ShadowSpread = 0,
+                ShadowColor = Color.Black
             };
-            if (!DesignMode)
+
+            _hoverTimer = new Timer { Interval = 16 };
+            _hoverTimer.Tick += HoverTimer_Tick;
+        }
+
+        #region Hover Animation
+
+        private void HoverTimer_Tick(object sender, EventArgs e)
+        {
+            const float speed = 0.18f;
+            bool changed = false;
+            changed |= StepValue(ref _closeHover, hotButton == CaptionButton.Close ? 1f : 0f, speed);
+            changed |= StepValue(ref _maxHover, hotButton == CaptionButton.Maximize ? 1f : 0f, speed);
+            changed |= StepValue(ref _minHover, hotButton == CaptionButton.Minimize ? 1f : 0f, speed);
+
+            if (changed)
+                InvalidateCaptionArea();
+            else
+                _hoverTimer.Stop();
+        }
+
+        private static bool StepValue(ref float current, float target, float speed)
+        {
+            float diff = target - current;
+            if (Math.Abs(diff) < 0.02f)
             {
-                hDropShadowForm.TargetForm = this;
+                if (current != target) { current = target; return true; }
+                return false;
             }
-            base.OnLoad(e);
+            current += diff * speed;
+            if (current < 0.02f) current = 0f;
+            if (current > 0.98f) current = 1f;
+            return true;
         }
 
-
-
-        HDropShadowForm hDropShadowForm = new HDropShadowForm();
-        //[Browsable(false)]
-        //[EditorBrowsable(EditorBrowsableState.Never)]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        //public new FormBorderStyle FormBorderStyle
-        //{ get; set; } = FormBorderStyle.None;
-
-        int _closeStep = 0;
-        int _maxStep = 0;
-        int _minStep = 0;
-
-        ControlsBox _controlBox = new ControlsBox();
-        [Browsable(true)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        public ControlsBox FormControlBox
+        private void InvalidateCaptionArea()
         {
-            get
-            {
-                if (_controlBox == null) _controlBox = new ControlsBox();
-                return _controlBox;
-            }
-            set
-            {
-                _controlBox = value;
-                Invalidate();
-            }
+            Invalidate(new Rectangle(Width - CAPTION_BUTTON_WIDTH * 3 - 2, 0,
+                CAPTION_BUTTON_WIDTH * 3 + 4, titleHeight + 2));
         }
 
-        private const int WM_NCLBUTTONDOWN = 0xA1;
-        private const int HT_CAPTION = 0x2;
+        #endregion
 
-        [DllImport("user32.dll")]
-        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        [DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();
-
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            _isMinHovered = false;
-            _isMaxHovered = false;
-            _isCloseHovered = false;
-            Invalidate();
-            base.OnMouseLeave(e);
-        }
-
-        protected override void OnLeave(EventArgs e)
-        {
-            _isMinHovered = false;
-            _isMaxHovered = false;
-            _isCloseHovered = false;
-            Invalidate();
-            base.OnLeave(e);
-        }
-
-        bool _isMinHovered, _isMaxHovered, _isCloseHovered = false;
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            if (ControlBox)
-            {
-                if (ControlBoxRect.Contains(e.Location))
-                {
-                    _isMinHovered = false;
-                    _isMaxHovered = false;
-                    _isCloseHovered = true; _closeStep = 255; _maxStep = 0; _minStep = 0;
-                }
-                else if (MaximizeBoxRect.Contains(e.Location))
-                {
-                    _isMinHovered = false;
-                    _isMaxHovered = true;
-                    _isCloseHovered = false; _closeStep = 0; _maxStep = 255; _minStep = 0;
-                }
-                else if (MinimizeBoxRect.Contains(e.Location))
-                {
-                    _isMinHovered = true;
-                    _isMaxHovered = false;
-                    _isCloseHovered = false; _closeStep = 0; _maxStep = 0; _minStep = 255;
-                }
-                else
-                {
-                    _isMinHovered = false;
-                    _isMaxHovered = false;
-                    _isCloseHovered = false; _closeStep = 0; _maxStep = 0; _minStep = 0;
-                }
-            }
-            Invalidate();
-            base.OnMouseMove(e);
-        }
-
-
-        public bool MaximizeFullScreen { get; set; } = false;
-
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            base.OnMouseUp(e);
-            Focus();
-            if (e.Button == MouseButtons.Left)
-            {
-                if (MaximizeBox)
-                    if (_isMaxHovered)
-                    {
-                        switch (WindowState)
-                        {
-                            case FormWindowState.Normal:
-                                if (MaximizeFullScreen == true)
-                                    MaximumSize = new Size(0, 0);
-                                else MaximumSize = new Size(Screen.PrimaryScreen.WorkingArea.Width, Screen.PrimaryScreen.WorkingArea.Height);
-                                WindowState = FormWindowState.Maximized;
-                                break;
-                            case FormWindowState.Maximized:
-                                WindowState = FormWindowState.Normal;
-                                break;
-                        }
-                    }
-                if (MinimizeBox)
-                {
-                    if (_isMinHovered)
-                        WindowState = FormWindowState.Minimized;
-                }
-                if (_isCloseHovered) Close();
-            }
-        }
-
-        protected override void OnMouseDown(MouseEventArgs e)
-        {
-            if (e.Location.Y <= 37 && e.X < Width - 36 * 3)
-            {
-                ReleaseCapture();
-                SendMessage(Handle, 0x112, 0xf012, 0);
-            }
-            Invalidate();
-            base.OnMouseDown(e);
-        }
-
-        protected override void OnSizeChanged(EventArgs e)
-        {
-
-            if (WindowState == FormWindowState.Normal)
-            {
-                if (Size.Width <= 200)
-                    Size = new Size(200, Height);
-                if (Size.Height <= 40)
-                    Size = new Size(Width, 40);
-
-            }
-
-            CalcSystemBoxPos(); Invalidate();
-            base.OnSizeChanged(e);
-        }
-
-        protected override void OnResize(EventArgs e)
-        {
-            if (WindowState == FormWindowState.Normal)
-            {
-                if (Size.Width <= 200)
-                    Size = new Size(200, Height);
-                if (Size.Height <= 40)
-                    Size = new Size(Width, 40);
-
-            }
-            AdjustForm();
-            CalcSystemBoxPos(); Invalidate();
-            base.OnResize(e);
-        }
-
-
-
-        const int resizeAreaSize = 10;
-        const int HTCLIENT = 1; //Represents the client area of the window
-        const int HTLEFT = 10;  //Left border of a window, allows resize horizontally to the left
-        const int HTRIGHT = 11; //Right border of a window, allows resize horizontally to the right
-        const int HTTOP = 12;   //Upper-horizontal border of a window, allows resize vertically up
-        const int HTTOPLEFT = 13;//Upper-left corner of a window border, allows resize diagonally to the left
-        const int HTTOPRIGHT = 14;//Upper-right corner of a window border, allows resize diagonally to the right
-        const int HTBOTTOM = 15; //Lower-horizontal border of a window, allows resize vertically down
-        const int HTBOTTOMLEFT = 16;//Lower-left corner of a window border, allows resize diagonally to the left
-        const int HTBOTTOMRIGHT = 17;//Lower-right corner of a window border, allows resize diagonally to the right     
-        int WS_MINIMIZEBOX = 0x00020000;
-
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
-
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
-
-        [DllImport("dwmapi.dll")]
-        public static extern int DwmIsCompositionEnabled(ref int pfEnabled);
-
-        [System.Runtime.InteropServices.DllImport("User32.dll")]
-        public static extern int GetSystemMetrics(int nIndex);
-
-        public struct MARGINS
-        {
-            public int leftWidth;
-            public int rightWidth;
-            public int topHeight;
-            public int bottomHeight;
-        }
-
-        private const int WS_EX_DLGMODALFRAME = 0x00000001;
-        private const int WS_EX_STATICEDGE = 0x00020000;
+        #region CreateParams
 
         protected override CreateParams CreateParams
         {
             get
             {
-                CreateParams cp = base.CreateParams;
-                cp.Style |= WS_MINIMIZEBOX;
-                cp.ClassStyle |= 0x8;   // CS_DBLCLKS
-                //cp.Style = WS_SIZEBOX;
-                //cp.Style &= ~WS_CAPTION;
-                //cp.Style &= ~WS_THICKFRAME;
-                //cp.Style &= ~WS_MINIMIZE;
-                //cp.Style &= ~WS_MAXIMIZE;
-                //cp.ExStyle &= ~WS_EX_DLGMODALFRAME;
-                //cp.ExStyle &= ~WS_EX_STATICEDGE;
+                var cp = base.CreateParams;
+                cp.ClassStyle |= 0x00020000; // CS_DROPSHADOW
                 return cp;
             }
         }
 
-        const int WM_NCPAINT = 0x85;
-        const int WM_NCCALCSIZE = 0x83;
-        const int WM_NCHITTEST = 0x84;
-        const int HTCAPTION = 0x2;
-        const int WS_SIZEBOX = 0x40000;
-        const int WS_CAPTION = 0x00C00000, WS_BORDE = 0x800000,
-        WS_SYSMENU = 0x80000,
-        WS_MAXIMIZEBOX = 0x10000,
-        WS_THICKFRAME = 0x00040000,
-        WS_MINIMIZE = 0x20000000,
-        WS_MAXIMIZE = 0x1000000;
+        #endregion
 
+        #region Properties
 
+        [Category("Appearance")]
+        public Color TitleBarColor
+        {
+            get => titleBarColor;
+            set { titleBarColor = value; Invalidate(new Rectangle(0, 0, Width, titleHeight + 2)); }
+        }
+
+        [Category("Appearance")]
+        public Color TitleTextColor
+        {
+            get => titleTextColor;
+            set { titleTextColor = value; Invalidate(new Rectangle(0, 0, Width, titleHeight + 2)); }
+        }
+
+        [Category("Appearance")]
+        public Color BorderColor
+        {
+            get => borderColor;
+            set { borderColor = value; Invalidate(); }
+        }
+
+        [Category("Appearance")]
+        [Description("Accent color shown as a thin line at the top of the active window.")]
+        public Color AccentColor
+        {
+            get => accentColor;
+            set { accentColor = value; Invalidate(new Rectangle(0, 0, Width, 3)); }
+        }
+
+        [Category("Appearance")]
+        public Icon TitleIcon
+        {
+            get => titleIcon;
+            set { titleIcon = value; Invalidate(new Rectangle(0, 0, 40, titleHeight)); }
+        }
+
+        [Category("Layout")]
+        public int TitleHeight
+        {
+            get => titleHeight;
+            set { titleHeight = Math.Max(24, value); Invalidate(); }
+        }
+
+        public override Rectangle DisplayRectangle
+        {
+            get
+            {
+                var cr = ClientRectangle;
+                bool maximized = WindowState == FormWindowState.Maximized;
+                int b = maximized ? 0 : 1;
+                return new Rectangle(cr.X + b, cr.Y + titleHeight,
+                    Math.Max(0, cr.Width - b * 2), Math.Max(0, cr.Height - titleHeight - b));
+            }
+        }
+
+        #endregion
+
+        #region Native Frame / Composition Properties
+
+        private bool useNativeFrame;
+        [Category("Behavior")]
+        [Description("When true the OS window frame is used (FormBorderStyle=Sizable) and DWM caption colors are applied where supported.")]
+        public bool UseNativeFrame
+        {
+            get => useNativeFrame;
+            set { if (useNativeFrame == value) return; useNativeFrame = value; Invalidate(); }
+        }
+
+        private void ApplyDwmCaptionColors()
+        {
+            try
+            {
+                int caption = titleBarColor.ToArgb();
+                Dwmapi.DwmSetWindowAttribute(Handle, Dwmapi.DWMWINDOWATTRIBUTE.DWMWA_CAPTION_COLOR, ref caption, sizeof(int));
+                int text = titleTextColor.ToArgb();
+                Dwmapi.DwmSetWindowAttribute(Handle, Dwmapi.DWMWINDOWATTRIBUTE.DWMWA_TEXT_COLOR, ref text, sizeof(int));
+            }
+            catch { }
+        }
+
+        private bool useAccent;
+        private ACCENT_STATE accentState = ACCENT_STATE.ACCENT_ENABLE_BLURBEHIND;
+        private int accentFlags = 0;
+        private int accentGradient = 0;
+        private bool useMica = false;
+        private bool useRoundedCorners = false;
+
+        [Category("Appearance")]
+        public bool UseAccent
+        {
+            get => useAccent;
+            set
+            {
+                useAccent = value;
+                if (IsHandleCreated && useAccent)
+                    CompositionHelper.SetAccentPolicy(Handle, accentState, accentFlags, accentGradient);
+            }
+        }
+
+        [Category("Appearance")]
+        public ACCENT_STATE AccentState
+        {
+            get => accentState;
+            set { accentState = value; if (IsHandleCreated && useAccent) CompositionHelper.SetAccentPolicy(Handle, accentState, accentFlags, accentGradient); }
+        }
+
+        [Category("Appearance")]
+        public Color AccentGradientColor
+        {
+            get => Color.FromArgb(accentGradient);
+            set { accentGradient = value.ToArgb(); if (IsHandleCreated && useAccent) CompositionHelper.SetAccentPolicy(Handle, accentState, accentFlags, accentGradient); }
+        }
+
+        [Category("Appearance")]
+        public bool UseMica
+        {
+            get => useMica;
+            set
+            {
+                useMica = value;
+                if (IsHandleCreated && useMica) CompositionHelper.EnableMica(Handle);
+            }
+        }
+
+        [Category("Appearance")]
+        public bool UseRoundedCorners
+        {
+            get => useRoundedCorners;
+            set
+            {
+                useRoundedCorners = value;
+                if (IsHandleCreated && useRoundedCorners) CompositionHelper.SetWindowCornerPreference(Handle, Dwmapi.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND);
+            }
+        }
+
+        #endregion
+
+        #region Lifecycle
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            if (useAccent)
+                CompositionHelper.SetAccentPolicy(Handle, accentState, accentFlags, accentGradient);
+            if (useMica)
+                CompositionHelper.EnableMica(Handle);
+            if (useRoundedCorners)
+                CompositionHelper.SetWindowCornerPreference(Handle, Dwmapi.DWM_WINDOW_CORNER_PREFERENCE.DWMWCP_ROUND);
+            if (useNativeFrame)
+                ApplyDwmCaptionColors();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_hoverTimer != null) { _hoverTimer.Stop(); _hoverTimer.Dispose(); _hoverTimer = null; }
+                if (dropShadow != null) { dropShadow.Dispose(); dropShadow = null; }
+            }
+            base.Dispose(disposing);
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (!isWindowActive) { isWindowActive = true; Invalidate(); }
+        }
+
+        protected override void OnDeactivate(EventArgs e)
+        {
+            base.OnDeactivate(e);
+            if (isWindowActive) { isWindowActive = false; Invalidate(); }
+        }
+
+        #endregion
+
+        #region Painting
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            var g = e.Graphics;
+            g.SmoothingMode = SmoothingMode.None;
+            g.InterpolationMode = InterpolationMode.NearestNeighbor;
+            g.Clear(BackColor);
+
+            bool maximized = WindowState == FormWindowState.Maximized;
+            int inset = maximized ? 0 : 1;
+
+            // Border (not when maximized)
+            if (!maximized)
+            {
+                using (var borderPen = new Pen(isWindowActive ? borderColor : Color.FromArgb(50, 50, 50)))
+                    g.DrawRectangle(borderPen, 0, 0, Width - 1, Height - 1);
+            }
+
+            // Title bar background
+            var captionColor = isWindowActive ? titleBarColor : DarkenColor(titleBarColor, 0.25f);
+            using (var brush = new SolidBrush(captionColor))
+                g.FillRectangle(brush, inset, inset, Width - inset * 2, titleHeight - inset);
+
+            // Active accent line at top
+            if (isWindowActive)
+            {
+                using (var accentPen = new Pen(accentColor, 1f))
+                    g.DrawLine(accentPen, inset, inset, Width - 1 - inset, inset);
+            }
+
+            // Separator line below titlebar
+            using (var sepPen = new Pen(Color.FromArgb(isWindowActive ? 40 : 25, 255, 255, 255)))
+                g.DrawLine(sepPen, inset, titleHeight, Width - 1 - inset, titleHeight);
+
+            // Icon
+            int contentLeft = 10;
+            if (titleIcon != null)
+            {
+                int iconY = (titleHeight - TITLE_ICON_SIZE) / 2;
+                g.DrawIcon(titleIcon, new Rectangle(contentLeft, iconY, TITLE_ICON_SIZE, TITLE_ICON_SIZE));
+                contentLeft += TITLE_ICON_SIZE + 8;
+            }
+
+            // Title text
+            int btnCount = 1 + (MaximizeBox ? 1 : 0) + (MinimizeBox ? 1 : 0);
+            int titleRight = Width - (CAPTION_BUTTON_WIDTH * btnCount) - 8;
+            var titleRect = new Rectangle(contentLeft, inset, Math.Max(0, titleRight - contentLeft), titleHeight - inset);
+            var textColor = isWindowActive ? titleTextColor : Color.FromArgb(130, titleTextColor);
+            using (var font = new Font("Segoe UI", TITLE_FONT_SIZE, FontStyle.Regular, GraphicsUnit.Point))
+            {
+                TextRenderer.DrawText(g, Text, font, titleRect, textColor,
+                    TextFormatFlags.VerticalCenter | TextFormatFlags.Left |
+                    TextFormatFlags.EndEllipsis | TextFormatFlags.SingleLine);
+            }
+
+            // Caption buttons
+            DrawCaptionButtons(g);
+        }
+
+        private void DrawCaptionButtons(Graphics g)
+        {
+            bool maximized = WindowState == FormWindowState.Maximized;
+            int topY = maximized ? 0 : 1;
+            int rightEdge = maximized ? Width : Width - 1;
+            int x = rightEdge;
+
+            x -= CAPTION_BUTTON_WIDTH;
+            DrawButton(g, new Rectangle(x, topY, CAPTION_BUTTON_WIDTH, titleHeight - topY), CaptionButton.Close, _closeHover);
+
+            if (MaximizeBox)
+            {
+                x -= CAPTION_BUTTON_WIDTH;
+                DrawButton(g, new Rectangle(x, topY, CAPTION_BUTTON_WIDTH, titleHeight - topY), CaptionButton.Maximize, _maxHover);
+            }
+
+            if (MinimizeBox)
+            {
+                x -= CAPTION_BUTTON_WIDTH;
+                DrawButton(g, new Rectangle(x, topY, CAPTION_BUTTON_WIDTH, titleHeight - topY), CaptionButton.Minimize, _minHover);
+            }
+        }
+
+        private void DrawButton(Graphics g, Rectangle rect, CaptionButton btn, float hoverProgress)
+        {
+            bool isDown = downButton == btn;
+
+            // Background hover
+            if (hoverProgress > 0f || isDown)
+            {
+                Color bgColor;
+                if (btn == CaptionButton.Close)
+                {
+                    int alpha = isDown ? 255 : (int)(hoverProgress * 255);
+                    bgColor = Color.FromArgb(alpha, isDown ? Color.FromArgb(196, 43, 28) : Color.FromArgb(232, 17, 35));
+                }
+                else
+                {
+                    int alpha = isDown ? 26 : (int)(hoverProgress * 38);
+                    bgColor = Color.FromArgb(alpha, 255, 255, 255);
+                }
+                using (var b = new SolidBrush(bgColor))
+                    g.FillRectangle(b, rect);
+            }
+
+            // Glyph color
+            Color glyphColor;
+            if (btn == CaptionButton.Close && (hoverProgress > 0.4f || isDown))
+                glyphColor = Color.White;
+            else
+                glyphColor = isWindowActive ? titleTextColor : Color.FromArgb(130, titleTextColor);
+
+            // Center of button
+            int cx = rect.X + rect.Width / 2;
+            int cy = rect.Y + rect.Height / 2;
+            int gs = 5; // glyph half-size
+
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            using (var p = new Pen(glyphColor, 1.15f))
+            {
+                if (btn == CaptionButton.Close)
+                {
+                    p.StartCap = LineCap.Round;
+                    p.EndCap = LineCap.Round;
+                    g.DrawLine(p, cx - gs, cy - gs, cx + gs, cy + gs);
+                    g.DrawLine(p, cx + gs, cy - gs, cx - gs, cy + gs);
+                }
+                else if (btn == CaptionButton.Maximize)
+                {
+                    p.StartCap = LineCap.Square;
+                    p.EndCap = LineCap.Square;
+                    if (WindowState == FormWindowState.Maximized)
+                    {
+                        // Restore icon
+                        int s = 4, off = 2;
+                        g.DrawRectangle(p, cx - s, cy - s + off, s * 2 - off, s * 2 - off);
+                        g.DrawLine(p, cx - s + off, cy - s, cx + s, cy - s);
+                        g.DrawLine(p, cx + s, cy - s, cx + s, cy + s - off);
+                        g.DrawLine(p, cx - s + off, cy - s, cx - s + off, cy - s + 1);
+                    }
+                    else
+                    {
+                        g.DrawRectangle(p, cx - gs, cy - gs, gs * 2, gs * 2);
+                    }
+                }
+                else if (btn == CaptionButton.Minimize)
+                {
+                    p.StartCap = LineCap.Flat;
+                    p.EndCap = LineCap.Flat;
+                    g.DrawLine(p, cx - gs, cy, cx + gs, cy);
+                }
+            }
+            g.SmoothingMode = SmoothingMode.None;
+        }
+
+        private static Color DarkenColor(Color c, float amount)
+        {
+            float r = Math.Max(0, c.R * (1f - amount));
+            float gr = Math.Max(0, c.G * (1f - amount));
+            float b = Math.Max(0, c.B * (1f - amount));
+            return Color.FromArgb(c.A, (int)r, (int)gr, (int)b);
+        }
+
+        #endregion
+
+        #region Mouse Handling
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            var btn = HitTestCaptionButton(e.Location);
+            if (btn != hotButton)
+            {
+                hotButton = btn;
+                if (!_hoverTimer.Enabled) _hoverTimer.Start();
+                InvalidateCaptionArea();
+            }
+
+            // Set proper directional cursor for resize zones
+            if (WindowState != FormWindowState.Maximized)
+            {
+                var ht = GetResizeHitTest(e.Location);
+                Cursor = GetCursorForHitTest(ht);
+            }
+            else
+            {
+                Cursor = Cursors.Default;
+            }
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            if (hotButton != CaptionButton.None)
+            {
+                hotButton = CaptionButton.None;
+                if (!_hoverTimer.Enabled) _hoverTimer.Start();
+                InvalidateCaptionArea();
+            }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            if (e.Button != MouseButtons.Left) return;
+
+            var btn = HitTestCaptionButton(e.Location);
+            if (btn != CaptionButton.None)
+            {
+                downButton = btn;
+                InvalidateCaptionArea();
+                return;
+            }
+
+            // Double-click title bar to toggle maximize
+            if (e.Clicks == 2 && e.Y <= titleHeight && MaximizeBox)
+            {
+                WindowState = WindowState == FormWindowState.Maximized
+                    ? FormWindowState.Normal : FormWindowState.Maximized;
+                return;
+            }
+
+            // Drag to move
+            if (e.Y <= titleHeight)
+            {
+                ReleaseCapture();
+                SendMessage(Handle, 0x0112 /*WM_SYSCOMMAND*/, 0xF010 + 2 /*SC_MOVE + HTCAPTION*/, 0);
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+            if (downButton != CaptionButton.None)
+            {
+                var clicked = downButton;
+                downButton = CaptionButton.None;
+                hotButton = HitTestCaptionButton(e.Location);
+                InvalidateCaptionArea();
+                if (clicked == hotButton || clicked == HitTestCaptionButton(e.Location))
+                    HandleCaptionClick(clicked);
+            }
+        }
+
+        private void HandleCaptionClick(CaptionButton btn)
+        {
+            if (btn == CaptionButton.Close)
+                Close();
+            else if (btn == CaptionButton.Minimize)
+                WindowState = FormWindowState.Minimized;
+            else if (btn == CaptionButton.Maximize)
+                WindowState = WindowState == FormWindowState.Maximized
+                    ? FormWindowState.Normal : FormWindowState.Maximized;
+        }
+
+        #endregion
+
+        #region Hit Testing
+
+        private CaptionButton HitTestCaptionButton(Point p)
+        {
+            if (p.Y > titleHeight) return CaptionButton.None;
+
+            bool maximized = WindowState == FormWindowState.Maximized;
+            int rightEdge = maximized ? Width : Width - 1;
+            int x = rightEdge;
+
+            var closeRect = new Rectangle(x - CAPTION_BUTTON_WIDTH, maximized ? 0 : 1, CAPTION_BUTTON_WIDTH, titleHeight);
+            if (closeRect.Contains(p)) return CaptionButton.Close;
+
+            x -= CAPTION_BUTTON_WIDTH;
+            if (MaximizeBox)
+            {
+                var maxRect = new Rectangle(x - CAPTION_BUTTON_WIDTH, maximized ? 0 : 1, CAPTION_BUTTON_WIDTH, titleHeight);
+                if (maxRect.Contains(p)) return CaptionButton.Maximize;
+                x -= CAPTION_BUTTON_WIDTH;
+            }
+
+            if (MinimizeBox)
+            {
+                var minRect = new Rectangle(x - CAPTION_BUTTON_WIDTH, maximized ? 0 : 1, CAPTION_BUTTON_WIDTH, titleHeight);
+                if (minRect.Contains(p)) return CaptionButton.Minimize;
+            }
+
+            return CaptionButton.None;
+        }
+
+        private int GetResizeHitTest(Point p)
+        {
+            if (WindowState == FormWindowState.Maximized) return 0;
+            int rb = RESIZE_BORDER;
+            bool left = p.X <= rb, right = p.X >= Width - rb;
+            bool top = p.Y <= rb, bottom = p.Y >= Height - rb;
+
+            if (top && left) return 13;    // HTTOPLEFT
+            if (top && right) return 14;   // HTTOPRIGHT
+            if (bottom && left) return 16; // HTBOTTOMLEFT
+            if (bottom && right) return 17;// HTBOTTOMRIGHT
+            if (top) return 12;            // HTTOP
+            if (bottom) return 15;         // HTBOTTOM
+            if (left) return 10;           // HTLEFT
+            if (right) return 11;          // HTRIGHT
+            return 0;
+        }
+
+        private static Cursor GetCursorForHitTest(int ht)
+        {
+            switch (ht)
+            {
+                case 12: case 15: return Cursors.SizeNS;     // top/bottom
+                case 10: case 11: return Cursors.SizeWE;     // left/right
+                case 13: case 17: return Cursors.SizeNWSE;   // topleft/bottomright
+                case 14: case 16: return Cursors.SizeNESW;   // topright/bottomleft
+                default: return Cursors.Default;
+            }
+        }
+
+        #endregion
+
+        #region WndProc
 
         protected override void WndProc(ref Message m)
         {
-            //base.WndProc(ref m);
+            const int WM_NCHITTEST = 0x0084;
+            const int WM_NCCALCSIZE = 0x0083;
+            const int WM_GETMINMAXINFO = 0x0024;
+            const int WM_NCACTIVATE = 0x0086;
 
-            switch (m.Msg)
+            // Prevent the default non-client frame from being drawn on activation changes
+            if (m.Msg == WM_NCACTIVATE)
             {
+                m.Result = new IntPtr(1);
+                return;
+            }
 
-                case WM_NCHITTEST:
-                    base.WndProc(ref m);
-                    if (Resizable && (int)m.Result == HTCLIENT && WindowState == FormWindowState.Normal)
+            // Remove non-client area; properly constrain when maximized
+            if (m.Msg == WM_NCCALCSIZE)
+            {
+                if (m.WParam != IntPtr.Zero && WindowState == FormWindowState.Maximized)
+                {
+                    // Constrain client area to the monitor work area to prevent overflow
+                    var nccsp = (NCCALCSIZE_PARAMS)Marshal.PtrToStructure(m.LParam, typeof(NCCALCSIZE_PARAMS));
+                    var monitor = MonitorFromWindow(Handle, 2u);
+                    if (monitor != IntPtr.Zero)
                     {
-                        Point screenPoint = new Point(m.LParam.ToInt32()); //Gets screen point coordinates(X and Y coordinate of the pointer)                           
-                        Point clientPoint = PointToClient(screenPoint); //Computes the location of the screen point into client coordinates                          
-                        if (clientPoint.Y <= resizeAreaSize)//If the pointer is at the top of the form (within the resize area- X coordinate)
+                        var mi = new MONITORINFO { cbSize = Marshal.SizeOf(typeof(MONITORINFO)) };
+                        if (GetMonitorInfo(monitor, ref mi))
                         {
-                            if (clientPoint.X <= resizeAreaSize) //If the pointer is at the coordinate X=0 or less than the resizing area(X=10) in 
-                                m.Result = (IntPtr)HTTOPLEFT; //Resize diagonally to the left
-                            else if (clientPoint.X < (Size.Width - resizeAreaSize))//If the pointer is at the coordinate X=11 or less than the width of the form(X=Form.Width-resizeArea)
-                                m.Result = (IntPtr)HTTOP; //Resize vertically up
-                            else //Resize diagonally to the right
-                                m.Result = (IntPtr)HTTOPRIGHT;
-                        }
-                        else if (clientPoint.Y <= (Size.Height - resizeAreaSize)) //If the pointer is inside the form at the Y coordinate(discounting the resize area size)
-                        {
-                            if (clientPoint.X <= resizeAreaSize)//Resize horizontally to the left
-                                m.Result = (IntPtr)HTLEFT;
-                            else if (clientPoint.X > (Width - resizeAreaSize))//Resize horizontally to the right
-                                m.Result = (IntPtr)HTRIGHT;
-                        }
-                        else
-                        {
-                            if (clientPoint.X <= resizeAreaSize)//Resize diagonally to the left
-                                m.Result = (IntPtr)HTBOTTOMLEFT;
-                            else if (clientPoint.X < (Size.Width - resizeAreaSize)) //Resize vertically down
-                                m.Result = (IntPtr)HTBOTTOM;
-                            else //Resize diagonally to the right
-                                m.Result = (IntPtr)HTBOTTOMRIGHT;
+                            nccsp.rcOldWindow.left = mi.rcWork.left;
+                            nccsp.rcOldWindow.top = mi.rcWork.top;
+                            nccsp.rcOldWindow.right = mi.rcWork.right;
+                            nccsp.rcOldWindow.bottom = mi.rcWork.bottom;
+                            Marshal.StructureToPtr(nccsp, m.LParam, false);
                         }
                     }
+                }
+                m.Result = IntPtr.Zero;
+                return;
+            }
 
-                    return;
+            if (m.Msg == WM_GETMINMAXINFO)
+            {
+                OnGetMinMaxInfo(ref m);
+                return;
+            }
+
+            if (m.Msg == WM_NCHITTEST)
+            {
+                var mouse = PointToClient(new Point((int)m.LParam));
+
+                // Resize borders (only when not maximized)
+                if (WindowState != FormWindowState.Maximized)
+                {
+                    int ht = GetResizeHitTest(mouse);
+                    if (ht != 0)
+                    {
+                        m.Result = new IntPtr(ht);
+                        return;
+                    }
+                }
+
+                // Caption area
+                if (mouse.Y <= titleHeight)
+                {
+                    if (HitTestCaptionButton(mouse) == CaptionButton.None)
+                    {
+                        m.Result = new IntPtr(2); // HTCAPTION
+                        return;
+                    }
+                    else
+                    {
+                        // Return HTCLIENT for caption buttons so mouse events work
+                        m.Result = new IntPtr(1); // HTCLIENT
+                        return;
+                    }
+                }
             }
 
             base.WndProc(ref m);
         }
 
-
-        private void AdjustForm()
+        private void OnGetMinMaxInfo(ref Message m)
         {
-            switch (WindowState)
+            var minmax = (MINMAXINFO)Marshal.PtrToStructure(m.LParam, typeof(MINMAXINFO));
+            var monitor = MonitorFromWindow(Handle, 2u);
+
+            if (monitor != IntPtr.Zero)
             {
-                case FormWindowState.Maximized: //Maximized form (After)
-                    //this.Padding = new Padding(8, 8, 8, 0);
-                    MaximumSize = Screen.PrimaryScreen.WorkingArea.Size;
-                    break;
-                case FormWindowState.Normal: //Restored form (After)
-                    //if (this.Padding.Top != Border.Top)
-                    //    this.Padding = Border;
-                    break;
-            }
-        }
-
-
-
-
-        private Padding _borderP = new Padding(1, 2, 1, 1);
-        public Padding Border
-        {
-            get { return _borderP; }
-            set
-            {
-                _borderP = value; Invalidate();
-            }
-        }
-
-        protected override void OnLocationChanged(EventArgs e)
-        {
-            Invalidate();
-            base.OnLocationChanged(e);
-        }
-
-        private System.Drawing.Text.TextRenderingHint texg = Helper.TextHelper.SetTextRender();
-        public System.Drawing.Text.TextRenderingHint TextRendering
-        {
-            get { return texg; }
-            set
-            {
-                texg = value; Invalidate();
-            }
-        }
-
-        private Color _titleColor = Color.White;
-        public Color TitleColor
-        {
-            get { return _titleColor; }
-            set
-            {
-                _titleColor = value; Invalidate();
-            }
-        }
-
-        int _shadowTitleHeight = 4;
-        public int ShadowTitleHeight
-        {
-            get { return _shadowTitleHeight; }
-            set
-            {
-                _shadowTitleHeight = value; Invalidate();
-            }
-        }
-
-        Color _shadowTitleColor = Color.Black;
-        public Color ShadowTitleColor
-        {
-            get { return _shadowTitleColor; }
-            set
-            {
-                _shadowTitleColor = value; Invalidate();
-            }
-        }
-
-        private Font titleFont = new Font("Arial", 12f);
-        public Font TitleFont
-        {
-            get { return titleFont; }
-            set
-            {
-                titleFont = value; Invalidate();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets border color if window is deactivate.
-        /// </summary>
-        public Color DeactivateBorderColor { get; set; } = Color.Gray;
-        /// <summary>
-        /// Gets or sets control box icon color if window is deactivate.
-        /// </summary>
-        public Color DeactivateControlButtonIconColor { get; set; } = Color.Gray;
-        bool DeAct = false;
-
-        private Color titleColor = Color.DimGray;
-        /// <summary>
-        /// Gets or sets color for title text on window.
-        /// </summary>
-        public Color TitleTextColor
-        {
-            get { return titleColor; }
-            set
-            {
-                titleColor = value; Invalidate();
-            }
-        }
-
-        private bool showTitle = true;
-        /// <summary>
-        /// Show title text on window.
-        /// </summary>
-        public bool ShowTitleText
-        {
-            get { return showTitle; }
-            set
-            {
-                showTitle = value; Invalidate();
-            }
-        }
-
-        private Color borderColor = Global.PrimaryColors.BorderNormalColor1;
-        /// <summary>
-        /// Gets or sets border color of window.
-        /// </summary>
-        public Color BorderColor
-        {
-            get { return borderColor; }
-            set
-            {
-                borderColor = value; Invalidate();
-            }
-        }
-
-        private RectangleF ControlBoxRect;
-        private RectangleF MaximizeBoxRect;
-        private RectangleF MinimizeBoxRect;
-        float ControlBoxLeft = 0;
-
-        private void CalcSystemBoxPos()
-        {
-            ControlBoxLeft = Width;
-            if (ControlBox)
-            {
-                ControlBoxRect = new Rectangle(Width - 8 - 28, 37 / 2 - 14, 28, 28);//37 Is Title Height
-                ControlBoxLeft = ControlBoxRect.Left - 2;
-                if (MaximizeBox)
+                var monitorInfo = new MONITORINFO { cbSize = Marshal.SizeOf(typeof(MONITORINFO)) };
+                if (GetMonitorInfo(monitor, ref monitorInfo))
                 {
-                    MaximizeBoxRect = new RectangleF(ControlBoxRect.Left - 28 - 2, ControlBoxRect.Top, 28, 28);
-                    ControlBoxLeft = MaximizeBoxRect.Left - 2;
-                }
-                else
-                {
-                    MaximizeBoxRect = new RectangleF(Width + 1, Height + 1, 1, 1);
-                }
-                if (MinimizeBox)
-                {
-                    MinimizeBoxRect = new RectangleF(MaximizeBox ? MaximizeBoxRect.Left - 28 - 2 : ControlBoxRect.Left - 28 - 2, ControlBoxRect.Top, 28, 28);
-                    ControlBoxLeft = MinimizeBoxRect.Left - 2;
-                }
-                else MinimizeBoxRect = new RectangleF(Width + 1, Height + 1, 1, 1);
+                    var workArea = monitorInfo.rcWork;
+                    var monitorArea = monitorInfo.rcMonitor;
 
-            }
-
-            Invalidate();
-        }
-
-        public new bool MaximizeBox
-        {
-            get { return base.MaximizeBox; }
-            set
-            {
-                base.MaximizeBox = value; Refresh();
-            }
-        }
-
-        public new bool ControlBox
-        {
-            get { return base.ControlBox; }
-            set
-            {
-                base.ControlBox = value; Refresh();
-            }
-        }
-
-        public new bool MinimizeBox
-        {
-            get { return base.MinimizeBox; }
-            set
-            {
-                base.MinimizeBox = value; Refresh();
-            }
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            System.Drawing.Graphics g = e.Graphics;
-            using (SolidBrush sb = new SolidBrush(DeAct ? DeactivateBorderColor : borderColor))
-            {
-                HeCopUI_Framework.Helper.GraphicsHelper.SetHightGraphics(g);
-                g.CompositingQuality = CompositingQuality.HighQuality;
-                g.TextRenderingHint = texg;
-                using (SolidBrush fillBrush = new SolidBrush(TitleColor))
-                    g.FillRectangle(fillBrush, new RectangleF(0, 0, Width, 37));
-
-                using (LinearGradientBrush gradientBrush = new System.Drawing.Drawing2D.LinearGradientBrush(new Rectangle(0, 37, Width, ShadowTitleHeight), Color.FromArgb(60, ShadowTitleColor), Color.Transparent, LinearGradientMode.Vertical))
-                    g.FillRectangle(gradientBrush, 0, 37, Width, ShadowTitleHeight);
-
-                if (Border.Top > 0)
-                    g.DrawLine(new Pen(sb, Border.Top) { Alignment = PenAlignment.Inset }, new Point(0, 0), new Point(Width, 0));
-                //Vẽ viền bên phải
-                if (Border.Right > 0)
-                    g.DrawLine(new Pen(sb, Border.Right) { Alignment = PenAlignment.Inset }, new Point(Width, 0), new Point(Width, Height));
-                //Vẽ viền bên trái
-                if (Border.Left > 0)
-                    g.DrawLine(new Pen(sb, Border.Left) { Alignment = PenAlignment.Inset }, new Point(0, 0), new Point(0, Height));
-                //Vẽ viền dưới
-                if (Border.Bottom > 0)
-                    g.DrawLine(new Pen(sb, Border.Bottom) { Alignment = PenAlignment.Inset }, new Point(0, Height), new Point(Width, Height));
-
-                int iconsize = 18;
-                if (ShowIcon == true) g.DrawIcon(Icon, new Rectangle(10, 37 / 2 - iconsize / 2, iconsize, iconsize));
-                if (showTitle == true)
-                {
-                    using (SolidBrush brush = new SolidBrush(titleColor))
-                        if (ShowIcon == false) g.DrawString(Text, titleFont, brush, new PointF(6, 37 / 2 - titleFont.Height / 2));
-                        else g.DrawString(Text, titleFont, brush, new Point(15 + 14, (int)(38 / 2 - g.MeasureString(Text, titleFont).Height / 2)));
-
-                }
-
-                if (ControlBox == true)
-                {
-                    int sc = 12;
-                    using (SolidBrush closeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.CloseBoxColor, FormControlBox.CloseBoxHoverColor, _closeStep)))
-                        g.FillPath(closeBrush, (FormControlBox.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ControlBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(ControlBoxRect, sc));
-
-                    if (MaximizeBox)
-                        using (SolidBrush maximizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.MaximizeBoxColor, FormControlBox.MaximizeBoxHoverColor, _maxStep)))
-                            g.FillPath(maximizeBrush, (FormControlBox.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MaximizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MaximizeBoxRect, sc));
-
-                    if (MinimizeBox)
-                        using (SolidBrush minimizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.MinimizeBoxColor, FormControlBox.MinimizeBoxHoverColor, _minStep)))
-                            g.FillPath(minimizeBrush, (FormControlBox.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, sc));
-
-                    if (MaximizeBox == false)
-                        using (SolidBrush minimizeBrush = new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.MinimizeBoxColor, FormControlBox.MinimizeBoxHoverColor, _minStep)))
-                            g.FillPath(minimizeBrush, (FormControlBox.HoverColorShape == ShapeType.RoundedRectangle) ? HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, 5) : HeCopUI_Framework.Helper.DrawHelper.GetRoundPath(MinimizeBoxRect, sc));
-
-                    #region CB
-                    g.PixelOffsetMode = PixelOffsetMode.Default;
-                    using (Pen closePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.IconCloseColor, FormControlBox.IconCloseHoverColor, _closeStep)), 1.5f))
-                        DrawClose(g, closePen);
-
-                    if (MaximizeBox == true)
-                        using (Pen maximizePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.IconMaximizeColor, FormControlBox.IconMinimizeHoverColor, _maxStep)), 1.5f))
-                            DrawMaximize_Restore(g, maximizePen);
-
-                    //if (MaximizeBox == false)
-                    using (Pen minimizePen = new Pen(new SolidBrush(HeCopUI_Framework.Helper.DrawHelper.BlendColor(FormControlBox.IconMinimizeColor, FormControlBox.IconMinimizeHoverColor, _minStep)), 1.5f))
-                        DrawMinimize(g, minimizePen);
-
-                    #endregion
+                    minmax.maxPosition.X = Math.Abs(workArea.left - monitorArea.left);
+                    minmax.maxPosition.Y = Math.Abs(workArea.top - monitorArea.top);
+                    minmax.maxSize.Width = Math.Abs(workArea.Right - workArea.Left);
+                    minmax.maxSize.Height = Math.Abs(workArea.Bottom - workArea.Top);
                 }
             }
 
+            if (MinimumSize.Width > 0 || MinimumSize.Height > 0)
+                minmax.minTrackSize = MinimumSize;
+
+            if (!MaximumSize.IsEmpty)
+                minmax.maxTrackSize = MaximumSize;
+
+            Marshal.StructureToPtr(minmax, m.LParam, false);
+            m.Result = IntPtr.Zero;
         }
 
-        #region DrawControlBox
-        void DrawClose(Graphics g, System.Drawing.Pen pen)
-        {
-            g.DrawLine(pen, ControlBoxRect.Left + ControlBoxRect.Width / 2 - 6,
-                    ControlBoxRect.Top + ControlBoxRect.Height / 2 - 6,
-                    ControlBoxRect.Left + ControlBoxRect.Width / 2 + 5,
-                    ControlBoxRect.Top + ControlBoxRect.Height / 2 + 5);
-            g.DrawLine(pen, ControlBoxRect.Left + ControlBoxRect.Width / 2 - 6,
-                    ControlBoxRect.Top + ControlBoxRect.Height / 2 + 5,
-                    ControlBoxRect.Left + ControlBoxRect.Width / 2 + 5,
-                    ControlBoxRect.Top + ControlBoxRect.Height / 2 - 6);
-        }
-
-        void DrawMaximize_Restore(Graphics g, System.Drawing.Pen pen)
-        {
-            if (WindowState == FormWindowState.Maximized)
-            {
-                g.DrawRectangle(pen, MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 - 6,
-                        MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 - 1,
-                        7, 7);
-
-                g.DrawLine(pen,
-                          MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 - 2,
-                          MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 - 1,
-                          MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 - 2,
-                          MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 - 4);
-
-                g.DrawLine(pen,
-                    MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 - 2,
-                    MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 - 4,
-                    MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 + 5,
-                    MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 - 4);
-
-                g.DrawLine(pen,
-                    MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 + 5,
-                    MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 - 4,
-                    MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 + 5,
-                    MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 + 3);
-
-                g.DrawLine(pen,
-                    MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 + 5,
-                    MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 + 3,
-                    MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 + 2,
-                    MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 + 3);
-
-            }
-            else
-            {
-                g.DrawRectangle(pen, MaximizeBoxRect.Left + MaximizeBoxRect.Width / 2 - 6,
-                       MaximizeBoxRect.Top + MaximizeBoxRect.Height / 2 - 5, 10, 10);
-            }
-        }
-
-        void DrawMinimize(Graphics g, System.Drawing.Pen pen)
-        {
-            g.DrawLine(pen, MinimizeBoxRect.Left + MinimizeBoxRect.Width / 2 - 6,
-                  MinimizeBoxRect.Top + MinimizeBoxRect.Height / 2,
-                  MinimizeBoxRect.Left + MinimizeBoxRect.Width / 2 + 5,
-                  MinimizeBoxRect.Top + MinimizeBoxRect.Height / 2);
-
-        }
         #endregion
-
-        public bool Resizable { get; set; } = true;
     }
-
-    #region object properties
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    public class ControlsBox
-    {
-        ShapeType sd = ShapeType.RoundedRectangle;
-        public ShapeType HoverColorShape
-        {
-            get { return sd; }
-            set
-            {
-                sd = value;
-            }
-        }
-
-        public Color IconMaximizeColor
-        {
-            get; set;
-        } = Color.FromArgb(80, 80, 80);
-
-        public Color IconMaximizeHoverColor
-        {
-            get; set;
-        } = Color.FromArgb(60, 60, 60);
-
-        public Color IconMinimizeColor
-        {
-            get; set;
-        } = Color.FromArgb(80, 80, 80);
-
-        public Color IconMinimizeHoverColor
-        {
-            get; set;
-        } = Color.FromArgb(60, 60, 60);
-
-        public Color IconCloseColor
-        {
-            get; set;
-        } = Color.FromArgb(80, 80, 80);
-
-        public Color IconCloseHoverColor
-        {
-            get; set;
-        } = Color.WhiteSmoke;
-
-        public Color MaximizeBoxColor
-        {
-            get; set;
-        } = Color.White;
-
-        public Color MinimizeBoxColor
-        {
-            get; set;
-        } = Color.White;
-
-        public Color CloseBoxColor
-        {
-            get; set;
-        } = Color.White;
-
-        public Color MaximizeBoxHoverColor
-        {
-            get; set;
-        } = Color.FromArgb(230, 230, 230);
-
-        public Color MinimizeBoxHoverColor
-        {
-            get; set;
-        } = Color.FromArgb(230, 230, 230);
-
-        public Color CloseBoxHoverColor
-        {
-            get; set;
-        } = Color.Red;
-
-    }
-    #endregion
 }

@@ -321,6 +321,10 @@ namespace HeCopUI_Framework.Win32
         public static extern IntPtr MonitorFromWindow(IntPtr hWnd, uint dwFlags);
 #pragma warning restore CS3001 // Argument type is not CLS-compliant
 
+        [DllImport("User32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
 
 
         [DllImport("Shcore.dll")]

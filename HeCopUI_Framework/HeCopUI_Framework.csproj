@@ -174,7 +174,7 @@
     <Compile Include="Effects\BlursEffect.cs" />
     <Compile Include="Enums\LineChartType.cs" />
     <Compile Include="Enums\ProgressValueType.cs" />
-    <Compile Include="Forms\HFormFlat.cs">
+    <Compile Include="Forms\HForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Helper\ColorHelper.cs" />
@@ -239,12 +239,6 @@
     <Compile Include="Enums\ShapeType.cs" />
     <Compile Include="Enums\SortMode.cs" />
     <Compile Include="Enums\TitleChartAlign.cs" />
-    <Compile Include="Forms\HForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\HForm.Designer.cs">
-      <DependentUpon>HForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\Shadow_Test.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -467,6 +461,8 @@
     <Compile Include="Win32\Enums\MonitorDpiType.cs" />
     <Compile Include="Win32\Enums\WINCOMPATTR.cs" />
     <Compile Include="Win32\Struct\ACCENT_POLICY.cs" />
+    <Compile Include="Win32\Struct\MONITORINFO.cs" />
+    <Compile Include="Win32\CompositionHelper.cs" />
     <Compile Include="Win32\Bitmap\Enums\AlphaBlend.cs" />
     <Compile Include="Win32\Dwmapi.cs" />
     <Compile Include="Win32\Enums\ABEs.cs" />
@@ -652,9 +648,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Picker\HCircleAnglePicker.resx">
       <DependentUpon>HCircleAnglePicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\HForm.resx">
-      <DependentUpon>HForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\HMessageBox.resx">
       <DependentUpon>HMessageBox.cs</DependentUpon>

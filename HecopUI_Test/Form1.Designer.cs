@@ -297,14 +297,14 @@ namespace HecopUI_Test
             this.hTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hTabControl1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.hTabControl1.ItemSize = new System.Drawing.Size(35, 135);
-            this.hTabControl1.Location = new System.Drawing.Point(1, 42);
+            this.hTabControl1.Location = new System.Drawing.Point(1, 34);
             this.hTabControl1.Multiline = true;
             this.hTabControl1.Name = "hTabControl1";
             this.hTabControl1.Padding = new System.Drawing.Point(0, 0);
             this.hTabControl1.SelectedIndex = 0;
             this.hTabControl1.SelectedTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(102)))));
             this.hTabControl1.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
-            this.hTabControl1.Size = new System.Drawing.Size(889, 546);
+            this.hTabControl1.Size = new System.Drawing.Size(883, 536);
             this.hTabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.hTabControl1.TabIndex = 0;
             this.hTabControl1.TabsColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
@@ -333,7 +333,7 @@ namespace HecopUI_Test
             this.tabPage1.Location = new System.Drawing.Point(139, 4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(746, 538);
+            this.tabPage1.Size = new System.Drawing.Size(740, 528);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Home";
             // 
@@ -343,7 +343,7 @@ namespace HecopUI_Test
             this.hLabel10.BackColor = System.Drawing.Color.Transparent;
             this.hLabel10.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.hLabel10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.hLabel10.Location = new System.Drawing.Point(413, 165);
+            this.hLabel10.Location = new System.Drawing.Point(407, 165);
             this.hLabel10.Name = "hLabel10";
             this.hLabel10.Size = new System.Drawing.Size(56, 25);
             this.hLabel10.Symbol = "";
@@ -362,7 +362,7 @@ namespace HecopUI_Test
             this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.AlwaysUnderline;
             this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(108)))));
-            this.linkLabel1.Location = new System.Drawing.Point(472, 165);
+            this.linkLabel1.Location = new System.Drawing.Point(466, 165);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(235, 25);
             this.linkLabel1.TabIndex = 9;
@@ -377,7 +377,7 @@ namespace HecopUI_Test
             this.hLabel9.BackColor = System.Drawing.Color.Transparent;
             this.hLabel9.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(148)))), ((int)(((byte)(122)))));
-            this.hLabel9.Location = new System.Drawing.Point(413, 129);
+            this.hLabel9.Location = new System.Drawing.Point(407, 129);
             this.hLabel9.Name = "hLabel9";
             this.hLabel9.Size = new System.Drawing.Size(114, 23);
             this.hLabel9.Symbol = "";
@@ -422,7 +422,7 @@ namespace HecopUI_Test
             this.panel1.Margin = new System.Windows.Forms.Padding(0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(5, 12, 5, 10);
-            this.panel1.Size = new System.Drawing.Size(353, 308);
+            this.panel1.Size = new System.Drawing.Size(347, 308);
             this.panel1.TabIndex = 6;
             // 
             // hLabel7
@@ -433,7 +433,7 @@ namespace HecopUI_Test
             this.hLabel7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.hLabel7.Location = new System.Drawing.Point(5, 220);
             this.hLabel7.Name = "hLabel7";
-            this.hLabel7.Size = new System.Drawing.Size(343, 52);
+            this.hLabel7.Size = new System.Drawing.Size(337, 52);
             this.hLabel7.Symbol = "✨";
             this.hLabel7.SymbolColor = System.Drawing.Color.Gray;
             this.hLabel7.SymbolFont = new System.Drawing.Font("Segoe UI Emoji", 11F);
@@ -452,7 +452,7 @@ namespace HecopUI_Test
             this.hLabel6.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.hLabel6.Location = new System.Drawing.Point(5, 168);
             this.hLabel6.Name = "hLabel6";
-            this.hLabel6.Size = new System.Drawing.Size(343, 52);
+            this.hLabel6.Size = new System.Drawing.Size(337, 52);
             this.hLabel6.Symbol = "📱 ";
             this.hLabel6.SymbolColor = System.Drawing.Color.Gray;
             this.hLabel6.SymbolFont = new System.Drawing.Font("Segoe UI Emoji", 11F);
@@ -471,7 +471,7 @@ namespace HecopUI_Test
             this.hLabel5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.hLabel5.Location = new System.Drawing.Point(5, 116);
             this.hLabel5.Name = "hLabel5";
-            this.hLabel5.Size = new System.Drawing.Size(343, 52);
+            this.hLabel5.Size = new System.Drawing.Size(337, 52);
             this.hLabel5.Symbol = "⚡ ";
             this.hLabel5.SymbolColor = System.Drawing.Color.Gray;
             this.hLabel5.SymbolFont = new System.Drawing.Font("Segoe UI Emoji", 11F);
@@ -490,7 +490,7 @@ namespace HecopUI_Test
             this.hLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.hLabel4.Location = new System.Drawing.Point(5, 64);
             this.hLabel4.Name = "hLabel4";
-            this.hLabel4.Size = new System.Drawing.Size(343, 52);
+            this.hLabel4.Size = new System.Drawing.Size(337, 52);
             this.hLabel4.Symbol = "🎨 ";
             this.hLabel4.SymbolColor = System.Drawing.Color.Gray;
             this.hLabel4.SymbolFont = new System.Drawing.Font("Segoe UI Emoji", 11F);
@@ -510,7 +510,7 @@ namespace HecopUI_Test
             this.hLabel3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.hLabel3.Location = new System.Drawing.Point(5, 12);
             this.hLabel3.Name = "hLabel3";
-            this.hLabel3.Size = new System.Drawing.Size(343, 52);
+            this.hLabel3.Size = new System.Drawing.Size(337, 52);
             this.hLabel3.Symbol = "🚀 ";
             this.hLabel3.SymbolColor = System.Drawing.Color.Gray;
             this.hLabel3.SymbolFont = new System.Drawing.Font("Segoe UI Emoji", 11F);
@@ -531,7 +531,7 @@ namespace HecopUI_Test
             this.hLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.hLabel2.Location = new System.Drawing.Point(22, 57);
             this.hLabel2.Name = "hLabel2";
-            this.hLabel2.Size = new System.Drawing.Size(329, 45);
+            this.hLabel2.Size = new System.Drawing.Size(323, 45);
             this.hLabel2.Symbol = "";
             this.hLabel2.SymbolColor = System.Drawing.Color.Gray;
             this.hLabel2.SymbolFont = new System.Drawing.Font("Segoe UI Symbol", 10F);
@@ -568,7 +568,7 @@ namespace HecopUI_Test
             this.tabPage2.Location = new System.Drawing.Point(139, 4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(5);
-            this.tabPage2.Size = new System.Drawing.Size(746, 538);
+            this.tabPage2.Size = new System.Drawing.Size(699, 476);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Buttons";
             // 
@@ -590,7 +590,7 @@ namespace HecopUI_Test
             this.hTabControl5.SelectedIndex = 0;
             this.hTabControl5.SelectedTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
             this.hTabControl5.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
-            this.hTabControl5.Size = new System.Drawing.Size(736, 528);
+            this.hTabControl5.Size = new System.Drawing.Size(689, 466);
             this.hTabControl5.TabIndex = 27;
             this.hTabControl5.TabsColor = System.Drawing.Color.White;
             this.hTabControl5.TabStyle = HeCopUI_Framework.Enums.TabStyle.Style2;
@@ -620,7 +620,7 @@ namespace HecopUI_Test
             this.tabPage24.Location = new System.Drawing.Point(4, 34);
             this.tabPage24.Name = "tabPage24";
             this.tabPage24.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage24.Size = new System.Drawing.Size(728, 490);
+            this.tabPage24.Size = new System.Drawing.Size(681, 428);
             this.tabPage24.TabIndex = 0;
             this.tabPage24.Text = "Text Button";
             // 
@@ -1010,7 +1010,7 @@ namespace HecopUI_Test
             this.tabPage25.Location = new System.Drawing.Point(4, 34);
             this.tabPage25.Name = "tabPage25";
             this.tabPage25.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage25.Size = new System.Drawing.Size(728, 490);
+            this.tabPage25.Size = new System.Drawing.Size(681, 428);
             this.tabPage25.TabIndex = 1;
             this.tabPage25.Text = "Tile Button";
             // 
@@ -1372,7 +1372,7 @@ namespace HecopUI_Test
             this.tabPage26.Location = new System.Drawing.Point(4, 34);
             this.tabPage26.Name = "tabPage26";
             this.tabPage26.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage26.Size = new System.Drawing.Size(728, 490);
+            this.tabPage26.Size = new System.Drawing.Size(681, 428);
             this.tabPage26.TabIndex = 2;
             this.tabPage26.Text = "Subtitle Button";
             // 
@@ -1804,7 +1804,7 @@ namespace HecopUI_Test
             this.tabPage27.Location = new System.Drawing.Point(4, 34);
             this.tabPage27.Name = "tabPage27";
             this.tabPage27.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage27.Size = new System.Drawing.Size(728, 490);
+            this.tabPage27.Size = new System.Drawing.Size(681, 428);
             this.tabPage27.TabIndex = 3;
             this.tabPage27.Text = "Switch/ Options";
             // 
@@ -1978,7 +1978,7 @@ namespace HecopUI_Test
             this.tabPage5.Location = new System.Drawing.Point(139, 4);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(746, 538);
+            this.tabPage5.Size = new System.Drawing.Size(699, 476);
             this.tabPage5.TabIndex = 15;
             this.tabPage5.Text = "Images";
             // 
@@ -2016,7 +2016,7 @@ namespace HecopUI_Test
             this.tabPage22.Location = new System.Drawing.Point(139, 4);
             this.tabPage22.Name = "tabPage22";
             this.tabPage22.Padding = new System.Windows.Forms.Padding(5);
-            this.tabPage22.Size = new System.Drawing.Size(746, 538);
+            this.tabPage22.Size = new System.Drawing.Size(699, 476);
             this.tabPage22.TabIndex = 14;
             this.tabPage22.Text = "Data View";
             // 
@@ -2036,7 +2036,7 @@ namespace HecopUI_Test
             this.hTabControl10.SelectedIndex = 0;
             this.hTabControl10.SelectedTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
             this.hTabControl10.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
-            this.hTabControl10.Size = new System.Drawing.Size(736, 528);
+            this.hTabControl10.Size = new System.Drawing.Size(689, 466);
             this.hTabControl10.TabIndex = 3;
             this.hTabControl10.TabsColor = System.Drawing.Color.White;
             this.hTabControl10.TabStyle = HeCopUI_Framework.Enums.TabStyle.Style2;
@@ -2058,7 +2058,7 @@ namespace HecopUI_Test
             this.tabPage35.Location = new System.Drawing.Point(4, 34);
             this.tabPage35.Name = "tabPage35";
             this.tabPage35.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage35.Size = new System.Drawing.Size(728, 490);
+            this.tabPage35.Size = new System.Drawing.Size(681, 428);
             this.tabPage35.TabIndex = 1;
             this.tabPage35.Text = "Tree View";
             // 
@@ -2376,7 +2376,7 @@ namespace HecopUI_Test
             this.hTreeView1.RootLinesColor = System.Drawing.Color.Gray;
             this.hTreeView1.ShowPlusMinus = true;
             this.hTreeView1.ShowRootLines = true;
-            this.hTreeView1.Size = new System.Drawing.Size(686, 357);
+            this.hTreeView1.Size = new System.Drawing.Size(639, 295);
             this.hTreeView1.SpaceBetweenNodes = 1;
             this.hTreeView1.TabIndex = 0;
             this.hTreeView1.Text = "hTreeView1";
@@ -2392,7 +2392,7 @@ namespace HecopUI_Test
             this.tabPage36.Location = new System.Drawing.Point(4, 34);
             this.tabPage36.Name = "tabPage36";
             this.tabPage36.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage36.Size = new System.Drawing.Size(728, 490);
+            this.tabPage36.Size = new System.Drawing.Size(681, 428);
             this.tabPage36.TabIndex = 2;
             this.tabPage36.Text = "Charts";
             // 
@@ -2460,7 +2460,7 @@ namespace HecopUI_Test
             this.hTabControl4.SelectedIndex = 0;
             this.hTabControl4.SelectedTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(148)))), ((int)(((byte)(122)))));
             this.hTabControl4.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
-            this.hTabControl4.Size = new System.Drawing.Size(695, 447);
+            this.hTabControl4.Size = new System.Drawing.Size(648, 385);
             this.hTabControl4.TabIndex = 2;
             this.hTabControl4.TabsColor = System.Drawing.Color.White;
             this.hTabControl4.TabStyle = HeCopUI_Framework.Enums.TabStyle.Style2;
@@ -2482,7 +2482,7 @@ namespace HecopUI_Test
             this.tabPage15.Location = new System.Drawing.Point(4, 32);
             this.tabPage15.Name = "tabPage15";
             this.tabPage15.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage15.Size = new System.Drawing.Size(687, 411);
+            this.tabPage15.Size = new System.Drawing.Size(640, 349);
             this.tabPage15.TabIndex = 0;
             this.tabPage15.Text = "Bar";
             // 
@@ -2519,7 +2519,7 @@ namespace HecopUI_Test
             this.tabPage16.Location = new System.Drawing.Point(4, 32);
             this.tabPage16.Name = "tabPage16";
             this.tabPage16.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage16.Size = new System.Drawing.Size(687, 411);
+            this.tabPage16.Size = new System.Drawing.Size(640, 349);
             this.tabPage16.TabIndex = 1;
             this.tabPage16.Text = "Line";
             // 
@@ -2554,7 +2554,7 @@ namespace HecopUI_Test
             this.tabPage17.Location = new System.Drawing.Point(4, 32);
             this.tabPage17.Name = "tabPage17";
             this.tabPage17.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage17.Size = new System.Drawing.Size(687, 411);
+            this.tabPage17.Size = new System.Drawing.Size(640, 349);
             this.tabPage17.TabIndex = 2;
             this.tabPage17.Text = "Pie";
             // 
@@ -2586,7 +2586,7 @@ namespace HecopUI_Test
             this.tabPage18.Location = new System.Drawing.Point(4, 32);
             this.tabPage18.Name = "tabPage18";
             this.tabPage18.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage18.Size = new System.Drawing.Size(687, 411);
+            this.tabPage18.Size = new System.Drawing.Size(640, 349);
             this.tabPage18.TabIndex = 3;
             this.tabPage18.Text = "Radar";
             // 
@@ -2630,7 +2630,7 @@ namespace HecopUI_Test
             this.tabPage14.Location = new System.Drawing.Point(4, 32);
             this.tabPage14.Name = "tabPage14";
             this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage14.Size = new System.Drawing.Size(687, 411);
+            this.tabPage14.Size = new System.Drawing.Size(640, 349);
             this.tabPage14.TabIndex = 4;
             this.tabPage14.Text = "Chart cui";
             // 
@@ -2645,7 +2645,7 @@ namespace HecopUI_Test
             this.tabPage21.Location = new System.Drawing.Point(139, 4);
             this.tabPage21.Name = "tabPage21";
             this.tabPage21.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage21.Size = new System.Drawing.Size(746, 538);
+            this.tabPage21.Size = new System.Drawing.Size(699, 476);
             this.tabPage21.TabIndex = 13;
             this.tabPage21.Text = "TextBox & Labels";
             // 
@@ -2791,7 +2791,7 @@ namespace HecopUI_Test
             this.tabPage4.Location = new System.Drawing.Point(139, 4);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(5);
-            this.tabPage4.Size = new System.Drawing.Size(746, 538);
+            this.tabPage4.Size = new System.Drawing.Size(699, 476);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Progress";
             // 
@@ -2812,7 +2812,7 @@ namespace HecopUI_Test
             this.hTabControl6.SelectedIndex = 0;
             this.hTabControl6.SelectedTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
             this.hTabControl6.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
-            this.hTabControl6.Size = new System.Drawing.Size(736, 528);
+            this.hTabControl6.Size = new System.Drawing.Size(689, 466);
             this.hTabControl6.TabIndex = 2;
             this.hTabControl6.TabsColor = System.Drawing.Color.White;
             this.hTabControl6.TabStyle = HeCopUI_Framework.Enums.TabStyle.Style2;
@@ -2844,7 +2844,7 @@ namespace HecopUI_Test
             this.tabPage3.Location = new System.Drawing.Point(4, 34);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(728, 490);
+            this.tabPage3.Size = new System.Drawing.Size(681, 428);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Indicator & Loading";
             // 
@@ -3030,7 +3030,7 @@ namespace HecopUI_Test
             this.tabPage28.Location = new System.Drawing.Point(4, 34);
             this.tabPage28.Name = "tabPage28";
             this.tabPage28.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage28.Size = new System.Drawing.Size(728, 490);
+            this.tabPage28.Size = new System.Drawing.Size(681, 428);
             this.tabPage28.TabIndex = 1;
             this.tabPage28.Text = "Circular Progress Bar";
             // 
@@ -3144,7 +3144,7 @@ namespace HecopUI_Test
             this.tabPage29.Location = new System.Drawing.Point(4, 34);
             this.tabPage29.Name = "tabPage29";
             this.tabPage29.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage29.Size = new System.Drawing.Size(728, 490);
+            this.tabPage29.Size = new System.Drawing.Size(681, 428);
             this.tabPage29.TabIndex = 2;
             this.tabPage29.Text = "Rectangle Progress Bar";
             // 
@@ -3324,7 +3324,7 @@ namespace HecopUI_Test
             this.tabPage9.Location = new System.Drawing.Point(139, 4);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage9.Size = new System.Drawing.Size(746, 538);
+            this.tabPage9.Size = new System.Drawing.Size(699, 476);
             this.tabPage9.TabIndex = 18;
             this.tabPage9.Text = "Slider";
             // 
@@ -3345,7 +3345,7 @@ namespace HecopUI_Test
             this.hTabControl9.SelectedIndex = 0;
             this.hTabControl9.SelectedTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
             this.hTabControl9.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
-            this.hTabControl9.Size = new System.Drawing.Size(740, 532);
+            this.hTabControl9.Size = new System.Drawing.Size(693, 470);
             this.hTabControl9.TabIndex = 8;
             this.hTabControl9.TabsColor = System.Drawing.Color.White;
             this.hTabControl9.TabStyle = HeCopUI_Framework.Enums.TabStyle.Style2;
@@ -3369,7 +3369,7 @@ namespace HecopUI_Test
             this.tabPage20.Location = new System.Drawing.Point(4, 34);
             this.tabPage20.Name = "tabPage20";
             this.tabPage20.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage20.Size = new System.Drawing.Size(732, 494);
+            this.tabPage20.Size = new System.Drawing.Size(685, 432);
             this.tabPage20.TabIndex = 0;
             this.tabPage20.Text = "Range Slider";
             // 
@@ -3452,7 +3452,7 @@ namespace HecopUI_Test
             this.tabPage34.Location = new System.Drawing.Point(4, 34);
             this.tabPage34.Name = "tabPage34";
             this.tabPage34.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage34.Size = new System.Drawing.Size(732, 494);
+            this.tabPage34.Size = new System.Drawing.Size(685, 432);
             this.tabPage34.TabIndex = 1;
             this.tabPage34.Text = "Knob";
             // 
@@ -3519,7 +3519,7 @@ namespace HecopUI_Test
             this.tabPage19.Location = new System.Drawing.Point(4, 34);
             this.tabPage19.Name = "tabPage19";
             this.tabPage19.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage19.Size = new System.Drawing.Size(732, 494);
+            this.tabPage19.Size = new System.Drawing.Size(685, 432);
             this.tabPage19.TabIndex = 2;
             this.tabPage19.Text = "Scroll Bars";
             // 
@@ -3599,7 +3599,7 @@ namespace HecopUI_Test
             this.tabPage8.Location = new System.Drawing.Point(139, 4);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(5);
-            this.tabPage8.Size = new System.Drawing.Size(746, 538);
+            this.tabPage8.Size = new System.Drawing.Size(699, 476);
             this.tabPage8.TabIndex = 7;
             this.tabPage8.Text = "Container controls";
             // 
@@ -3619,7 +3619,7 @@ namespace HecopUI_Test
             this.hTabControl8.SelectedIndex = 0;
             this.hTabControl8.SelectedTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
             this.hTabControl8.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
-            this.hTabControl8.Size = new System.Drawing.Size(736, 528);
+            this.hTabControl8.Size = new System.Drawing.Size(689, 466);
             this.hTabControl8.TabIndex = 1;
             this.hTabControl8.TabsColor = System.Drawing.Color.White;
             this.hTabControl8.TabStyle = HeCopUI_Framework.Enums.TabStyle.Style2;
@@ -3641,7 +3641,7 @@ namespace HecopUI_Test
             this.tabPage32.Location = new System.Drawing.Point(4, 34);
             this.tabPage32.Name = "tabPage32";
             this.tabPage32.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage32.Size = new System.Drawing.Size(728, 490);
+            this.tabPage32.Size = new System.Drawing.Size(681, 428);
             this.tabPage32.TabIndex = 0;
             this.tabPage32.Text = "Panel";
             // 
@@ -3674,7 +3674,7 @@ namespace HecopUI_Test
             this.tabPage33.Location = new System.Drawing.Point(4, 34);
             this.tabPage33.Name = "tabPage33";
             this.tabPage33.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage33.Size = new System.Drawing.Size(728, 490);
+            this.tabPage33.Size = new System.Drawing.Size(681, 428);
             this.tabPage33.TabIndex = 1;
             this.tabPage33.Text = "TabControl";
             // 
@@ -3785,7 +3785,7 @@ namespace HecopUI_Test
             this.tabPage6.Location = new System.Drawing.Point(139, 4);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(5);
-            this.tabPage6.Size = new System.Drawing.Size(746, 538);
+            this.tabPage6.Size = new System.Drawing.Size(699, 476);
             this.tabPage6.TabIndex = 10;
             this.tabPage6.Text = "Pickers";
             // 
@@ -3806,7 +3806,7 @@ namespace HecopUI_Test
             this.hTabControl7.SelectedIndex = 0;
             this.hTabControl7.SelectedTabColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
             this.hTabControl7.SelectedTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(142)))));
-            this.hTabControl7.Size = new System.Drawing.Size(736, 528);
+            this.hTabControl7.Size = new System.Drawing.Size(689, 466);
             this.hTabControl7.TabIndex = 7;
             this.hTabControl7.TabsColor = System.Drawing.Color.White;
             this.hTabControl7.TabStyle = HeCopUI_Framework.Enums.TabStyle.Style2;
@@ -3829,7 +3829,7 @@ namespace HecopUI_Test
             this.tabPage30.Location = new System.Drawing.Point(4, 34);
             this.tabPage30.Name = "tabPage30";
             this.tabPage30.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage30.Size = new System.Drawing.Size(728, 490);
+            this.tabPage30.Size = new System.Drawing.Size(681, 428);
             this.tabPage30.TabIndex = 0;
             this.tabPage30.Text = "Clock";
             // 
@@ -3871,7 +3871,7 @@ namespace HecopUI_Test
             this.tabPage31.Location = new System.Drawing.Point(4, 34);
             this.tabPage31.Name = "tabPage31";
             this.tabPage31.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage31.Size = new System.Drawing.Size(728, 490);
+            this.tabPage31.Size = new System.Drawing.Size(681, 428);
             this.tabPage31.TabIndex = 1;
             this.tabPage31.Text = "Calendar";
             // 
@@ -3961,7 +3961,7 @@ namespace HecopUI_Test
             this.tabPage7.Location = new System.Drawing.Point(4, 34);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage7.Size = new System.Drawing.Size(728, 490);
+            this.tabPage7.Size = new System.Drawing.Size(681, 428);
             this.tabPage7.TabIndex = 2;
             this.tabPage7.Text = "tabPage7";
             // 
@@ -3973,7 +3973,7 @@ namespace HecopUI_Test
             this.tabPageIndicators.Location = new System.Drawing.Point(139, 4);
             this.tabPageIndicators.Name = "tabPageIndicators";
             this.tabPageIndicators.Padding = new System.Windows.Forms.Padding(20);
-            this.tabPageIndicators.Size = new System.Drawing.Size(746, 538);
+            this.tabPageIndicators.Size = new System.Drawing.Size(699, 476);
             this.tabPageIndicators.TabIndex = 19;
             this.tabPageIndicators.Text = "Indicators && Blur";
             // 
@@ -4001,7 +4001,7 @@ namespace HecopUI_Test
             this.flowLayoutPanelIndicators.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanelIndicators.Location = new System.Drawing.Point(20, 20);
             this.flowLayoutPanelIndicators.Name = "flowLayoutPanelIndicators";
-            this.flowLayoutPanelIndicators.Size = new System.Drawing.Size(706, 498);
+            this.flowLayoutPanelIndicators.Size = new System.Drawing.Size(659, 436);
             this.flowLayoutPanelIndicators.TabIndex = 0;
             // 
             // arcRotateIndicator1
@@ -4089,7 +4089,7 @@ namespace HecopUI_Test
             this.fadingCircleIndicator1.DotSize = 6;
             this.fadingCircleIndicator1.IndicatorColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(148)))));
             this.fadingCircleIndicator1.IsAnimating = true;
-            this.fadingCircleIndicator1.Location = new System.Drawing.Point(565, 15);
+            this.fadingCircleIndicator1.Location = new System.Drawing.Point(15, 125);
             this.fadingCircleIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.fadingCircleIndicator1.Name = "fadingCircleIndicator1";
             this.fadingCircleIndicator1.Size = new System.Drawing.Size(80, 80);
@@ -4105,7 +4105,7 @@ namespace HecopUI_Test
             this.fourDotsIndicator1.DotCount = 4;
             this.fourDotsIndicator1.DotSize = 10;
             this.fourDotsIndicator1.IsAnimating = true;
-            this.fourDotsIndicator1.Location = new System.Drawing.Point(15, 125);
+            this.fourDotsIndicator1.Location = new System.Drawing.Point(125, 125);
             this.fourDotsIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.fourDotsIndicator1.Name = "fourDotsIndicator1";
             this.fourDotsIndicator1.Size = new System.Drawing.Size(80, 80);
@@ -4122,7 +4122,7 @@ namespace HecopUI_Test
             this.growingDotsIndicator1.DotColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(148)))));
             this.growingDotsIndicator1.DotCount = 4;
             this.growingDotsIndicator1.IsAnimating = true;
-            this.growingDotsIndicator1.Location = new System.Drawing.Point(125, 125);
+            this.growingDotsIndicator1.Location = new System.Drawing.Point(235, 125);
             this.growingDotsIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.growingDotsIndicator1.Name = "growingDotsIndicator1";
             this.growingDotsIndicator1.Size = new System.Drawing.Size(80, 80);
@@ -4137,7 +4137,7 @@ namespace HecopUI_Test
             this.infinityIndicator1.DotSize = 12;
             this.infinityIndicator1.IndicatorColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(148)))));
             this.infinityIndicator1.IsAnimating = true;
-            this.infinityIndicator1.Location = new System.Drawing.Point(235, 125);
+            this.infinityIndicator1.Location = new System.Drawing.Point(345, 125);
             this.infinityIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.infinityIndicator1.MoveSpeed = 0.08F;
             this.infinityIndicator1.Name = "infinityIndicator1";
@@ -4152,7 +4152,7 @@ namespace HecopUI_Test
             this.loadingBarIndicator1.BarColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(148)))));
             this.loadingBarIndicator1.BaseColor = System.Drawing.Color.LightGray;
             this.loadingBarIndicator1.IsAnimating = true;
-            this.loadingBarIndicator1.Location = new System.Drawing.Point(345, 125);
+            this.loadingBarIndicator1.Location = new System.Drawing.Point(455, 125);
             this.loadingBarIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.loadingBarIndicator1.Name = "loadingBarIndicator1";
             this.loadingBarIndicator1.SegmentWidth = 40;
@@ -4168,7 +4168,7 @@ namespace HecopUI_Test
             this.orbitIndicator1.CenterColor = System.Drawing.Color.DimGray;
             this.orbitIndicator1.CenterSize = 12;
             this.orbitIndicator1.IsAnimating = true;
-            this.orbitIndicator1.Location = new System.Drawing.Point(455, 125);
+            this.orbitIndicator1.Location = new System.Drawing.Point(15, 235);
             this.orbitIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.orbitIndicator1.Name = "orbitIndicator1";
             this.orbitIndicator1.OrbitColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(148)))));
@@ -4182,7 +4182,7 @@ namespace HecopUI_Test
             this.pieSpinnerIndicator1.BackColor = System.Drawing.Color.Transparent;
             this.pieSpinnerIndicator1.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.pieSpinnerIndicator1.IsAnimating = true;
-            this.pieSpinnerIndicator1.Location = new System.Drawing.Point(565, 125);
+            this.pieSpinnerIndicator1.Location = new System.Drawing.Point(125, 235);
             this.pieSpinnerIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.pieSpinnerIndicator1.Name = "pieSpinnerIndicator1";
             this.pieSpinnerIndicator1.Size = new System.Drawing.Size(80, 80);
@@ -4196,7 +4196,7 @@ namespace HecopUI_Test
             this.pulseRingIndicator1.BackColor = System.Drawing.Color.Transparent;
             this.pulseRingIndicator1.BaseColor = System.Drawing.Color.Transparent;
             this.pulseRingIndicator1.IsAnimating = true;
-            this.pulseRingIndicator1.Location = new System.Drawing.Point(15, 235);
+            this.pulseRingIndicator1.Location = new System.Drawing.Point(235, 235);
             this.pulseRingIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.pulseRingIndicator1.MaxScale = 1.2F;
             this.pulseRingIndicator1.MinScale = 0.7F;
@@ -4214,7 +4214,7 @@ namespace HecopUI_Test
             this.ringIndicator1.BackColor = System.Drawing.Color.Transparent;
             this.ringIndicator1.BaseColor = System.Drawing.Color.Transparent;
             this.ringIndicator1.IsAnimating = true;
-            this.ringIndicator1.Location = new System.Drawing.Point(125, 235);
+            this.ringIndicator1.Location = new System.Drawing.Point(345, 235);
             this.ringIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.ringIndicator1.Name = "ringIndicator1";
             this.ringIndicator1.RingColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(168)))), ((int)(((byte)(148)))));
@@ -4231,7 +4231,7 @@ namespace HecopUI_Test
             this.spinnerIndicator1.IsAnimating = true;
             this.spinnerIndicator1.LineLength = 10;
             this.spinnerIndicator1.LineThickness = 3;
-            this.spinnerIndicator1.Location = new System.Drawing.Point(235, 235);
+            this.spinnerIndicator1.Location = new System.Drawing.Point(455, 235);
             this.spinnerIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.spinnerIndicator1.Name = "spinnerIndicator1";
             this.spinnerIndicator1.Size = new System.Drawing.Size(80, 80);
@@ -4247,7 +4247,7 @@ namespace HecopUI_Test
             this.waveDotsIndicator1.DotCount = 5;
             this.waveDotsIndicator1.DotSize = 10;
             this.waveDotsIndicator1.IsAnimating = true;
-            this.waveDotsIndicator1.Location = new System.Drawing.Point(345, 235);
+            this.waveDotsIndicator1.Location = new System.Drawing.Point(15, 345);
             this.waveDotsIndicator1.Margin = new System.Windows.Forms.Padding(15);
             this.waveDotsIndicator1.Name = "waveDotsIndicator1";
             this.waveDotsIndicator1.Size = new System.Drawing.Size(80, 80);
@@ -4262,7 +4262,7 @@ namespace HecopUI_Test
             this.hImageBlur1.BlurRadius = 10;
             this.hImageBlur1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.hImageBlur1.Image = ((System.Drawing.Image)(resources.GetObject("hImageBlur1.Image")));
-            this.hImageBlur1.Location = new System.Drawing.Point(455, 235);
+            this.hImageBlur1.Location = new System.Drawing.Point(125, 345);
             this.hImageBlur1.Margin = new System.Windows.Forms.Padding(15);
             this.hImageBlur1.Name = "hImageBlur1";
             this.hImageBlur1.Size = new System.Drawing.Size(150, 150);
@@ -4271,30 +4271,12 @@ namespace HecopUI_Test
             // Form1
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(250)))), ((int)(((byte)(250)))), ((int)(((byte)(250)))));
-            this.ClientSize = new System.Drawing.Size(891, 589);
+            this.ClientSize = new System.Drawing.Size(885, 571);
             this.Controls.Add(this.hTabControl1);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.FormControlBox.CloseBoxColor = System.Drawing.Color.Transparent;
-            this.FormControlBox.CloseBoxHoverColor = System.Drawing.Color.Red;
-            this.FormControlBox.HoverColorShape = HeCopUI_Framework.Enums.ShapeType.RoundedRectangle;
-            this.FormControlBox.IconCloseColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.FormControlBox.IconCloseHoverColor = System.Drawing.Color.White;
-            this.FormControlBox.IconMaximizeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.FormControlBox.IconMaximizeHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.FormControlBox.IconMinimizeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.FormControlBox.IconMinimizeHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
-            this.FormControlBox.MaximizeBoxColor = System.Drawing.Color.Transparent;
-            this.FormControlBox.MaximizeBoxHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.FormControlBox.MinimizeBoxColor = System.Drawing.Color.Transparent;
-            this.FormControlBox.MinimizeBoxHoverColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(230)))), ((int)(((byte)(230)))));
-            this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Padding = new System.Windows.Forms.Padding(1, 42, 1, 1);
-            this.Resizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Hecop UI Framework";
-            this.TitleColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(247)))), ((int)(((byte)(250)))));
-            this.TitleTextColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
             this.Load += new System.EventHandler(this.Form1_Load);
             this.hTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

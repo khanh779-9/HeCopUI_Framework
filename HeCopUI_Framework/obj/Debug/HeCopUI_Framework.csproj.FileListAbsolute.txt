@@ -28,7 +28,6 @@ D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HeCopUI_Framework\obj\Debug\HeCopU
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HeCopUI_Framework\obj\Debug\HeCopUI_Framework.AnimatorNS.DoubleBitmapForm.resources
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HeCopUI_Framework\obj\Debug\HeCopUI_Framework.Controls.Chart.ChartTip.resources
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HeCopUI_Framework\obj\Debug\HeCopUI_Framework.Controls.HCircleAnglePicker.resources
-D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HeCopUI_Framework\obj\Debug\HeCopUI_Framework.Forms.HForm.resources
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HeCopUI_Framework\obj\Debug\HeCopUI_Framework.Forms.HMessageBox.resources
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HeCopUI_Framework\obj\Debug\HeCopUI_Framework.Properties.Resources.resources
 D:\Data\Tailieu\Projects\C#\HeCopUI_Framework\HeCopUI_Framework\obj\Debug\HeCopUI_Framework.SuperNotifyIcon.FormDebugger.resources
